@@ -1,0 +1,105 @@
+<mvc:View
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:macros="sap.fe.macros"
+    xmlns:filterBar="sap.fe.macros.filterBar"
+    xmlns:table="sap.fe.macros.table"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="nlabs.ui.quotationcomparison.ext.view.RFQDetail"
+>
+    <macros:Page
+        id="RFQDetail"
+        showFooter="true"
+        title="{RequestForQuotation}"
+        description="{CompanyCode}"
+    >
+        <!-- Main content -->
+        <macros:items>
+            <IconTabBar
+                expanded="true"
+                id="stickySubheaderBar"
+                class="sapUiResponsiveContentPadding"
+            >
+                <items>
+                    <IconTabFilter
+                        id="_IDGenIconTabFilter1"
+                        text="RFQ Details"
+                    >
+                        <macros:Form
+                            metaPath="/RFQs/@com.sap.vocabularies.UI.v1.FieldGroup#GeneratedGroup"
+                            id="myForm"
+                            title="Sample Form"
+                        />
+                        <macros:Table
+                            id="_IDGenTableRFQItems"
+                            metaPath="/RFQs/to_RequestForQuotationItem/@com.sap.vocabularies.UI.v1.LineItem"
+                        />
+                    </IconTabFilter>
+                    <IconTabFilter
+                        id="_IDGenIconTabFilter2"
+                        text="Supplier Quotation"
+                    >
+                        <macros:Table
+                            id="_IDGenTableSupplierQuotation"
+                            metaPath="/RFQs/SupplierQuotation/@com.sap.vocabularies.UI.v1.LineItem"
+                        />
+                        <!-- <macros:Table
+                            id="__IDGenddQuotation1CreateTableSupplierItems"
+                            contextPath="/RFQs/SupplierQuotation/"
+                            metaPath="/SupplierQuotationItem/@com.sap.vocabularies.UI.v1.LineItem"
+                        /> -->
+                    </IconTabFilter>
+                    <IconTabFilter
+                        id="_IDGenIconTabFilter3"
+                        text="Quotation Comparisons"
+                    >
+                        <macros:Table
+                            id="_IDGenTableQuotationComparisons"
+                            metaPath="/RFQs/QuotationComparison/@com.sap.vocabularies.UI.v1.LineItem"
+                            selectionMode="ForceSingle"
+                            readOnly="false"
+                        >
+                            <macros:actions>
+                                <table:Action
+                                    id="_IDGenActionGroup1"
+                                    key="CreateACtionQuotation"
+                                    text="Add Quotation"
+                                    press=".onAddQuotationPress"
+                                />
+                                <table:Action
+                                    id="_IDGenActionGroup2"
+                                    key="DisplayACtionCompareQuotation"
+                                    text="Compare Quotation"
+                                    press=".onCompareQuotationPress"
+                                    requiresSelection="true"
+                                />
+                            </macros:actions>
+                        </macros:Table>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </macros:items>
+
+        <!-- Footer aggregation -->
+        <macros:footer>
+            <OverflowToolbar id="_IDGenOverflowToolbar">
+                <ToolbarSpacer id="_IDGenToolbarSpacer" />
+                <Button
+                    id="_IDGenButton"
+                    text="Approve"
+                    press=".onApprove"
+                    type="Accept"
+                    icon=""
+                />
+                <Button
+                    id="_IDGenButton1"
+                    text="Reject"
+                    press=".onReject"
+                    type="Reject"
+                    icon=""
+                />
+            </OverflowToolbar>
+        </macros:footer>
+    </macros:Page>
+</mvc:View>
