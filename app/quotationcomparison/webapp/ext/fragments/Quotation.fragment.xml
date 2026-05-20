@@ -42,75 +42,75 @@
                 />
                 <Input
                     id="_IDGenQuotationFormInput"
-                    value="{oLocalModel>/QuotationCreate/RFQ}"
+                    value="{oLocalModel>/QuotationCreate/rfq}"
                     editable="false"
                 />
                 <Label
                     id="_IDGenQuotationFormLabel7"
-                    text="company Name"
+                    text="Company Name"
                 />
                 <Input
                     id="_IDGenQuotationFormInput1"
-                    value="{oLocalModel>/QuotationCreate/CompanyName}"
+                    value="{oLocalModel>/QuotationCreate/companyName}"
                 />
                 <Label
                     id="_IDGenQuotationFormLabel8"
-                    text="comparativeStatementTitle"
+                    text="Comparative Statement Title"
                 />
                 <Input
                     id="_IDGenQuotationFormInput2"
-                    value="{oLocalModel>/QuotationCreate/ComparativeStatementTitle}"
+                    value="{oLocalModel>/QuotationCreate/comparativeStatementTitle}"
                 />
 
                 <Label
                     id="_IDGenQuotationFormLabel9"
-                    text="requestorName"
+                    text="Requestor Name"
                 />
                 <Input
                     id="_IDGenQuotationFormInput3"
-                    value="{oLocalModel>/QuotationCreate/RequestorName}"
+                    value="{oLocalModel>/QuotationCreate/requestorName}"
                 />
                 <Label
                     id="_IDGenQuotationFormLabel10"
-                    text="accountAssignment"
+                    text="Account Assignment"
                 />
                 <Input
                     id="_IDGenQuotationFormInput4"
-                    value="{oLocalModel>/QuotationCreate/AccountAssignment}"
+                    value="{oLocalModel>/QuotationCreate/accountAssignment}"
                 />
                 <core:Title id="_IDGenuotationFormTitle2" text="" />
                 <Label
                     id="_IDGenQuotationFormLabel11"
-                    text="requisitionNumber"
+                    text="Requisition Number"
                 />
                 <Input
                     id="_IDGenQuotationFormInput5"
-                    value="{oLocalModel>/QuotationCreate/RequisitionNumber}"
+                    value="{oLocalModel>/QuotationCreate/requisitionNumber}"
                 />
 
                 <Label
                     id="_IDGenQuotationFormLabel12"
-                    text="requisitionDate"
+                    text="Requisition Date"
                 />
                 <DateTimePicker
                     id="_IDGenQuotationFormDateTimePicker"
-                    value="{oLocalModel>/QuotationCreate/RequisitionDate}"
+                    value="{oLocalModel>/QuotationCreate/requisitionDate}"
                 />
                 <Label
                     id="_IDGenQuotationFormLabel13"
-                    text="purpose"
+                    text="Purpose"
                 />
                 <Input
                     id="_IDGenQuotationFormDateTimePicker1"
-                    value="{oLocalModel>/QuotationCreate/Purpose}"
+                    value="{oLocalModel>/QuotationCreate/purpose}"
                 />
                 <Label
                     id="_IDGenQuotationFormLabel14"
-                    text="comparisonDate"
+                    text="Comparison Date"
                 />
                 <DateTimePicker
                     id="_IDGenQuotationFormDateTimePicker2"
-                    value="{oLocalModel>/QuotationCreate/ComparisonDate}"
+                    value="{oLocalModel>/QuotationCreate/comparisonDate}"
                 />
             </f:content>
         </f:SimpleForm>
@@ -126,17 +126,17 @@
             >
                 <uiTable:extension>
                     <OverflowToolbar
-                        id="_IDGenOverflowToolbar1"
+                        id="_IDGenQuotationOverflowToolbar1"
                         style="Clear"
                     >
                         <Title
                             id="title"
                             text="Supplier Quotation Items"
                         />
-                        <ToolbarSpacer id="_IDGenToolbarSpacer1" />
-                        <ToolbarSeparator id="_IDGenToolbarSeparator" />
+                        <ToolbarSpacer id="_IDGenQuotationToolbarSpacer1" />
+                        <ToolbarSeparator id="_IDGenQuotationToolbarSeparator" />
                         <SearchField
-                            id="_IDGenSearchField"
+                            id="_IDGenQuotationSearchField"
                             placeholder="Filter"
                             search=".filterGlobally"
                             width="15rem"

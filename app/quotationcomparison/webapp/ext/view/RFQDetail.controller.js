@@ -10,63 +10,66 @@ sap.ui.define(
         'use strict';
 
         return PageController.extend('nlabs.ui.quotationcomparison.ext.view.RFQDetail', {
-            /**
-             * Called when a controller is instantiated and its View controls (if available) are already created.
-             * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
-             * @memberOf nlabs.ui.quotationcomparison.ext.view.Main
-             */
             onInit: function () {
                 PageController.prototype.onInit.apply(this, arguments); // needs to be called to properly initialize the page controller
                 const oLocalModel = new JSONModel({
                     QuotationCreate: {
-                        RFQ: "s",
-                        CompanyName: "",
-                        ComparativeStatementTitle: "",
-                        RequestorName: "",
-                        AccountAssignment: "",
-                        RequisitionNumber: "",
-                        RequisitionDate: null,
-                        Purpose: "",
-                        ComparisonDate: null,
+                        rfq: '',
+                        requisitionNumber: '',
+                        companyName: '',
+                        comparativeStatementTitle: '',
+                        requestorName: '',
+                        accountAssignment: '',
+                        requisitionNumber: '',
+                        requisitionDate: null,
+                        purpose: '',
+                        comparisonDate: null,
                     },
                     SupplierQuotationItems: [],
-                    compareQuotationData: {}
+                    compareQuotationData: {
+                        rfq: '',
+                        requisitionNumber: '',
+                        companyName: '',
+                        comparativeStatementTitle: '',
+                        requestorName: '',
+                        accountAssignment: '',
+                        requisitionNumber: '',
+                        requisitionDate: null,
+                        purpose: '',
+                        comparisonDate: null,
+                    },
+                    compareQuotationIsEditable: false,
+                    compareQuotationItemData: []
                 });
                 // return oLocalModel;
                 this.editFlow.getView().setModel(oLocalModel, "oLocalModel");
             },
-
-            /**
-             * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
-             * (NOT before the first rendering! onInit() is used for that one!).
-             * @memberOf nlabs.ui.quotationcomparison.ext.view.Main
-             */
-            //  onBeforeRendering: function() {
-            //
-            //  },
-
-            /**
-             * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
-             * This hook is the same one that SAPUI5 controls get after being rendered.
-             * @memberOf nlabs.ui.quotationcomparison.ext.view.Main
-             */
+            onIconTabBarSelect: function (oEvent) {
+                // var oTable = this.editFlow.getView().byId("_IDGenQuotationComparisonActionGroup1");
+                // if (oTable) {
+                //     oTable.setSelectedIndex(0);
+                // }
+            },
             onAfterRendering: async function (oContext) {
                 try {
                     // debugger
-                    // this.editFlow.getView().getModel("ui").setProperty('/isEditable', true);
-                    return;
+                    var oTable = this.editFlow.getView().byId("_IDGenQuotationComparisonActionGroup1");
+                    if (oTable) {
+                        oTable.setSelectedIndex(0);
+                        oTable.attachEventOnce("rowsUpdated", function () {
+                            var oBinding = oTable.getBinding("rows");
+                            if (oBinding && oBinding.getLength() > 0) {
+                                // Select the first row
+                                oTable.setSelectedIndex(0);
+                            }
+                        });
+                    }
                 } catch (error) {
 
                 }
+                return;
             },
 
-            /**
-             * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
-             * @memberOf nlabs.ui.quotationcomparison.ext.view.Main
-             */
-            //  onExit: function() {
-            //
-            //  },
             onAddQuotationPress: async function (oEvent) {
                 const context = oEvent.getSource().getBindingContext();
                 const keyId = this.extractKey(context.getPath());
@@ -74,69 +77,25 @@ sap.ui.define(
                 const sPath =
                     `/RFQs('${keyId}')/SupplierQuotation('${keyId}')/`;
                 console.log("SPath", sPath);
-                // var oButton = oEvent.getSource(),
-                //     oView = this.getView();
                 this.editFlow.getView().getModel("ui").setProperty('/customUIQuotationPath', sPath);
                 await this.getSupplierQuotationItemData(keyId);
                 this.oDialog ??= await this.loadFragment({
                     name: "nlabs.ui.quotationcomparison.ext.fragments.Quotation"
                 });
 
-                // const oBox = this.editFlow.getView().byId("_IDGenddQCTableSupplierItemsVBox");
-                // const oSmartTable = this.editFlow.getView().byId("SupplierItemsTable");
-                // const oTable = new Table({
-                //     id: "BookingItems",
-                //     metaPath: "_SupplierQuotationItem/@com.sap.vocabularies.UI.v1.LineItem"
-                // });
-                // oTable.setBindingContext(
-                //     new sap.ui.model.Context(
-                //         this.getView().getModel(),
-                //         `/RFQs('${keyId}')/SupplierQuotation('${keyId}')`
-                //     )
-                // );
-                // oBox.bindElement({
-                //     path: `/RFQs('${keyId}')/SupplierQuotation('${keyId}')`
-                // });
-                // oSmartTable.setTableBindingPath(
-                //     `/_SupplierQuotationItem`
-                // );
-                // oBox.addItem(oTable);
-
-                // const oBindingContext = this.editFlow.getView().getModel().createBindingContext(
-                //     `/RFQs('${keyId}')/SupplierQuotation('${keyId}')`
-                // );
-                // const oBindingContext = this.editFlow.getView().getModel().bindContext(`/RFQs('${keyId}')/SupplierQuotation('${keyId}')`);
-
-                // oBox.setBindingContext(oBindingContext.getBoundContext());
-                // // const oModel = this.getView().getModel();
-
-                // const oBindingContext = oModel.bindContext(sPath);
-
-                // await oBindingContext.requestObject();
-
-                // oTable.setBindingContext(oBindingContext.getBoundContext());
-                // debugger
                 this.oDialog.setBindingContext(context);
                 this.getExtensionAPI().addDependent(this.oDialog);
-                //this.editFlow.getView().getModel("ui").setProperty('/isEditable', true);
                 this.oDialog.open();
             },
             getSupplierQuotationItemData: async function (keyId) {
-                debugger
                 const oModel = this.editFlow.getView().getModel();
-
-                // Navigation path
                 const sPath =
                     `/RFQs('${keyId}')/SupplierQuotation('${keyId}')/_SupplierQuotationItem`;
-
                 try {
-
                     // Bind list
                     const oListBinding = oModel.bindList(sPath);
-
                     // Request contexts
                     const aContexts = await oListBinding.requestContexts(0, 100);
-
                     // Convert contexts to plain objects
                     const aSupplierItems = aContexts.map((oContext) => {
                         return oContext.getObject();
@@ -145,15 +104,16 @@ sap.ui.define(
                     console.log("Supplier Items", aSupplierItems);
                     const oLocalModelData = {
                         QuotationCreate: {
-                            RFQ: keyId,
-                            CompanyName: "",
-                            ComparativeStatementTitle: "",
-                            RequestorName: "",
-                            AccountAssignment: "",
-                            RequisitionNumber: "",
-                            RequisitionDate: null,
-                            Purpose: "",
-                            ComparisonDate: null,
+                            rfq: keyId,
+                            requisitionNumber: '',
+                            companyName: '',
+                            comparativeStatementTitle: '',
+                            requestorName: '',
+                            accountAssignment: '',
+                            requisitionNumber: '',
+                            requisitionDate: null,
+                            purpose: '',
+                            comparisonDate: null,
                         },
                         SupplierQuotationItems: aSupplierItems
                     };
@@ -168,7 +128,6 @@ sap.ui.define(
                 }
             },
             onAddQuotationCancelPress: function (oEvent) {
-                //this.editFlow.getView().getModel("ui").setProperty('/isEditable', false);
                 this.oDialog.close();
             },
             onCreateComparison: function (oEvent) {
@@ -209,6 +168,7 @@ sap.ui.define(
                     console.error("Error creating empty row:", oError);
                 }
             },
+            /**
             onAddQuotationCreatePress: function (oEvent) {
                 // Logic for creating a quotation
                 const oTable = this.editFlow.getView().byId("_IDGenddQCTableSupplierItemsUITable");
@@ -232,6 +192,7 @@ sap.ui.define(
                 console.log("Cancel button pressed");
                 this.oDialog.close();
             },
+             */
             onCompareQuotationCancelPress: function () {
                 // Logic for canceling the dialog
                 console.log("Cancel button pressed");
@@ -241,27 +202,23 @@ sap.ui.define(
                 const match = sPath.match(/\('(.+)'\)/);
                 return match ? match[1] : null;
             },
-            onCompareQuotationPress: async function (oEvent) {
-                const contexts = oEvent.getParameter('contexts');
+            onCompareQuotationEditPress: function () {
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", true);
+                console.log("Edit button pressed");
+            },
+            onCompareQuotationDeletePress: function () {
+
+            },
+            onQuotationComparisonSelectionChange: async function (oEvent) {
+                console.log("Selection changed");
+                const contexts = oEvent.getParameter('selectedContext');
                 const selectedContextObject = contexts.map(context => context.getObject());
                 const transformRows = this.transformDataforComparison(selectedContextObject[0].items);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationData", selectedContextObject[0]);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemData", transformRows);
-                // let oTable = 
-                this.oCompareDialog ??= await this.loadFragment({
-                    name: "nlabs.ui.quotationcomparison.ext.fragments.CompareQuotation"
-                });
-
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
                 this.generateCOlumnsForComparison(selectedContextObject[0].items);
-                // const oBox = this.editFlow.getView().byId("_IDGenCompareQuotationVBox");
-                // oBox.addItem(oTable);
 
-                // this.oCompareDialog.setBindingContext(context);
-                this.getExtensionAPI().addDependent(this.oCompareDialog);
-                //this.editFlow.getView().getModel("ui").setProperty('/isEditable', true);
-                this.oCompareDialog.open();
-
-                // Implement comparison logic here, e.g., navigate to a comparison view
             },
             transformDataforComparison: function (aSelectedData) {
                 const aProperties = [
@@ -290,18 +247,7 @@ sap.ui.define(
                 return aRows;
             },
             generateCOlumnsForComparison: function (aSelectedData) {
-                const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationUITable");
-                // aSelectedData.forEach(col => {
-                //     oTable.addColumn(
-                //         new sap.ui.table.Column({
-                //             label: new sap.m.Label({ text: col.label }),
-                //             template: new sap.m.Text({ text: `{${col.path}}` })
-                //         })
-                //     );
-                // });
-                // return oTable;
-                // const oTable = this.byId("comparisonTable");
-
+                const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationDetailUITable");
                 oTable.removeAllColumns();
 
                 //
@@ -330,8 +276,9 @@ sap.ui.define(
                                 text: "Item " + (index + 1)
                             }),
 
-                            template: new sap.m.Text({
-                                text: "{oLocalModel>item" + index + "}"
+                            template: new sap.m.Input({
+                                value: "{oLocalModel>item" + index + "}",
+                                editable: "{oLocalModel>/compareQuotationIsEditable}"
                             }),
 
                             width: "200px"
@@ -339,26 +286,8 @@ sap.ui.define(
                     );
 
                 });
+
             }
-            // onBeforeRebindTable: function (oEvent) {
-            //     debugger
-            //     const collectionBindingInfo = oEvent.getParameter("collectionBindingInfo");
-            //     // collectionBindingInfo.path =
-            //     //     "/RFQs('3150000001')/SupplierQuotation('3160000001')";
-
-            //     // collectionBindingInfo.parameters = {
-            //     //     $$groupId: "$auto"
-            //     // };
-            //     collectionBindingInfo.attachEvent(
-            //         "dataReceived",
-            //         (data) => {
-            //             debugger
-            //             console.log("Data received:", data);
-            //         },
-            //         this
-            //     );
-            // }
-
         });
     }
 );
