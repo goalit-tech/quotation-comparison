@@ -13,7 +13,7 @@ sap.ui.define(
             onInit: function () {
                 PageController.prototype.onInit.apply(this, arguments); // needs to be called to properly initialize the page controller
                 const oLocalModel = new JSONModel({
-                    QuotationCreate: {
+                    CompareQuotation: {
                         rfq: '',
                         requisitionNumber: '',
                         companyName: '',
@@ -44,31 +44,9 @@ sap.ui.define(
                 // return oLocalModel;
                 this.editFlow.getView().setModel(oLocalModel, "oLocalModel");
             },
-            onIconTabBarSelect: function (oEvent) {
-                // var oTable = this.editFlow.getView().byId("_IDGenQuotationComparisonActionGroup1");
-                // if (oTable) {
-                //     oTable.setSelectedIndex(0);
-                // }
-            },
-            onAfterRendering: async function (oContext) {
-                try {
-                    // debugger
-                    var oTable = this.editFlow.getView().byId("_IDGenQuotationComparisonActionGroup1");
-                    if (oTable) {
-                        oTable.setSelectedIndex(0);
-                        oTable.attachEventOnce("rowsUpdated", function () {
-                            var oBinding = oTable.getBinding("rows");
-                            if (oBinding && oBinding.getLength() > 0) {
-                                // Select the first row
-                                oTable.setSelectedIndex(0);
-                            }
-                        });
-                    }
-                } catch (error) {
-
-                }
-                return;
-            },
+            // onAfterRendering: async function (oContext) {
+            //     return;
+            // },
 
             onAddQuotationPress: async function (oEvent) {
                 const context = oEvent.getSource().getBindingContext();
@@ -78,7 +56,7 @@ sap.ui.define(
                     `/RFQs('${keyId}')/SupplierQuotation('${keyId}')/`;
                 console.log("SPath", sPath);
                 this.editFlow.getView().getModel("ui").setProperty('/customUIQuotationPath', sPath);
-                await this.getSupplierQuotationItemData(keyId);
+                await this.getSupplierQuotationForRFQ(keyId, true);
                 this.oDialog ??= await this.loadFragment({
                     name: "nlabs.ui.quotationcomparison.ext.fragments.Quotation"
                 });
@@ -87,23 +65,37 @@ sap.ui.define(
                 this.getExtensionAPI().addDependent(this.oDialog);
                 this.oDialog.open();
             },
-            getSupplierQuotationItemData: async function (keyId) {
+            getSupplierQuotationForRFQ: async function (keyId, isCreateMode) {
                 const oModel = this.editFlow.getView().getModel();
+                // const sPath =
+                //     `/RFQs('${keyId}')/SupplierQuotation('${keyId}')/_SupplierQuotationItem`;
                 const sPath =
-                    `/RFQs('${keyId}')/SupplierQuotation('${keyId}')/_SupplierQuotationItem`;
+                    `/RFQs('${keyId}')/SupplierQuotation`;
                 try {
                     // Bind list
-                    const oListBinding = oModel.bindList(sPath);
+                    // const oListBinding = oModel.bindList(sPath);
+                    const oListBinding = oModel.bindList(
+                        sPath,
+                        undefined,
+                        undefined,
+                        undefined,
+                        {
+                            $expand: "_SupplierQuotationItem"
+                        }
+                    );
                     // Request contexts
                     const aContexts = await oListBinding.requestContexts(0, 100);
                     // Convert contexts to plain objects
-                    const aSupplierItems = aContexts.map((oContext) => {
+                    // const aSupplierItems = aContexts.map((oContext) => {
+                    //     return oContext.getObject();
+                    // });
+                    const aSupplierQuotation = aContexts.map((oContext) => {
                         return oContext.getObject();
                     });
 
-                    console.log("Supplier Items", aSupplierItems);
+                    console.log("Supplier Quotations", aSupplierQuotation);
                     const oLocalModelData = {
-                        QuotationCreate: {
+                        CompareQuotation: {
                             rfq: keyId,
                             requisitionNumber: '',
                             companyName: '',
@@ -115,11 +107,15 @@ sap.ui.define(
                             purpose: '',
                             comparisonDate: null,
                         },
-                        SupplierQuotationItems: aSupplierItems
+                        // SupplierQuotationItems: aSupplierItems
+                        SupplierQuotation: aSupplierQuotation
                     };
+                    if (!isCreateMode) {
+                        oLocalModelData.CompareQuotation = {}
+                    }
                     // return oLocalModel;
-                    this.editFlow.getView().getModel("oLocalModel").setProperty("/QuotationCreate", oLocalModelData.QuotationCreate);
-                    this.editFlow.getView().getModel("oLocalModel").setProperty("/SupplierQuotationItems", oLocalModelData.SupplierQuotationItems);
+                    this.editFlow.getView().getModel("oLocalModel").setProperty("/CompareQuotation", oLocalModelData.CompareQuotation);
+                    this.editFlow.getView().getModel("oLocalModel").setProperty("/SupplierQuotation", oLocalModelData.SupplierQuotation);
 
                 } catch (oError) {
 
@@ -127,80 +123,90 @@ sap.ui.define(
 
                 }
             },
-            onAddQuotationCancelPress: function (oEvent) {
+            onCompareQuotationTableRowSelectionChange: function (oEvent) {
+                const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationSupplierUITable");
+                const iRowIndex = oEvent.getParameter("rowIndex");
+                const oRowContext = oEvent.getParameter("rowContext");
+                const bSelected = oEvent.getParameter("selected");
+                const bUserInteraction = oEvent.getParameter("userInteraction");
+
+                if (!bUserInteraction || !oRowContext || iRowIndex < 0) {
+                    return;
+                }
+
+                const oObject = oRowContext.getObject();
+                if (!oObject || !Array.isArray(oObject._SupplierQuotationItem) || oObject._SupplierQuotationItem.length === 0) {
+                    return;
+                }
+
+                const sParentPath = oRowContext.getPath();
+                const aChildPaths = oObject._SupplierQuotationItem.map((_, index) => `${sParentPath}/_SupplierQuotationItem/${index}`);
+                const oRowsBinding = oTable.getBinding("rows");
+                const aContexts = oRowsBinding.getContexts(0, 1000);
+
+                aContexts.forEach((oContext, iIndex) => {
+                    if (!oContext) {
+                        return;
+                    }
+                    const sContextPath = oContext.getPath();
+                    if (aChildPaths.includes(sContextPath)) {
+                        if (bSelected) {
+                            oTable.addSelectionInterval(iIndex, iIndex);
+                        } else {
+                            oTable.removeSelectionInterval(iIndex, iIndex);
+                        }
+                    }
+                });
+            },
+            onAddCompareQuotationCreatePress: function (oEvent) {
+                const aSelectedQuotations = this.getSelectedSupplierQuotations();
+                const aSelectedItems = this.getSelectedSupplierQuotationItems();
+
+                console.log("Selected Quotations:", aSelectedQuotations);
+                console.log("Selected Items:", aSelectedItems);
+
                 this.oDialog.close();
             },
-            onCreateComparison: function (oEvent) {
-                const oView = this.editFlow.getView();
-                const oTable = oView.byId('_IDGenTableQuotationComparisons');
-
-                if (!oTable) {
-                    console.error("Table not found");
-                    return;
-                }
-
-                // Get the inner MDC table
-                const oMdcTable = oTable.getContent ? oTable.getContent() : oTable;
-
-                // Get the binding context of the table's row binding
-                const oRowBinding = oMdcTable.getRowBinding
-                    ? oMdcTable.getRowBinding()
-                    : oMdcTable.getBinding("rows") || oMdcTable.getBinding("items");
-
-                if (!oRowBinding) {
-                    console.error("Row binding not found");
-                    return;
-                }
-
-                try {
-                    // Create an empty transient context (empty row) in the table
-                    const oNewContext = oRowBinding.create(
-                        {}, // empty payload = empty row
-                        true, // bAtEnd - insert at the end
-                        false, // bInactive - false = active draft row
-                        true  // bTransient - true = keeps row in table without saving
-                    );
-
-                    // Optional: scroll to the new row
-                    oMdcTable.scrollToIndex && oMdcTable.scrollToIndex(oRowBinding.getLength() - 1);
-
-                } catch (oError) {
-                    console.error("Error creating empty row:", oError);
-                }
-            },
-            /**
-            onAddQuotationCreatePress: function (oEvent) {
-                // Logic for creating a quotation
-                const oTable = this.editFlow.getView().byId("_IDGenddQCTableSupplierItemsUITable");
+            getSelectedSupplierQuotations: function () {
+                const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationSupplierUITable");
                 const aSelectedIndices = oTable.getSelectedIndices();
+                const aRows = oTable.getRows();
 
-                console.log("Selected Row Count:", aSelectedIndices.length);
-
-                // Get selected objects
                 const aSelectedObjects = aSelectedIndices.map((iIndex) => {
-                    const oContext = oTable.getContextByIndex(iIndex);
-                    return oContext ? oContext.getObject() : null;
-                }).filter(Boolean);
+                    const oRow = aRows[iIndex];
+                    if (oRow) {
+                        const oContext = oRow.getBindingContext("oLocalModel");
+                        return oContext ? oContext.getObject() : null;
+                    }
+                    return null;
+                }).filter(obj => obj !== null);
 
-                console.log("Selected Objects:", aSelectedObjects);
-                console.log("Create button pressed");
+                console.log("Selected Supplier Quotations", aSelectedObjects);
+                return aSelectedObjects;
+            },
+            getSelectedSupplierQuotationItems: function () {
+                const aSelectedQuotations = this.getSelectedSupplierQuotations();
+
+                const aAllItems = aSelectedQuotations.flatMap((oQuotation) => {
+                    return oQuotation._SupplierQuotationItem || oQuotation.items || [];
+                });
+
+                console.log("Selected Items", aAllItems);
+                return aAllItems;
+            },
+
+            onAddCompareQuotationCancelPress: function (oEvent) {
                 this.oDialog.close();
             },
 
-            onAddQuotationCancelPress: function () {
-                // Logic for canceling the dialog
-                console.log("Cancel button pressed");
-                this.oDialog.close();
-            },
-             */
-            onCompareQuotationCancelPress: function () {
-                // Logic for canceling the dialog
-                console.log("Cancel button pressed");
-                this.oCompareDialog.close();
-            },
             extractKey: function (sPath) {
                 const match = sPath.match(/\('(.+)'\)/);
                 return match ? match[1] : null;
+            },
+            onCompareQuotationCancelPress: function () {
+                debugger;
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
+                console.log("Cancel button pressed");
             },
             onCompareQuotationEditPress: function () {
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", true);

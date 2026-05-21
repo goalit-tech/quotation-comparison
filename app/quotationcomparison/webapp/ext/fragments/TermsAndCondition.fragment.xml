@@ -8,6 +8,140 @@
     xmlns:core="sap.ui.core"
 >
  
+<uiTable:Table
+                id="_IDGenTermsAndConditionsUITable"
+                selectionMode="MultiToggle"
+                rows="{oLocalModel>/SupplierQuotationItems}"
+                enableCellFilter="true"
+                filter=".filterPrice"
+                ariaLabelledBy="title"
+            >
+                <uiTable:extension>
+                    <OverflowToolbar
+                        id="_IDGenTermsAndConditionsOverflowToolbar1"
+                        style="Clear"
+                    >
+                        <Title
+                            id="_IDGenTermsAndConditionsToolbarTitle1"
+                            text="Supplier Quotation Items"
+                        />
+                        <ToolbarSpacer id="_IDGenTermsAndConditionsToolbarSpacer1" />
+                        <ToolbarSeparator id="_IDGenTermsAndConditionsToolbarSeparator" />
+                         <Button id="_IDGenTermsAndConditionsAddButton" text='Add' press="onAddTerm"/>
+                        <Button id="_IDGenTermsAndConditionsLoadButton" text='Load Standard Terms' press="onLoadStandardTerms"/>
+                    </OverflowToolbar>
+                </uiTable:extension>
+                <uiTable:columns>
+                    <uiTable:Column
+                        id="_IDGenTermsAndConditionsColumn1"
+                        width="6rem"
+                        sortProperty="Group"
+                        filterProperty="Group"
+                    >
+                        <Label
+                            id="_IDGenTermsAndConditionsLabel1"
+                            text="Supplier Quotation Item"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenTermsAndConditionsText1"
+                                text="{oLocalModel>SupplierQuotationItem}"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenTermsAndConditionsColumn2"
+                        width="15rem"
+                        sortProperty="Material"
+                        filterProperty="Material"
+                    >
+                        <Label
+                            id="_IDGenTermsAndConditionsLabel2"
+                            text="Material"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenTermsAndConditionsText2"
+                                text="{oLocalModel>Material}"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenTermsAndConditionsColumn3"
+                        width="8rem"
+                        sortProperty="SupplierMaterialNumber"
+                        filterProperty="SupplierMaterialNumber"
+                    >
+                        <Label
+                            id="_IDGenTermsAndConditionsLabel3"
+                            text="Supplier Material Number"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenTermsAndConditionsText3"
+                                text="{oLocalModel>SupplierMaterialNumber}"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenTermsAndConditionsColumn4"
+                        width="6rem"
+                        sortProperty="MaterialGroup"
+                        filterProperty="MaterialGroup"
+                    >
+                        <Label
+                            id="_IDGenTermsAndConditionsLabel4"
+                            text="MaterialGroup"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenTermsAndConditionsText4"
+                                text="{oLocalModel>MaterialGroup}"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenTermsAndConditionsColumn5"
+                        width="12rem"
+                        sortProperty="ScheduleLineOrderQuantity"
+                        filterProperty="ScheduleLineOrderQuantity"
+                    >
+                        <Label
+                            id="_IDGenTermsAndConditionsLabel5"
+                            text="ScheduleLineOrderQuantity"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenTermsAndConditionsText5"
+                                text="{oLocalModel>ScheduleLineOrderQuantity}"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                </uiTable:columns>
+            </uiTable:Table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
  <Panel id="_IDGenPanel5"
                 headerText="Terms &amp; Conditions"
@@ -17,14 +151,14 @@
                     <OverflowToolbar id="_IDGenTermsandconditionOverflowToolbar1">
                         <Title id="_IDGenQuotationTitle2" text="Terms &amp; Conditions"/>
                         <ToolbarSpacer id="_IDGenToolbarSpacer1"/>
-                        <Select id="termsGroupFilter"
+                        <!-- <Select id="termsGroupFilter"
                             selectedKey="ALL"
                             change="onTermsGroupFilter">
                             <core:Item id="_IDGenItem1" key="ALL"        text="All Terms"/>
                             <core:Item id="_IDGenItem2" key="REGULAR"    text="Regular Terms"/>
                             <core:Item id="_IDGenItem3" key="SPECIAL"    text="Special Terms"/>
                             <core:Item id="_IDGenItem4" key="ADDITIONAL" text="Additional Terms"/>
-                        </Select>
+                        </Select> -->
                         <Button id="_IDGenButton7"
                             text="Add Term"
                             icon="sap-icon://add"

@@ -66,7 +66,14 @@
                                     visible="{= !${oLocalModel>/compareQuotationIsEditable} }"
                                 />
                                 <table:Action
-                                    id="_IDGenQuotationComparisonActionGroup2"
+                                    id="_IDGenQuotationComparisonCancelActionGroup2"
+                                    key="CancelACtionCompareQuotation"
+                                    text="Cancel"
+                                    press=".onCompareQuotationCancelPress"
+                                    visible="{= ${oLocalModel>/compareQuotationIsEditable} }"
+                                />
+                                <table:Action
+                                    id="_IDGenQuotationComparisonEditActionGroup2"
                                     key="EditACtionCompareQuotation"
                                     text="Edit"
                                     press=".onCompareQuotationEditPress"
@@ -74,7 +81,7 @@
                                     visible="{= !${oLocalModel>/compareQuotationIsEditable} }"
                                 />
                                 <table:Action
-                                    id="_IDGenQuotationComparisonActionGroup3"
+                                    id="_IDGenQuotationComparisonDeleteActionGroup3"
                                     key="DeleteACtionCompareQuotation"
                                     text="Delete"
                                     press=".onCompareQuotationDeletePress"
@@ -85,13 +92,6 @@
                         </macros:Table>
                          <core:Fragment id="_IDGenQuotationComparisonDetailFragment" fragmentName="nlabs.ui.quotationcomparison.ext.fragments.QuotationComparisonDetail" type="XML" />
                     
-                    </IconTabFilter>
-                    <IconTabFilter
-                        id="_IDGenIconTabFilterTermsandConditions"
-                        text="Terms and Conditions"
-                    >
-                       <core:Fragment id="_IDGenTermsAndConditionsFragment" fragmentName="nlabs.ui.quotationcomparison.ext.fragments.TermsAndCondition" type="XML" />
-                      
                     </IconTabFilter>
                 </items>
             </IconTabBar>

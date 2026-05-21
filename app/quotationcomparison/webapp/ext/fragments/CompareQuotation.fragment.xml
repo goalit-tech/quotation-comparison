@@ -11,11 +11,6 @@
         id="myCompareQuotationDialog"
         title="Create Quotation"
     >
-        <!-- <macros:Form
-            metaPath="/RFQs/QuotationComparison/@com.sap.vocabularies.UI.v1.FieldGroup#QuotationComparisonDetails"
-            id="_IDGenddQuotationCreateForm"
-            title="Sample Form"
-        /> -->
         <f:SimpleForm
             id="_idGenCompareQuotationForm"
             editable="true"

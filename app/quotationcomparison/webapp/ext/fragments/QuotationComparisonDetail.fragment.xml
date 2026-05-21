@@ -122,7 +122,22 @@
                 showNoData="true"
                 selectionMode="None"
             >
-               
+               <uiTable:extension>
+                    <OverflowToolbar
+                        id="_IDGenCompareQuotationDetailToolbar1"
+                        style="Clear"
+                    >
+                        <Title
+                            id="_IDGenCompareQuotationDetailToolbarTitle1"
+                            text="Quotation Items"
+                        />
+                        <ToolbarSpacer id="_IDGenCompareQuotationDetailToolbarSpacer1" />
+                        <ToolbarSeparator id="_IDGenCompareQuotationDetailToolbarSeparator" />
+                        <Button id="_IDGenCompareQuotationDetailAddButton" text='Add'></Button>
+                        <Button id="_IDGenCompareQuotationDetailRemoveButton" text='Remove'></Button>
+                        <Button id="_IDGenCompareQuotationDetailTermsAndConditionsButton" text='Terms And Conditions'></Button>
+                    </OverflowToolbar>
+                </uiTable:extension>
             </uiTable:Table>
         </VBox>
     </Panel>

@@ -42,7 +42,7 @@
                 />
                 <Input
                     id="_IDGenQuotationFormInput"
-                    value="{oLocalModel>/QuotationCreate/rfq}"
+                    value="{oLocalModel>/CompareQuotation/rfq}"
                     editable="false"
                 />
                 <Label
@@ -51,7 +51,7 @@
                 />
                 <Input
                     id="_IDGenQuotationFormInput1"
-                    value="{oLocalModel>/QuotationCreate/companyName}"
+                    value="{oLocalModel>/CompareQuotation/companyName}"
                 />
                 <Label
                     id="_IDGenQuotationFormLabel8"
@@ -59,7 +59,7 @@
                 />
                 <Input
                     id="_IDGenQuotationFormInput2"
-                    value="{oLocalModel>/QuotationCreate/comparativeStatementTitle}"
+                    value="{oLocalModel>/CompareQuotation/comparativeStatementTitle}"
                 />
 
                 <Label
@@ -68,7 +68,7 @@
                 />
                 <Input
                     id="_IDGenQuotationFormInput3"
-                    value="{oLocalModel>/QuotationCreate/requestorName}"
+                    value="{oLocalModel>/CompareQuotation/requestorName}"
                 />
                 <Label
                     id="_IDGenQuotationFormLabel10"
@@ -76,7 +76,7 @@
                 />
                 <Input
                     id="_IDGenQuotationFormInput4"
-                    value="{oLocalModel>/QuotationCreate/accountAssignment}"
+                    value="{oLocalModel>/CompareQuotation/accountAssignment}"
                 />
                 <core:Title id="_IDGenuotationFormTitle2" text="" />
                 <Label
@@ -85,7 +85,7 @@
                 />
                 <Input
                     id="_IDGenQuotationFormInput5"
-                    value="{oLocalModel>/QuotationCreate/requisitionNumber}"
+                    value="{oLocalModel>/CompareQuotation/requisitionNumber}"
                 />
 
                 <Label
@@ -94,7 +94,7 @@
                 />
                 <DateTimePicker
                     id="_IDGenQuotationFormDateTimePicker"
-                    value="{oLocalModel>/QuotationCreate/requisitionDate}"
+                    value="{oLocalModel>/CompareQuotation/requisitionDate}"
                 />
                 <Label
                     id="_IDGenQuotationFormLabel13"
@@ -102,7 +102,7 @@
                 />
                 <Input
                     id="_IDGenQuotationFormDateTimePicker1"
-                    value="{oLocalModel>/QuotationCreate/purpose}"
+                    value="{oLocalModel>/CompareQuotation/purpose}"
                 />
                 <Label
                     id="_IDGenQuotationFormLabel14"
@@ -110,16 +110,19 @@
                 />
                 <DateTimePicker
                     id="_IDGenQuotationFormDateTimePicker2"
-                    value="{oLocalModel>/QuotationCreate/comparisonDate}"
+                    value="{oLocalModel>/CompareQuotation/comparisonDate}"
                 />
             </f:content>
         </f:SimpleForm>
 
         <VBox id="_IDGenddQCTableSupplierItemsVBox">
-            <uiTable:Table
-                id="_IDGenddQCTableSupplierItemsUITable"
+        
+            <uiTable:TreeTable
+                id="_IDGenCompareQuotationSupplierUITable"
                 selectionMode="MultiToggle"
-                rows="{oLocalModel>/SupplierQuotationItems}"
+                rowSelectionChange=".onCompareQuotationTableRowSelectionChange"
+                rows="{path:'oLocalModel>/SupplierQuotation', parameters: {arrayNames:['_SupplierQuotationItem']}}"
+                enableSelectAll="false"
                 enableCellFilter="true"
                 filter=".filterPrice"
                 ariaLabelledBy="title"
@@ -130,8 +133,8 @@
                         style="Clear"
                     >
                         <Title
-                            id="title"
-                            text="Supplier Quotation Items"
+                            id="_IDGenQuotationComparisonTitle"
+                            text="Supplier Quotation and Items"
                         />
                         <ToolbarSpacer id="_IDGenQuotationToolbarSpacer1" />
                         <ToolbarSeparator id="_IDGenQuotationToolbarSeparator" />
@@ -140,36 +143,71 @@
                             placeholder="Filter"
                             search=".filterGlobally"
                             width="15rem"
+                            visible="false"
                         />
                     </OverflowToolbar>
                 </uiTable:extension>
                 <uiTable:columns>
                     <uiTable:Column
-                        id="SupplierQuotationItem"
+                        id="_IDGenSupplierColumn"
+                        width="10rem"
+                        sortProperty="Supplier"
+                        filterProperty="Supplier"
+                    >
+                        <Label
+                            id="_IDGenSupplierLabel1"
+                            text="Supplier" wrapping="true"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenSupplierText1"
+                                text="{oLocalModel>Supplier}"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenSupplierQuotationColumn"
+                        width="6rem"
+                        sortProperty="SupplierQuotation"
+                        filterProperty="SupplierQuotation"
+                    >
+                        <Label
+                            id="_IDGenSupplierQuotationLabel1"
+                            text="Supplier Quotation No" wrapping="true"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenSupplierQuotationText1"
+                                text="{oLocalModel>SupplierQuotation}"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenSupplierQuotationItemColumn"
                         width="6rem"
                         sortProperty="SupplierQuotationItem"
                         filterProperty="SupplierQuotationItem"
                     >
                         <Label
-                            id="_IDGenLabel1"
-                            text="Supplier Quotation Item"
+                            id="_IDGenSupplierQuotationItemLabel1"
+                            text="Supplier Quotation Item" wrapping="true"
                         />
                         <uiTable:template>
                             <Text
-                                id="_IDGenText"
+                                id="_IDGenSupplierQuotationItemText1"
                                 text="{oLocalModel>SupplierQuotationItem}"
                             />
                         </uiTable:template>
                     </uiTable:Column>
                     <uiTable:Column
-                        id="Material"
-                        width="15rem"
+                        id="_IDGenMaterialColumn"
+                        width="8rem"
                         sortProperty="Material"
                         filterProperty="Material"
                     >
                         <Label
                             id="_IDGenLabel2"
-                            text="Material"
+                            text="Material" wrapping="true"
                         />
                         <uiTable:template>
                             <Text
@@ -179,69 +217,120 @@
                         </uiTable:template>
                     </uiTable:Column>
                     <uiTable:Column
-                        id="SupplierMaterialNumber"
-                        width="8rem"
-                        sortProperty="SupplierMaterialNumber"
-                        filterProperty="SupplierMaterialNumber"
-                    >
-                        <Label
-                            id="_IDGenLabel3"
-                            text="Supplier Material Number"
-                        />
-                        <uiTable:template>
-                            <Text
-                                id="_IDGenText2"
-                                text="{oLocalModel>SupplierMaterialNumber}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column
-                        id="MaterialGroup"
+                        id="_IDGenMaterialGroupColumn"
                         width="6rem"
                         sortProperty="MaterialGroup"
                         filterProperty="MaterialGroup"
                     >
                         <Label
-                            id="_IDGenLabel4"
-                            text="MaterialGroup"
+                            id="_IDGenLabel3"
+                            text="Material Group" wrapping="true"
                         />
                         <uiTable:template>
                             <Text
-                                id="_IDGenText3"
+                                id="_IDGenText2"
                                 text="{oLocalModel>MaterialGroup}"
                             />
                         </uiTable:template>
                     </uiTable:Column>
                     <uiTable:Column
-                        id="ScheduleLineOrderQuantity"
-                        width="12rem"
+                        id="_IDGenPurchaseRequisitionColumn"
+                        width="8rem"
+                        sortProperty="PurchaseRequisition"
+                        filterProperty="PurchaseRequisition"
+                    >
+                        <Label
+                            id="_IDGenPurchaseRequisitionLabel3"
+                            text="Purchase Requisition / Item" wrapping="true"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenPurchaseRequisitionText3"
+                                text="{= ${oLocalModel>PurchaseRequisition} ? ${oLocalModel>PurchaseRequisition} + ' - ' + ${oLocalModel>PurchaseRequisitionItem} : '' }"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenPurchaseRequisitionItemColumn"
+                        width="8rem"
+                        sortProperty="PurchasingDocumentItemText"
+                        filterProperty="PurchasingDocumentItemText"
+                    >
+                        <Label
+                            id="_IDGenPurchaseRequisitionItemLabel4"
+                            text="Make"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenPurchaseRequisitionItemText4"
+                                text="{oLocalModel>PurchasingDocumentItemText}"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenScheduleLineOrderQuantityColumn"
+                        width="6rem"
                         sortProperty="ScheduleLineOrderQuantity"
                         filterProperty="ScheduleLineOrderQuantity"
                     >
                         <Label
-                            id="_IDGenLabel5"
-                            text="ScheduleLineOrderQuantity"
+                            id="_IDGenScheduleLineOrderQuantityLabel5"
+                            text="Quantity" wrapping="true"
                         />
                         <uiTable:template>
                             <Text
-                                id="_IDGenText4"
-                                text="{oLocalModel>ScheduleLineOrderQuantity}"
+                                id="_IDGenScheduleLineOrderQuantityText4"
+                                text="{oLocalModel>ScheduleLineOrderQuantity} {oLocalModel>BaseUnit}"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenNetPriceAmountColumn1"
+                        width="6rem"
+                        sortProperty="NetPriceAmount"
+                        filterProperty="NetPriceAmount"
+                    >
+                        <Label
+                            id="_IDGenNetPriceAmountLabel4"
+                            text="Net Price Amount" wrapping="true"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenNetPriceAmountText4"
+                                text="{= ${oLocalModel>NetPriceAmount} ? ${oLocalModel>NetPriceAmount} + ' ' + ${oLocalModel>DocumentCurrency} : '' }"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenNetAmountColumn1"
+                        width="6rem"
+                        sortProperty="NetAmount"
+                        filterProperty="NetAmount"
+                    >
+                        <Label
+                            id="_IDGenNetAmountLabel4"
+                            text="Total Amount" wrapping="true"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenNetAmountText4"
+                                text="{= ${oLocalModel>NetAmount} ? ${oLocalModel>NetAmount} + ' ' + ${oLocalModel>DocumentCurrency} : '' }"
                             />
                         </uiTable:template>
                     </uiTable:Column>
                 </uiTable:columns>
-            </uiTable:Table>
+            </uiTable:TreeTable>
         </VBox>
         <buttons>
             <Button
-                id="_IDGenddQuotationCreateButton"
+                id="_IDGendCompareQuotationButton"
                 text="Create"
-                press=".onAddQuotationCreatePress"
+                press=".onAddCompareQuotationCreatePress"
             />
             <Button
-                id="_IDGenddQuotationCancelButton"
+                id="_IDGendCompareQuotationCancelButton"
                 text="Cancel"
-                press=".onAddQuotationCancelPress"
+                press=".onAddCompareQuotationCancelPress"
             />
         </buttons>
     </Dialog>
