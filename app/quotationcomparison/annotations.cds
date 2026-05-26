@@ -348,11 +348,11 @@ annotate service.SupplierQuotation with @(Capabilities: {Insertable: false,
 
 annotate service.SupplierQuotation with @(UI: {
     LineItem                            : [
-        {
-            $Type: 'UI.DataField',
-            Label: 'Supplier Name',
-            Value: RequestForQuotation,
-        },
+        // {
+        //     $Type: 'UI.DataField',
+        //     Label: 'Supplier Name',
+        //     Value: RequestForQuotation,
+        // },
         {
             $Type: 'UI.DataField',
             Label: 'Supplier Quotation Number',
@@ -361,7 +361,7 @@ annotate service.SupplierQuotation with @(UI: {
         {
             $Type: 'UI.DataField',
             Label: 'Supplier Name',
-            Value: RequestForQuotation,
+            Value: SupplierName,
         },
         {
             $Type: 'UI.DataField',
@@ -371,31 +371,31 @@ annotate service.SupplierQuotation with @(UI: {
         {
             $Type: 'UI.DataField',
             Label: 'Quotation Date',
-            Value: SupplierQuotationExternalID,
+            Value: QuotationSubmissionDate,
+        },
+        {
+            $Type: 'UI.DataField',
+            Label: 'Quotation Deadline',
+            Value: 'QuotationLatestSubmissionDate',
         },
         {
             $Type: 'UI.DataField',
             Label: 'Currency',
-            Value: '',
+            Value: 'DocumentCurrency',
         },
         {
             $Type: 'UI.DataField',
-            Label: 'Exchange Rate',
-            Value: '',
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Validity Date',
-            Value: PurContrValidityStartDate,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Contact Person',
-            Value: ''
+            Label: 'Effective Exchange Rate',
+            Value: EffectiveExchangeRate,
         },
         {
             $Type: 'UI.DataField',
             Label: 'Supplier Remarks',
+            Value: ''
+        },
+        {
+            $Type: 'UI.DataField',
+            Label: 'Contact phone',
             Value: '',
         }
     ],
@@ -437,36 +437,41 @@ annotate service.SupplierQuotation with @(UI: {
             {
                 $Type: 'UI.DataField',
                 Label: 'Supplier Name',
+                Value: SupplierName,
+            },
+            {
+                $Type: 'UI.DataField',
+                Label: 'Supplier Code',
                 Value: Supplier,
             },
             {
                 $Type: 'UI.DataField',
                 Label: 'Quotation Date',
-                Value: CreationDate,
+                Value: QuotationSubmissionDate,
+            },
+            {
+                $Type: 'UI.DataField',
+                Label: 'Quotation Deadline',
+                Value: 'QuotationLatestSubmissionDate',
             },
             {
                 $Type: 'UI.DataField',
                 Label: 'Currency',
-                Value: DocumentCurrency,
+                Value: 'DocumentCurrency',
             },
             {
                 $Type: 'UI.DataField',
-                Label: 'Exchange Rate',
+                Label: 'Effective Exchange Rate',
                 Value: EffectiveExchangeRate,
             },
             {
                 $Type: 'UI.DataField',
-                Label: 'Validity Date',
-                Value: PurContrValidityStartDate,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Contact Person',
-                Value: '',
-            },
-            {
-                $Type: 'UI.DataField',
                 Label: 'Supplier Remarks',
+                Value: ''
+            },
+            {
+                $Type: 'UI.DataField',
+                Label: 'Contact phone',
                 Value: '',
             }
         ],
@@ -476,23 +481,23 @@ annotate service.SupplierQuotation with @(UI: {
 annotate service.SupplierQuotationItem with @(UI: {LineItem: [
     {
         $Type: 'UI.DataField',
-        Label: 'Item Number',
-        Value: SupplierQuotationItem,
+        Label: 'Item Number for FQ',
+        Value: RequestForQuotationItem,
     },
     {
         $Type: 'UI.DataField',
         Label: 'Material Description',
-        Value: Material,
+        Value: PurchasingDocumentItemText,
     },
     {
         $Type: 'UI.DataField',
         Label: 'Quantity',
-        Value: AwardedQuantity,
+        Value: ScheduleLineOrderQuantity,
     },
     {
         $Type: 'UI.DataField',
-        Label: 'Units',
-        Value: OrderQuantityUnit,
+        Label: 'Base unit of Measure',
+        Value: BaseUnit,
     },
     {
         $Type: 'UI.DataField',
@@ -502,12 +507,12 @@ annotate service.SupplierQuotationItem with @(UI: {LineItem: [
     {
         $Type: 'UI.DataField',
         Label: 'Total Amount',
-        Value: NetAmount,
+        Value: TotalNetAmount,
     },
     {
         $Type: 'UI.DataField',
         Label: 'Delivery Date',
-        Value: '',
+        Value: 'ScheduleLineDeliveryDate',
     },
     {
         $Type: 'UI.DataField',

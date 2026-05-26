@@ -55,7 +55,6 @@
                             metaPath="/RFQs/QuotationComparison/@com.sap.vocabularies.UI.v1.LineItem"
                             selectionMode="ForceSingle"
                             selectionChange=".onQuotationComparisonSelectionChange"
-                            readOnly="false"
                         >
                             <macros:actions>
                                 <table:Action

@@ -39,7 +39,8 @@ sap.ui.define(
                         comparisonDate: null,
                     },
                     compareQuotationIsEditable: false,
-                    compareQuotationItemData: []
+                    compareQuotationItemData: [],
+                    cqUITableSelectionMode: 'Single'
                 });
                 // return oLocalModel;
                 this.editFlow.getView().setModel(oLocalModel, "oLocalModel");
@@ -72,8 +73,6 @@ sap.ui.define(
                 const sPath =
                     `/RFQs('${keyId}')/SupplierQuotation`;
                 try {
-                    // Bind list
-                    // const oListBinding = oModel.bindList(sPath);
                     const oListBinding = oModel.bindList(
                         sPath,
                         undefined,
@@ -85,10 +84,6 @@ sap.ui.define(
                     );
                     // Request contexts
                     const aContexts = await oListBinding.requestContexts(0, 100);
-                    // Convert contexts to plain objects
-                    // const aSupplierItems = aContexts.map((oContext) => {
-                    //     return oContext.getObject();
-                    // });
                     const aSupplierQuotation = aContexts.map((oContext) => {
                         return oContext.getObject();
                     });
@@ -204,8 +199,8 @@ sap.ui.define(
                 return match ? match[1] : null;
             },
             onCompareQuotationCancelPress: function () {
-                debugger;
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/cqUITableSelectionMode", 'Single');
                 console.log("Cancel button pressed");
             },
             onCompareQuotationEditPress: function () {
@@ -214,6 +209,40 @@ sap.ui.define(
             },
             onCompareQuotationDeletePress: function () {
 
+            },
+            formatCQUITableSelectionMode: function (mode) {
+                console.log('data is received', mode);
+                return mode === 'Single' ? 'ForceSingle' : 'None';
+            },
+            onAddQuotationPress1: function (oEvent) {
+                // const oTable = this.editFlow.getView().byId("_IDGenTableQuotationComparisons");
+                const context = oEvent.getSource().getBindingContext();
+                const keyId = this.extractKey(context.getPath());
+                console.log("RFQID", keyId);
+                const oLocalModelData = {
+                    CompareQuotation: {
+                        rfq: keyId,
+                        requisitionNumber: '',
+                        companyName: '',
+                        comparativeStatementTitle: '',
+                        requestorName: '',
+                        accountAssignment: '',
+                        requisitionNumber: '',
+                        requisitionDate: null,
+                        purpose: '',
+                        comparisonDate: null,
+                    },
+                    // SupplierQuotationItems: aSupplierItems
+                    // SupplierQuotation: aSupplierQuotation
+                };
+                // if (!isCreateMode) {
+                //     oLocalModelData.CompareQuotation = {}
+                // }
+                // return oLocalModel;
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationData", oLocalModelData.CompareQuotation);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemData", []);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", true);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/cqUITableSelectionMode", 'None');
             },
             onQuotationComparisonSelectionChange: async function (oEvent) {
                 console.log("Selection changed");
