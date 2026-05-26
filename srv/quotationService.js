@@ -4,7 +4,7 @@ const getComparisonData = require('./quotationData');
 
 module.exports = async (srv) => {
     // Using CDS API   
-    cds   
+    cds
     const S4_RFQ_PROCESS_API = await cds.connect.to("S4_API_RFQ_PROCESS");
     const S4_SUPPLIER_QUOTATION_SRV = await cds.connect.to("S4_API_SUPPLIER_QUOTATION");
     // srv.on('READ', ['RFQs', 'A_RequestForQuotationItem', 'A_RequestForQuotation'], req => {
@@ -39,13 +39,17 @@ module.exports = async (srv) => {
         isEntitySetAvailable = entitySetAvailableInUrl(from, 'QuotationComparison');
         if (isEntitySetAvailable) {
             const { QuotationComparison } = this.entities;
-            const query = SELECT.from(QuotationComparison)
-                .where({ rfq: rfqId });
+            // const query = SELECT.from(QuotationComparison)
+            //     .where({ rfq: rfqId });
             // Carry over $top, $skip, $count, $select from the original request
+
+            const { QuotationComparison } = S4_QUOTATION_COMPARISON_SRV.entities;
+            const query = SELECT.from(QuotationComparison)
+                .where({ RequisitionNumber: rfqId });
             if (SELECT.limit) query.SELECT.limit = SELECT.limit;
             if (SELECT.columns) query.SELECT.columns = SELECT.columns;
             if (SELECT.count) query.SELECT.count = SELECT.count;
-            return S4_SUPPLIER_QUOTATION_SRV.run(query);
+            return S4_QUOTATION_COMPARISON_SRV.run(query);
         }
         // Default: forward to RFQ Process API
         return S4_RFQ_PROCESS_API.run(req.query);
@@ -101,59 +105,41 @@ module.exports = async (srv) => {
         }
         return S4_SUPPLIER_QUOTATION_SRV.run(query);
     });
-  
-     srv.on('READ', 'QuotationComparisons', async req => {
+
+    srv.on('READ', 'QuotationComparisons', async req => {
+        const { QuotationComparison } = S4_QUOTATION_COMPARISON_SRV.entities;
         // const { QuotationComparison } = db.entities;
         const sel = req.query.SELECT;
         const from = sel?.from;
         if (entitySetAvailableInUrl(from, 'QuotationComparison')) {
-            // const rfq = req.params[0].RequestForQuotation
-            // return SELECT.from(QuotationComparison)
-            //     .where({ rfq: rfq })
-            const data = getComparisonData(srv);
-            data.filter(c => c.rfq === req.params[0].RequestForQuotation);
+            const rfqKey = from.ref[0]?.where;
+            const rfqId = rfqKey?.find(e => e.val)?.val;
+            if (rfqId) {
+                query.where({ RequestForQuotation: rfqId });
+            }
+        } else if (sel.where) {
+            query.SELECT.where = sel.where;
             return data;
         }
+        return S4_QUOTATION_COMPARISON_SRV.run(query);
     });
 
     srv.on('READ', 'QuotationComparisonItems', async req => {
-        // const { QuotationComparisonItems } = db.entities;
+        const { QuotationComparisonItem } = S4_QUOTATION_COMPARISON_SRV.entities;
         const sel = req.query.SELECT;
         const from = sel?.from;
         if (entitySetAvailableInUrl(from, 'QuotationComparisonItems')) {
-            // const rfq = req.params[0].RequestForQuotation
-            // return SELECT.from(QuotationComparisonItems)
-            //     .where({ rfq })
-            const data = getComparisonData(srv);
-            const items = data.find(c => c.rfq === req.params[0].RequestForQuotation)?.items;
-            return items || [];
+            const rfqKey = from.ref[0]?.where;
+            const rfqId = rfqKey?.find(e => e.val)?.val;
+            if (rfqId) {
+                query.where({ RequisitionNumber: rfqId });
+            }
+        } else if (sel.where) {
+            query.SELECT.where = sel.where;
         }
-    })
+        return S4_QUOTATION_COMPARISON_SRV.run(query);
+    });
 
-    // srv.on('READ', 'QuotationComparisons', async (req) => {
-    //     return [];
-    // });
-    // srv.on('CREATE', 'QuotationComparison', async req => {
-    //     return req.data;
-    // });
-
-    // srv.on('CREATE', 'QuotationComparisons', async (req) => {
-    //     console.log("Create is called");
-    //     return "Quotation Comparison created successfully";
-    // });
-    // srv.on('READ', 'QuotationComparisonItems', async (req) => {
-    //     return [];
-    // });
-
-    // srv.on('CREATEQuotationComparison', async (req) => {
-    //     console.log("Create Quotation Comparison is called");
-    //     return "Quotation Comparison created successfully";
-    // });
-
-    // srv.on('UPDATEQuotationComparison', async (req) => {
-    //     console.log("Update Quotation Comparison is called");
-    //     return "Quotation Comparison updated successfully";
-    // });
 }
 
 function entitySetAvailableInUrl(from, sEntitySetName) {

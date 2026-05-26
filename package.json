@@ -61,6 +61,18 @@
         },
         "csrf": true,
         "csrfInBatch": true
+      },
+      "S4_API_QUOTATION_COMPARISON": {
+        "kind": "odata",
+        "model": "srv/external/API_QUOTATION_COMPARISON_SRV",
+        "[production]": {
+          "credentials": {
+            "destination": "S4_API",
+            "path": "/sap/opu/odata4/sap/zsb_quot_comp/srvd/sap/zsd_quot_comp_hdr/0001/"
+          }
+        },
+        "csrf": true,
+        "csrfInBatch": true
       }
     }
   },

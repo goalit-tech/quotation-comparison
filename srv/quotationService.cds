@@ -1,5 +1,7 @@
 using {S4_API_RFQ_PROCESS as API_RFQ_PROCESS_SRV} from './external/API_RFQ_PROCESS_SRV';
 using {S4_API_SUPPLIER_QUOTATION as API_SUPPLIER_QUOTATION_SRV} from './external/API_SUPPLIER_QUOTATION_SRV';
+
+using {S4_API_QUOTATION_COMPARISON as API_QUOTATION_COMPARISON_SRV} from './external/API_QUOTATION_COMPARISON_SRV';
 using {nlab.rfq.db as db} from '../db/datamodel';
 
 
@@ -15,7 +17,7 @@ service QuotationService {
             SupplierQuotation   : Association to many SupplierQuotation
                                       on SupplierQuotation.RequestForQuotation = RequestForQuotation,
             QuotationComparison : Association to many QuotationComparisons
-                                      on QuotationComparison.rfq = RequestForQuotation,
+                                      on QuotationComparison.RequisitionNumber = RequestForQuotation,
 
 
         };
@@ -35,18 +37,7 @@ service QuotationService {
     @readonly
     entity SupplierQuotationItem       as projection on API_SUPPLIER_QUOTATION_SRV.SupplierQuotationItem;
 
-   
-    entity QuotationComparisons        as
-        projection on db.QuotationComparison {
-            *
-        }
-        actions {
-            @Core.OperationAvailable: true
-            action CREATEQuotationComparison() returns String;
 
-            @Core.OperationAvailable: true
-            action UPDATEQuotationComparison() returns String;
-        };
-
-    entity QuotationComparisonItems    as projection on db.QuotationComparisonItem;
+    entity QuotationComparisons        as projection on API_QUOTATION_COMPARISON_SRV.QuotationComparison;
+    entity QuotationComparisonItems    as projection on API_QUOTATION_COMPARISON_SRV.QuotationComparisonItem;
 }
