@@ -1,4 +1,4 @@
-/* checksum : aa9c1135f87f0a0efeef0c80cbed8621 */
+/* checksum : 31f75950dfcfccd44db575d7278f7383 */
 @cds.external : true
 @CodeList.CurrencyCodes.Url : '../../../../default/iwbep/common/0001/$metadata'
 @CodeList.CurrencyCodes.CollectionPath : 'Currencies'
@@ -43,13 +43,13 @@
 @PDF.Features.UploadToFileShare : true
 @Capabilities.KeyAsSegmentSupported : true
 @Capabilities.AsynchronousRequestsSupported : true
-service S4_API_QUOTATION_COMPARISON {
+service S4_API_QUOTATION_COMPARISON1 {
   @cds.external : true
   type QuotationComparisonCbAControl {
     @Common.Label : 'Dynamic CbA-Control'
     @Common.Heading : 'Dynamic Create by Association Control'
     @Common.QuickInfo : 'Dynamic Create via Association Control Property'
-    _CompareQuotationItem : Boolean not null;
+    _ITEMS : Boolean not null;
   };
 
   @cds.external : true
@@ -82,8 +82,8 @@ service S4_API_QUOTATION_COMPARISON {
   @Common.Messages : SAP__Messages
   @Capabilities.NavigationRestrictions.RestrictedProperties : [
     {
-      NavigationProperty: _CompareQuotationItem,
-      InsertRestrictions: { Insertable: ![__CreateByAssociationControl/_CompareQuotationItem] }
+      NavigationProperty: _ITEMS,
+      InsertRestrictions: { Insertable: ![__CreateByAssociationControl/_ITEMS] }
     }
   ]
   @Capabilities.SearchRestrictions.Searchable : false
@@ -91,14 +91,13 @@ service S4_API_QUOTATION_COMPARISON {
   @Capabilities.SortRestrictions.NonSortableProperties : [ '__CreateByAssociationControl', '__EntityControl' ]
   @Capabilities.UpdateRestrictions.DeltaUpdateSupported : true
   @Capabilities.UpdateRestrictions.Updatable : ![__EntityControl/Updatable]
-  @Capabilities.UpdateRestrictions.NonUpdatableNavigationProperties : [ '_CompareQuotationItem' ]
+  @Capabilities.UpdateRestrictions.NonUpdatableNavigationProperties : [ '_ITEMS' ]
   @Capabilities.UpdateRestrictions.QueryOptions.SelectSupported : true
   @Capabilities.DeepUpdateSupport.ContentIDSupported : true
   @Capabilities.DeleteRestrictions.Deletable : ![__EntityControl/Deletable]
   entity QuotationComparison {
     @Core.ComputedDefaultValue : true
     key QuotationComparison : String(10) not null;
-    RequestForQuotation : String(10) not null;
     CompanyCode : String(4) not null;
     CompanyName : String(40) not null;
     CompativeStatementTitle : String(100) not null;
@@ -118,7 +117,7 @@ service S4_API_QUOTATION_COMPARISON {
     __EntityControl : EntityControl;
     SAP__Messages : many SAP__Message not null;
     @Common.Composition : true
-    _CompareQuotationItem : Composition of many QuotationComparisonItem on _CompareQuotationItem._Header = $self;
+    _ITEMS : Composition of many QuotationComparisonItem on _ITEMS._Header = $self;
   };
 
   @cds.external : true
@@ -199,32 +198,28 @@ service S4_API_QUOTATION_COMPARISON {
   @cds.external : true
   @cds.persistence.skip : true
   @Common.Label : 'Supplier Quotation Header'
-  @Capabilities.NavigationRestrictions.RestrictedProperties : [
-    {
-      NavigationProperty: _SupplierQuotationItem,
-      InsertRestrictions: { Insertable: false }
-    }
-  ]
   @Capabilities.SearchRestrictions.Searchable : false
   @Capabilities.InsertRestrictions.Insertable : false
   @Capabilities.DeleteRestrictions.Deletable : false
   @Capabilities.UpdateRestrictions.Updatable : false
-  @Capabilities.UpdateRestrictions.NonUpdatableNavigationProperties : [ '_SupplierQuotationItem' ]
   @Capabilities.UpdateRestrictions.QueryOptions.SelectSupported : true
+  @Capabilities.FilterRestrictions.FilterExpressionRestrictions : [
+    { Property: OrderQuantity, AllowedExpressions: 'MultiValue' },
+    { Property: NetAmount, AllowedExpressions: 'MultiValue' },
+    { Property: NetPriceAmount, AllowedExpressions: 'MultiValue' }
+  ]
   entity SupplierQuotation {
     @Common.IsUpperCase : true
     @Common.Label : 'Supplier Quotation'
     @Common.Heading : 'Quotation'
     @Common.QuickInfo : 'Supplier Quotation Number'
     key SupplierQuotation : String(10) not null;
-    @Common.IsUpperCase : true
-    @Common.Label : 'RFQ'
-    @Common.QuickInfo : 'Request for Quotation'
-    RequestForQuotation : String(10) not null;
+    @Common.IsDigitSequence : true
+    @Common.Label : 'Supplier Quotation Item'
+    @Common.QuickInfo : 'Item Number of Supplier Quotation'
+    key ItemNumber : String(5) not null;
     @Common.IsUpperCase : true
     @Common.Label : 'Supplier'
-    @Common.QuickInfo : 'Account Number of Supplier'
-    @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=LIFNR'
     SupplierCode : String(10) not null;
     @Common.IsUpperCase : true
     @Common.Label : 'Supplier Name'
@@ -251,47 +246,6 @@ service S4_API_QUOTATION_COMPARISON {
     ValidityDate : Date;
     ContactPerson : String(80) not null;
     SupplierRemarks : String(255) not null;
-    @Common.Composition : true
-    _SupplierQuotationItem : Composition of many SupplierQuotationItem on _SupplierQuotationItem._Header = $self;
-  };
-
-  @cds.external : true
-  @cds.persistence.skip : true
-  @Common.Label : 'Supplier Quotation Item'
-  @Capabilities.NavigationRestrictions.RestrictedProperties : [
-    {
-      NavigationProperty: _Header,
-      InsertRestrictions: { Insertable: false }
-    }
-  ]
-  @Capabilities.SearchRestrictions.Searchable : false
-  @Capabilities.InsertRestrictions.Insertable : false
-  @Capabilities.DeleteRestrictions.Deletable : false
-  @Capabilities.UpdateRestrictions.Updatable : false
-  @Capabilities.UpdateRestrictions.NonUpdatableNavigationProperties : [ '_Header' ]
-  @Capabilities.UpdateRestrictions.QueryOptions.SelectSupported : true
-  @Capabilities.FilterRestrictions.FilterExpressionRestrictions : [
-    { Property: OrderQuantity, AllowedExpressions: 'MultiValue' },
-    { Property: NetAmount, AllowedExpressions: 'MultiValue' },
-    { Property: NetPriceAmount, AllowedExpressions: 'MultiValue' }
-  ]
-  entity SupplierQuotationItem {
-    @Common.IsUpperCase : true
-    @Common.Label : 'Purchasing Document'
-    @Common.Heading : 'Pur. Doc.'
-    @Common.QuickInfo : 'Purchasing Document Number'
-    @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=EBELN'
-    key SupplierQuotation : String(10) not null;
-    @Common.IsDigitSequence : true
-    @Common.Label : 'Supplier Quotation Item'
-    @Common.QuickInfo : 'Item Number of Supplier Quotation'
-    key ItemNumber : String(5) not null;
-    @Common.IsUpperCase : true
-    @Common.Label : 'Purch. Doc. Category'
-    @Common.Heading : 'Cat'
-    @Common.QuickInfo : 'Purchasing Document Category'
-    @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=BSTYP'
-    PurchasingDocumentCategory : String(1) not null;
     @Common.Label : 'Short Text'
     @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=TXZ01'
     PurchasingDocumentItemText : String(40) not null;
@@ -440,7 +394,6 @@ service S4_API_QUOTATION_COMPARISON {
     YY1_Specifications_PDI : String(200) not null;
     @Common.Label : 'Material Make'
     YY1_MaterialMake_PDI : String(70) not null;
-    _Header : Association to one SupplierQuotation on _Header.SupplierQuotation = SupplierQuotation;
   };
 };
 
