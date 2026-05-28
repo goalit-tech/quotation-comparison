@@ -16,7 +16,7 @@ service QuotationService {
             // NEW ASSOCIATION
             SupplierQuotation   : Association to many SupplierQuotation
                                       on SupplierQuotation.RequestForQuotation = RequestForQuotation,
-            QuotationComparison : Association to many QuotationComparisons
+            QuotationComparison : Association to many QuotationComparison
                                       on QuotationComparison.RequestForQuotation = RequestForQuotation,
 
 
@@ -38,12 +38,9 @@ service QuotationService {
     entity SupplierQuotationItem     as projection on API_QUOTATION_COMPARISON_SRV.SupplierQuotationItem;
 
 
-    entity QuotationComparisons      as projection on API_QUOTATION_COMPARISON_SRV.QuotationComparison
-        actions {
-            // action createCompareQuotation(quotationComparison: QuotationComparisons) returns String;
-            action upsertCompareQuotation(quotationComparison: QuotationComparisons, type: String)      returns QuotationComparisons;
-            action workflowForCompareQuotation(quotationComparison: QuotationComparisons, workflowType: String) returns QuotationComparisons;
-        };
+    entity QuotationComparison       as projection on API_QUOTATION_COMPARISON_SRV.QuotationComparison;
 
-    entity QuotationComparisonItems  as projection on API_QUOTATION_COMPARISON_SRV.QuotationComparisonItem;
+    entity QuotationComparisonItem   as projection on API_QUOTATION_COMPARISON_SRV.QuotationComparisonItem;
+    action upsertCompareQuotation(quotationComparison: QuotationComparison, type: String)              returns String;
+    action workflowForCompareQuotation(quotationComparison: QuotationComparison, workflowType: String) returns String;
 }

@@ -14,32 +14,34 @@ sap.ui.define(
                 PageController.prototype.onInit.apply(this, arguments); // needs to be called to properly initialize the page controller
                 const oLocalModel = new JSONModel({
                     CompareQuotation: {
-                        rfq: '',
-                        requisitionNumber: '',
-                        companyName: '',
-                        comparativeStatementTitle: '',
-                        requestorName: '',
-                        accountAssignment: '',
-                        requisitionNumber: '',
-                        requisitionDate: null,
-                        purpose: '',
-                        comparisonDate: null,
+                        RequestForQuotation: '',
+                        CompanyCode: '',
+                        CompanyName: '',
+                        CompativeStatementTitle: '',
+                        NameOfRequester: '',
+                        AccountAssignment: '',
+                        RequisitionNumber: '',
+                        RequisitionDate: null,
+                        Purpose: '',
+                        ComparisonDate: null,
                     },
                     SupplierQuotationItems: [],
                     compareQuotationData: {
-                        rfq: '',
-                        requisitionNumber: '',
-                        companyName: '',
-                        comparativeStatementTitle: '',
-                        requestorName: '',
-                        accountAssignment: '',
-                        requisitionNumber: '',
-                        requisitionDate: null,
-                        purpose: '',
-                        comparisonDate: null,
+                        RequestForQuotation: '',
+                        RequisitionNumber: '',
+                        CompanyCode: '',
+                        CompanyName: '',
+                        CompativeStatementTitle: '',
+                        NameOfRequester: '',
+                        AccountAssignment: '',
+                        RequisitionNumber: '',
+                        RequisitionDate: null,
+                        Purpose: '',
+                        ComparisonDate: null,
                     },
                     compareQuotationIsEditable: false,
                     compareQuotationItemData: [],
+                    compareQuotationItemSelected: false,
                     cqUITableSelectionMode: 'Single'
                 });
                 // return oLocalModel;
@@ -53,25 +55,50 @@ sap.ui.define(
                 const context = oEvent.getSource().getBindingContext();
                 const keyId = this.extractKey(context.getPath());
                 console.log("RFQID", keyId);
-                const sPath =
-                    `/RFQs('${keyId}')/SupplierQuotation('${keyId}')/`;
-                console.log("SPath", sPath);
-                this.editFlow.getView().getModel("ui").setProperty('/customUIQuotationPath', sPath);
-                await this.getSupplierQuotationForRFQ(keyId, true);
+                // const sPath =
+                //     `/RFQs('${keyId}')/SupplierQuotation('${keyId}')/`;
+                // console.log("SPath", sPath);
+                // this.editFlow.getView().getModel("ui").setProperty('/customUIQuotationPath', sPath);
+                const aSupplierQuotationData = await this.getSupplierQuotationForRFQ(keyId, true);
+                await this.updateContextForCompareQuotation(aSupplierQuotationData, keyId, true);
+
                 this.oDialog ??= await this.loadFragment({
                     name: "nlabs.ui.quotationcomparison.ext.fragments.Quotation"
                 });
 
-                this.oDialog.setBindingContext(context);
+                // this.oDialog.setBindingContext(context);
                 this.getExtensionAPI().addDependent(this.oDialog);
                 this.oDialog.open();
             },
-            getSupplierQuotationForRFQ: async function (keyId, isCreateMode) {
+            updateContextForCompareQuotation: function (aSupplierQuotation, keyId, isCreateMode) {
+                const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
+                    ? aSupplierQuotation
+                    : (aSupplierQuotation?.value || []);
+
+                const oLocalModelData = {
+                    CompareQuotation: {
+                        RequestForQuotation: keyId || '',
+                        CompanyCode: aSupplierQuotationData[0]?.CompanyCode || '',
+                        CompanyName: aSupplierQuotationData[0]?.CompanyName || '',
+                        CompativeStatementTitle: aSupplierQuotationData[0]?.CompativeStatementTitle || '',
+                        NameOfRequester: aSupplierQuotationData[0]?.NameOfRequester || '',
+                        AccountAssignment: aSupplierQuotationData[0]?.AccountAssignment || '',
+                        RequisitionNumber: aSupplierQuotationData[0]?.RequisitionNumber || '',
+                        Purpose: aSupplierQuotationData[0]?.Purpose || '',
+                        RequisitionDate: aSupplierQuotationData[0]?.RequisitionDate || null,
+                        ComparisonDate: aSupplierQuotationData[0]?.ComparisonDate || null,
+                    },
+                    SupplierQuotation: aSupplierQuotationData
+                };
+                if (!isCreateMode) {
+                    oLocalModelData.CompareQuotation = {}
+                }
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/CompareQuotation", oLocalModelData.CompareQuotation);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/SupplierQuotation", oLocalModelData.SupplierQuotation);
+            },
+            getSupplierQuotationForRFQ: async function (keyId) {
                 const oModel = this.editFlow.getView().getModel();
-                // const sPath =
-                //     `/RFQs('${keyId}')/SupplierQuotation('${keyId}')/_SupplierQuotationItem`;
-                const sPath =
-                    `/RFQs('${keyId}')/SupplierQuotation`;
+                const sPath = `/RFQs('${keyId}')/SupplierQuotation`;
                 try {
                     const oListBinding = oModel.bindList(
                         sPath,
@@ -82,85 +109,113 @@ sap.ui.define(
                             $expand: "_SupplierQuotationItem"
                         }
                     );
-                    // Request contexts
                     const aContexts = await oListBinding.requestContexts(0, 100);
-                    const aSupplierQuotation = aContexts.map((oContext) => {
-                        return oContext.getObject();
-                    });
+                    const aSupplierQuotation = aContexts.map((oContext) => oContext.getObject());
 
                     console.log("Supplier Quotations", aSupplierQuotation);
-                    const oLocalModelData = {
-                        CompareQuotation: {
-                            rfq: keyId,
-                            requisitionNumber: '',
-                            companyName: '',
-                            comparativeStatementTitle: '',
-                            requestorName: '',
-                            accountAssignment: '',
-                            requisitionNumber: '',
-                            requisitionDate: null,
-                            purpose: '',
-                            comparisonDate: null,
-                        },
-                        // SupplierQuotationItems: aSupplierItems
-                        SupplierQuotation: aSupplierQuotation
-                    };
-                    if (!isCreateMode) {
-                        oLocalModelData.CompareQuotation = {}
-                    }
-                    // return oLocalModel;
-                    this.editFlow.getView().getModel("oLocalModel").setProperty("/CompareQuotation", oLocalModelData.CompareQuotation);
-                    this.editFlow.getView().getModel("oLocalModel").setProperty("/SupplierQuotation", oLocalModelData.SupplierQuotation);
+                    return aSupplierQuotation;
 
                 } catch (oError) {
-
                     console.error("Error loading supplier items", oError);
-
+                    return [];
                 }
             },
             onCompareQuotationTableRowSelectionChange: function (oEvent) {
                 const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationSupplierUITable");
-                const iRowIndex = oEvent.getParameter("rowIndex");
-                const oRowContext = oEvent.getParameter("rowContext");
-                const bSelected = oEvent.getParameter("selected");
-                const bUserInteraction = oEvent.getParameter("userInteraction");
 
-                if (!bUserInteraction || !oRowContext || iRowIndex < 0) {
-                    return;
-                }
+                var oRowIndex = oEvent.getParameter("rowIndex");
+                var oRowContext = oEvent.getParameter("rowContext");
+                var sPath = oRowContext.getPath(); // This will give you the path of the selected row
+                if (sPath.includes("/_SupplierQuotationItem/")) {
+                    // const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationSupplierUITable");
+                    const aSelectedIndices = oTable.getSelectedIndices();
+                    const aRows = oTable.getRows();
 
-                const oObject = oRowContext.getObject();
-                if (!oObject || !Array.isArray(oObject._SupplierQuotationItem) || oObject._SupplierQuotationItem.length === 0) {
-                    return;
-                }
-
-                const sParentPath = oRowContext.getPath();
-                const aChildPaths = oObject._SupplierQuotationItem.map((_, index) => `${sParentPath}/_SupplierQuotationItem/${index}`);
-                const oRowsBinding = oTable.getBinding("rows");
-                const aContexts = oRowsBinding.getContexts(0, 1000);
-
-                aContexts.forEach((oContext, iIndex) => {
-                    if (!oContext) {
-                        return;
-                    }
-                    const sContextPath = oContext.getPath();
-                    if (aChildPaths.includes(sContextPath)) {
-                        if (bSelected) {
-                            oTable.addSelectionInterval(iIndex, iIndex);
-                        } else {
-                            oTable.removeSelectionInterval(iIndex, iIndex);
+                    const aSelectedItems = aSelectedIndices.map((iIndex) => {
+                        const oRow = aRows[iIndex];
+                        if (oRow) {
+                            const oContext = oRow.getBindingContext("oLocalModel");
+                            return oContext ? oContext.getObject() : null;
                         }
-                    }
-                });
+                        return null;
+                    }).filter(obj => obj !== null);
+
+                    console.log("Selected Quotation Items:", aSelectedItems);
+                    this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemSelected", aSelectedItems);
+                } else {
+                    // Remove the current selected row
+                    oTable.removeSelectionInterval(oRowIndex, oRowIndex);
+                }
             },
             onAddCompareQuotationCreatePress: function (oEvent) {
-                const aSelectedQuotations = this.getSelectedSupplierQuotations();
-                const aSelectedItems = this.getSelectedSupplierQuotationItems();
+                //const aSelectedQuotations = this.getSelectedSupplierQuotations();
+                // const aSelectedItems = this.getSelectedSupplierQuotationItems();
+                // this.editFlow.getView().getModel("oLocalModel").getProperty("/CompareQuotationItems");
 
-                console.log("Selected Quotations:", aSelectedQuotations);
-                console.log("Selected Items:", aSelectedItems);
+                // console.log("Selected Quotations:", aSelectedQuotations);
+                // console.log("Selected Items:", aSelectedItems);
 
                 this.oDialog.close();
+                debugger;
+                this.callActionForQuotationComparison('upsertCompareQuotation', { type: "Create" })
+            },
+            callActionForQuotationComparison: async function (sActionName, mUrlParameters) {
+
+                const oModel = this.editFlow.getView().getModel();
+                const oCompareQuotation = this.editFlow.getView().getModel("oLocalModel").getProperty("/CompareQuotation");
+                const aCompareQuotationItems = this.editFlow.getView().getModel("oLocalModel").getProperty("/compareQuotationItemSelected") || [];
+                // oCompareQuotation
+                const oPayload = {
+                    quotationComparison: oCompareQuotation
+                };
+
+                try {
+                    const oModel = this.getView().getModel();
+
+                    // Create action binding
+                    const oAction = oModel.bindContext("/upsertCompareQuotation(...)");
+
+                    // Set parameters
+                    // Set action parameters
+                    oAction.setParameter("quotationComparison", oCompareQuotation);
+                    oAction.setParameter("type", "CREATE");
+
+                    // try {
+                    await oAction.execute();
+
+                    const oResult = oAction.getBoundContext().getObject();
+                    console.log(oResult);
+
+                    sap.m.MessageToast.show("Action executed successfully");
+                    // } catch (error) {
+                    //     console.error(error);
+                    //     sap.m.MessageBox.error("Action failed");
+                    // }
+                    // const oResult = await new Promise((resolve, reject) => {
+                    //     oModel.callFunction(`/${sActionName}`, {
+                    //         method: "POST",
+                    //         urlParameters: mUrlParameters,
+                    //         groupId: "$auto",
+                    //         changeSetId: "$auto",
+                    //         refreshAfterChange: true,
+                    //         headers: {
+                    //             "Content-Type": "application/json"
+                    //         },
+                    //         success: (oResponse) => {
+                    //             console.log("Action result", oResponse);
+                    //             resolve(oResponse);
+                    //         },
+                    //         error: (oError) => {
+                    //             console.error("Error calling action", sActionName, oError);
+                    //             reject(oError);
+                    //         }
+                    //     });
+                    // });
+                    // return oResult;
+                } catch (oError) {
+                    console.error("Error calling action", sActionName, oError);
+                    throw oError;
+                }
             },
             getSelectedSupplierQuotations: function () {
                 const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationSupplierUITable");
@@ -252,6 +307,7 @@ sap.ui.define(
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationData", selectedContextObject[0]);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemData", transformRows);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemSelected", true);
                 this.generateCOlumnsForComparison(selectedContextObject[0].items);
 
             },

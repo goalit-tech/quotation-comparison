@@ -25,7 +25,9 @@
     "undeploy": "cf undeploy quotationcomparison --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-    "watch-quotationcompare": "cds watch --open com.nlab.ui.quotationcompare/index.html?sap-ui-xx-viewCache=false --livereload false"
+    "watch-quotationcompare": "cds watch --open com.nlab.ui.quotationcompare/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-compare-quotation": "cds watch --open nlabs.ui.comparequotation/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-comparequotation": "cds watch --open nlabs.ui.comparequotation/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "private": true,
   "cds": {
@@ -63,8 +65,12 @@
         "csrfInBatch": true
       },
       "S4_API_QUOTATION_COMPARISON": {
-        "kind": "odata",
+        "kind": "odata-v4",
         "model": "srv/external/API_QUOTATION_COMPARISON_SRV",
+        "credentials": {
+          "destination": "S4_API",
+          "path": "/sap/opu/odata4/sap/zsb_quot_comp/srvd/sap/zsd_quot_comp_hdr/0001/"
+        },
         "[production]": {
           "credentials": {
             "destination": "S4_API",
@@ -80,6 +86,7 @@
     "app/*"
   ],
   "sapux": [
-    "app/quotationcomparison"
+    "app/quotationcomparison",
+    "app/compare-quotation"
   ]
 }
