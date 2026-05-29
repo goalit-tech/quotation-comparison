@@ -47,12 +47,14 @@
                 />
                 <Label
                     id="_IDGenQuotationCompanyNameFormLabel"
-                    text="Company Name"
+                    text="Company Code"
                 />
                 <Input
                     id="_IDGenQuotationCompanyNameFormInput"
-                    value="{oLocalModel>/CompareQuotation/CompanyName} ({oLocalModel>/CompareQuotation/CompanyCode})"
+                    value="{oLocalModel>/CompareQuotation/CompanyCode}"
+                    editable="false"
                 />
+                    <!-- value="{oLocalModel>/CompareQuotation/CompanyName} ({oLocalModel>/CompareQuotation/CompanyCode})" -->
                 <Label
                     id="_IDGenQuotationCompativeStatementTitleFormLabel"
                     text="Comparative Statement Title"
@@ -92,9 +94,16 @@
                     id="_IDGenQuotationRequisitionDateFormLabel"
                     text="Requisition Date"
                 />
-                <DateTimePicker
+                <!-- value="{oLocalModel>/CompareQuotation/RequisitionDate}" -->
+                <DatePicker
                     id="_IDGenQuotationRequisitionDateFormDateTimePicker"
-                    value="{oLocalModel>/CompareQuotation/RequisitionDate}"
+                    	value="{
+						'path':'oLocalModel>/CompareQuotation/RequisitionDate',
+						'type':'sap.ui.model.type.Date',
+						'formatOptions': {
+							'pattern': 'yyyy-MM-dd'
+						}
+					}"
                 />
                 <Label
                     id="_IDGenQuotationPurposeFormLabel"
@@ -108,21 +117,29 @@
                     id="_IDGenQuotationComparisonDateFormLabel"
                     text="Comparison Date"
                 />
-                <DateTimePicker
+                <!-- value="{oLocalModel>/CompareQuotation/ComparisonDate}" -->
+                <DatePicker
                     id="_IDGenQuotationComparisonDateFormDateTimePicker"
-                    value="{oLocalModel>/CompareQuotation/ComparisonDate}"
+                    value="{
+						'path':'oLocalModel>/CompareQuotation/ComparisonDate',
+						'type':'sap.ui.model.type.Date',
+						'formatOptions': {
+							'pattern': 'yyyy-MM-dd'
+						}
+					}"
                 />
             </f:content>
         </f:SimpleForm>
 
         <VBox id="_IDGenddQCTableSupplierItemsVBox">
         
-            <uiTable:TreeTable
+                <!-- rowSelectionChange=".onCompareQuotationTableRowSelectionChange" -->
+                <!-- rows="{path:'oLocalModel>/SupplierQuotation', parameters: {arrayNames:['_SupplierQuotationItem']}}" -->
+            <uiTable:Table
                 id="_IDGenCompareQuotationSupplierUITable"
                 selectionMode="MultiToggle"
-                rowSelectionChange=".onCompareQuotationTableRowSelectionChange"
-                rows="{path:'oLocalModel>/SupplierQuotation', parameters: {arrayNames:['_SupplierQuotationItem']}}"
                 enableSelectAll="false"
+                rows="{oLocalModel>/SupplierQuotationItem}"
                 enableCellFilter="true"
                 filter=".filterPrice"
                 ariaLabelledBy="title"
@@ -439,7 +456,7 @@
                         </uiTable:template>
                     </uiTable:Column>
                 </uiTable:columns>
-            </uiTable:TreeTable>
+            </uiTable:Table>
         </VBox>
         <buttons>
             <Button

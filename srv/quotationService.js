@@ -1,6 +1,6 @@
 const cds = require('@sap/cds');
 
-const {UPSERT} = cds.ql;
+const { UPSERT } = cds.ql;
 
 class CapCompareQuotationService extends cds.ApplicationService {
     async init() {
@@ -15,7 +15,7 @@ class CapCompareQuotationService extends cds.ApplicationService {
         this.on('READ', 'QuotationComparisonItem', req => this.readQuotationComparisonItem(req));
         // this.on('READ', 'SupplierQuotationItem', req => S4_QUOTATION_COMPARISON_SRV.run(req.query));
         this.on('READ', 'RFQs', req => this.readRFQsAndNavigationData(req));
-        this.on('upsertCompareQuotation', async ({ data: { quotationComparison, type } }) => this.upsertCompareQuotation(quotationComparison, type));
+        this.on('upsertCompareQuotation', async ({ data: { quotationComparison, quotationComparisonItem, type } }) => this.upsertCompareQuotation(quotationComparison, quotationComparisonItem, type));
         this.on('workflowForCompareQuotation', async (req) => this.workflowForCompareQuotation(req));
         return super.init()
     }
@@ -109,11 +109,11 @@ class CapCompareQuotationService extends cds.ApplicationService {
         if (sel.orderBy) query.SELECT.orderBy = sel.orderBy;
         if (sel.count) query.SELECT.count = sel.count;
         const from = sel.from;
-        if (this.entitySetAvailableInUrl(from, '_QuotationComparisonItem')) {
+        if (this.entitySetAvailableInUrl(from, '_CompareQuotationItem')) {
             const rfqKey = from.ref[0]?.where;
             const rfqId = rfqKey?.find(e => e.val)?.val;
             if (rfqId) {
-                query.where({ RequestForQuotation: rfqId });
+                query.where({ QuotationComparison: rfqId });
             }
         } else if (sel.where) {
             query.SELECT.where = sel.where;
@@ -126,24 +126,33 @@ class CapCompareQuotationService extends cds.ApplicationService {
         return Array.isArray(from?.ref) && from.ref.some(r => r === sEntitySetName);
     }
 
-    async upsertCompareQuotation(quotationComparison, type) {
+    async upsertCompareQuotation(quotationComparison, quotationComparisonItem, type) {
         try {
             if (!quotationComparison) {
                 return { message: "No payload provided" };
             }
 
             const S4_QUOTATION_COMPARISON_SRV = await cds.connect.to("S4_API_QUOTATION_COMPARISON");
-            const { QuotationComparison } = S4_QUOTATION_COMPARISON_SRV.entities;
-            const { INSERT } = cds;
+            // const { QuotationComparison } = S4_QUOTATION_COMPARISON_SRV.entities;
+            // const { INSERT } = cds;
+            // const query = SELECT.from(QuotationComparison);
+            // const { QuotationComparison } = S4_QUOTATION_COMPARISON_SRV.entities;
+            // const query = SELECT.from(QuotationComparison).limit(1);
+            // .orderBy({ CompareQuotation: 'desc' })
 
-            // const result = await S4_QUOTATION_COMPARISON_SRV.run(
-            //     INSERT.into(QuotationComparison).entries([quotationComparison])
-            // );
-            const result = await S4_QUOTATION_COMPARISON_SRV.create('QuotationComparison', quotationComparison);
+            // const lastRecord = await S4_QUOTATION_COMPARISON_SRV.run(query);
 
-            return { message: "Quotation upserted successfully", result };
+            // const readData = await S4_QUOTATION_COMPARISON_SRV.run(query);
+            quotationComparison.QuotationComparison = Math.floor(Math.random() * 10000000).toString();
+            const resultHeader = await S4_QUOTATION_COMPARISON_SRV.create('QuotationComparison', quotationComparison);
+            quotationComparisonItem.forEach(eachQuotationItem => {
+                eachQuotationItem.CompareQuotation = resultHeader?.CompareQuotation;
+            });
+            const resultItems = await S4_QUOTATION_COMPARISON_SRV.create('QuotationComparisonItem', quotationComparisonItem);
+
+            return { message: `Quotation upserted successfully with ComparisonId: ${resultHeader?.CompareQuotation}` };
         } catch (err) {
-            req.log?.error?.(err);
+            // req.log?.error?.(err);
             return { error: err.message || String(err) };
         }
     }
