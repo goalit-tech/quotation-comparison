@@ -115,13 +115,22 @@
             </f:content>
         </f:SimpleForm>
         <VBox id="_IDGenCompareQuotationDetailVBox">
+                <!-- rows="{oLocalModel>/compareQuotationItemData}" -->
             <uiTable:Table
                 id="_IDGenCompareQuotationDetailUITable"
-                rows="{oLocalModel>/compareQuotationItemData}"
                 enableCellFilter="true"
                 showNoData="true"
                 selectionMode="None"
+                rows="{
+                    path: 'oLocalModel>/compareQuotationItemData',
+                    sorter: {
+                        path: 'Description',
+                        descending: false
+                    }
+                }"
             >
+              <!-- items="{ path: '<your_path>', sorter: { path: '<Property_to_Sort>', descending: <true/false>, group: '.getGroup' }, groupHeaderFactory: '.getGroupHeader'}" -->
+              
                <uiTable:extension>
                     <OverflowToolbar
                         id="_IDGenCompareQuotationDetailToolbar1"

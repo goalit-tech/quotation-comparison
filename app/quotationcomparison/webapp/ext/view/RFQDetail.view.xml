@@ -89,7 +89,7 @@
                                 />
                             </macros:actions>
                         </macros:Table>
-                        <VBox id="_IDGenCompareQuotationTableDetailVBox" visible="{= !${oLocalModel>/compareQuotationItemSelected}}">
+                        <VBox id="_IDGenCompareQuotationTableDetailVBox" visible="{= ${oLocalModel>/compareQuotationItemSelected}}">
                           <core:Fragment id="_IDGenQuotationComparisonDetailFragment" fragmentName="nlabs.ui.quotationcomparison.ext.fragments.QuotationComparisonDetail" type="XML" />
                         
                         </VBox>

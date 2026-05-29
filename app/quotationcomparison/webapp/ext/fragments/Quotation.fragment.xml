@@ -51,9 +51,10 @@
                 />
                 <Input
                     id="_IDGenQuotationCompanyNameFormInput"
-                    value="{oLocalModel>/CompareQuotation/CompanyCode}"
+                    value="{oLocalModel>/CompareQuotation/CompanyName} ({oLocalModel>/CompareQuotation/CompanyCode})"
                     editable="false"
                 />
+                    <!-- value="{oLocalModel>/CompareQuotation/CompanyCode}" -->
                     <!-- value="{oLocalModel>/CompareQuotation/CompanyName} ({oLocalModel>/CompareQuotation/CompanyCode})" -->
                 <Label
                     id="_IDGenQuotationCompativeStatementTitleFormLabel"

@@ -86,7 +86,7 @@ sap.ui.define(
                         QuotationComparison: '',
                         RequestForQuotation: rfqContextObject?.RequestForQuotation || '',
                         CompanyCode: aSupplierQuotationData[0]?.CompanyCode || '',
-                        CompanyName: aSupplierQuotationData[0]?.CompanyName || '',
+                        CompanyName: aSupplierQuotationData[0]?.CompanyCodeName || '',
                         CompativeStatementTitle: aSupplierQuotationData[0]?.CompativeStatementTitle || '',
                         NameOfRequester: aSupplierQuotationData[0]?.NameOfRequester || '',
                         AccountAssignment: aSupplierQuotationData[0]?.AccountAssignment || '',
@@ -108,70 +108,37 @@ sap.ui.define(
             prepareCompareQuotationItemData: function () {
                 const aSelectedItems = this.editFlow.getView().getModel("oLocalModel").getProperty("/supplierQuotationItemSelected") || [];
                 const aCompareQuotationItem = [];
-                const fieldMapping = {
-                    QuotationComparison: (item) => item?.QuotationComparison || '',
-                    SNo: (item) => item?.SNo || '',
-                    Description: (item) => item?.Description || '',
-                    Quantity: (item) => item?.Quantity || '',
-                    Units: (item) => item?.Units || '',
-                    SupplierCode: (item) => item?.SupplierCode || '',
-                    SupplierName: (item) => item?.SupplierName || '',
-                    UnitRate: (item) => item?.UnitRate || '',
-                    TotalAmount: (item) => item?.TotalAmount || '',
-                    Currency: (item) => item?.Currency || '',
-                    MaterialMake: (item) => item?.MaterialMake || '',
-                    Specifications: (item) => item?.Specifications || '',
-                    ModelNumber: (item) => item?.ModelNumber || '',
-                    Warranty: (item) => item?.Warranty || '',
-                    TaxAmount: (item) => item?.TaxAmount || '',
-                    FreightCharges: (item) => item?.FreightCharges || '',
-                    Discount: (item) => item?.Discount || '',
-                    TechnicalCompliance: (item) => item?.TechnicalCompliance || '',
-                    ConversionRs: (item) => item?.ConversionRs || '',
-                    BcdPercent: (item) => item?.BcdPercent || '',
-                    SwcPercentOnBcd: (item) => item?.SwcPercentOnBcd || '',
-                    HsnCode: (item) => item?.HsnCode || '',
-                    Gst: (item) => item?.Gst || '',
-                    InsuranceCharges: (item) => item?.InsuranceCharges || '',
-                    BankCharges: (item) => item?.BankCharges || '',
-                    LocalTransportCharges: (item) => item?.LocalTransportCharges || '',
-                    LandingCost: (item) => item?.LandingCost || '',
-                    Density: (item) => item?.Density || '',
-                    ContactPerson: (item) => item?.ContactPerson || '',
-                    PhoneNumber: (item) => item?.PhoneNumber || '',
-
-                };
 
                 aSelectedItems.forEach((item, index) => {
                     var newQuotationComparisonItem = {
                         QuotationComparison: item?.QuotationComparison || '',
-                        SNo: (index + 1) * 10,
+                        SNo: ((index + 1) * 10).toString(),
                         Description: item?.PurchasingDocumentItemText || '',
-                        Quantity: item?.OrderQuantity || '',
+                        Quantity: item?.ScheduleLineOrderQuantity || 0,
                         Units: item?.BaseUnit || '',
                         SupplierCode: item?.SupplierCode || '',
                         SupplierName: item?.SupplierName || '',
-                        UnitRate: item?.NetPriceAmount || '',
-                        TotalAmount: item?.NetAmount || '',
+                        UnitRate: item?.NetPriceAmount || 0,
+                        TotalAmount: item?.NetAmount || 0,
                         Currency: item?.DocumentCurrency || '',
                         MaterialMake: item?.MaterialMake || '',
                         Specifications: item?.YY1_Specifications_PDI || '',
                         ModelNumber: item?.YY1_MaterialMake_PDI || '',
                         Warranty: item?.Warranty || '',
-                        TaxAmount: item?.TaxAmount || '',
-                        FreightCharges: item?.FreightCharges || '',
-                        Discount: item?.Discount || '',
+                        TaxAmount: item?.TaxAmount || 0,
+                        FreightCharges: item?.FreightCharges || 0,
+                        Discount: item?.Discount || 0,
                         TechnicalCompliance: item?.TechnicalCompliance || '',
-                        ConversionRs: item?.Conversion || '',
-                        BcdPercent: item?.BcdPerce || '',
-                        SwcPercentOnBcd: item?.SwcPercentOnBcd || '',
+                        ConversionRs: item?.Conversion || 1,
+                        BcdPercent: item?.BcdPerce || 0,
+                        SwcPercentOnBcd: item?.SwcPercentOnBcd || 0,
                         HsnCode: item?.HsnCode || '',
-                        Gst: item?.Gst || '',
-                        InsuranceCharges: item?.InsuranceCharges || '',
-                        BankCharges: item?.BankCharges || '',
-                        LocalTransportCharges: item?.LocalTransportCharges || '',
-                        LandingCost: item?.LandingCost || '',
-                        Density: item?.Density || '',
+                        Gst: item?.Gst || 0,
+                        InsuranceCharges: item?.InsuranceCharges || 0,
+                        BankCharges: item?.BankCharges || 0,
+                        LocalTransportCharges: item?.LocalTransportCharges || 0,
+                        LandingCost: item?.LandingCost || 0,
+                        Density: item?.Density || 0,
                         ContactPerson: item?.ContactPerson || '',
                         PhoneNumber: item?.PhoneNumber || ''
                     };
@@ -448,7 +415,17 @@ sap.ui.define(
                 });
 
 
-            }
+            },
+            getGroup: function (oContext) {
+                return oContext.getProperty('Description');
+            },
+
+            getGroupHeader: function (oGroup) {
+                debugger;
+                return new sap.m.GroupHeaderListItem({
+                    title: oGroup.key
+                });
+            },
         });
     }
 );
