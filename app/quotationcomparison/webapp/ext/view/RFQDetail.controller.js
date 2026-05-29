@@ -324,13 +324,13 @@ sap.ui.define(
             onCompareQuotationTableRowSelectionChange: async function (oEvent) {
                 console.log("Selection changed");
                 const contexts = oEvent.getParameter('selectedContext');
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemSelected", true);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
                 const selectedContextObject = contexts.map(context => context.getObject());
                 const aCompareQuotationItems = await this.getSelectedCompareQuotationItemDetails(selectedContextObject[0]);
                 const transformRows = this.transformDataforComparison(aCompareQuotationItems);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationData", selectedContextObject[0]);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemData", transformRows);
-                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
-                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemSelected", true);
                 this.generateCOlumnsForComparison(aCompareQuotationItems);
 
             },
