@@ -66,6 +66,7 @@
                 <Property Name="Description" Type="Edm.String" Nullable="false" MaxLength="200"/>
                 <Property Name="Quantity" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="2"/>
                 <Property Name="Units" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="SupplierCode" Type="Edm.String" Nullable="false" MaxLength="10"/>
                 <Property Name="SupplierName" Type="Edm.String" Nullable="false" MaxLength="80"/>
                 <Property Name="UnitRate" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="variable"/>
                 <Property Name="TotalAmount" Type="Edm.Decimal" Nullable="false" Precision="15" Scale="variable"/>
@@ -102,6 +103,8 @@
                 </Key>
                 <Property Name="SupplierQuotation" Type="Edm.String" Nullable="false" MaxLength="10"/>
                 <Property Name="RequestForQuotation" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="CompanyCode" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="CompanyCodeName" Type="Edm.String" Nullable="false" MaxLength="25"/>
                 <Property Name="SupplierCode" Type="Edm.String" Nullable="false" MaxLength="10"/>
                 <Property Name="SupplierName" Type="Edm.String" Nullable="false" MaxLength="220"/>
                 <Property Name="QuotationDate" Type="Edm.Date"/>
@@ -140,11 +143,11 @@
                 <Property Name="OrderQuantityUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
                 <Property Name="OrderItemQtyToBaseQtyNmrtr" Type="Edm.Decimal" Nullable="false" Precision="5"/>
                 <Property Name="OrderItemQtyToBaseQtyDnmntr" Type="Edm.Decimal" Nullable="false" Precision="5"/>
-                <Property Name="OrderQuantity" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="ScheduleLineOrderQuantity" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
                 <Property Name="PurgDocPriceDate" Type="Edm.Date"/>
                 <Property Name="BaseUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
                 <Property Name="NetAmount" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="variable"/>
-                <Property Name="NetPriceAmount" Type="Edm.Decimal" Nullable="false" Precision="11" Scale="variable"/>
+                <Property Name="NetOrderPrice" Type="Edm.Decimal" Nullable="false" Precision="11" Scale="variable"/>
                 <Property Name="NetPriceQuantity" Type="Edm.Decimal" Nullable="false" Precision="5"/>
                 <Property Name="DocumentCurrency" Type="Edm.String" Nullable="false" MaxLength="5"/>
                 <Property Name="PurchaseRequisition" Type="Edm.String" Nullable="false" MaxLength="10"/>
@@ -153,6 +156,7 @@
                 <Property Name="RequestForQuotationItem" Type="Edm.String" Nullable="false" MaxLength="5"/>
                 <Property Name="YY1_Specifications_PDI" Type="Edm.String" Nullable="false" MaxLength="200"/>
                 <Property Name="YY1_MaterialMake_PDI" Type="Edm.String" Nullable="false" MaxLength="70"/>
+                <Property Name="AccountingAssignment" Type="Edm.String" Nullable="false" MaxLength="1"/>
                 <NavigationProperty Name="_Header" Type="com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.SupplierQuotationType" Nullable="false" Partner="_SupplierQuotationItem">
                     <ReferentialConstraint Property="SupplierQuotation" ReferencedProperty="SupplierQuotation"/>
                 </NavigationProperty>
@@ -210,10 +214,10 @@
                 </EntitySet>
             </EntityContainer>
             <Annotations Target="SAP__self.QuotationComparisonItemType/QuotationComparison">
-                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__core.Computed"/>
             </Annotations>
             <Annotations Target="SAP__self.QuotationComparisonItemType/SNo">
-                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__core.Computed"/>
                 <Annotation Term="SAP__common.IsDigitSequence"/>
             </Annotations>
             <Annotations Target="SAP__self.QuotationComparisonItemType/Quantity">
@@ -420,6 +424,12 @@
                 <Annotation Term="SAP__common.Label" String="RFQ"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Request for Quotation"/>
             </Annotations>
+            <Annotations Target="SAP__self.SupplierQuotationType/CompanyCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Company Code"/>
+                <Annotation Term="SAP__common.Heading" String="CoCd"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BUKRS"/>
+            </Annotations>
             <Annotations Target="SAP__self.SupplierQuotationType/SupplierCode">
                 <Annotation Term="SAP__common.IsUpperCase"/>
                 <Annotation Term="SAP__common.Label" String="Supplier"/>
@@ -578,7 +588,7 @@
                 <Annotation Term="SAP__common.QuickInfo" String="Purchase Order Unit of Measure"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=BSTME"/>
             </Annotations>
-            <Annotations Target="SAP__self.SupplierQuotationItemType/OrderQuantity">
+            <Annotations Target="SAP__self.SupplierQuotationItemType/ScheduleLineOrderQuantity">
                 <Annotation Term="SAP__measures.Unit" Path="OrderQuantityUnit"/>
                 <Annotation Term="SAP__common.Label" String="Order Quantity"/>
                 <Annotation Term="SAP__common.Heading" String="PO Quantity"/>
@@ -595,7 +605,7 @@
                 <Annotation Term="SAP__measures.ISOCurrency" Path="DocumentCurrency"/>
                 <Annotation Term="SAP__common.Label" String="Quotation Net Value"/>
             </Annotations>
-            <Annotations Target="SAP__self.SupplierQuotationItemType/NetPriceAmount">
+            <Annotations Target="SAP__self.SupplierQuotationItemType/NetOrderPrice">
                 <Annotation Term="SAP__measures.ISOCurrency" Path="DocumentCurrency"/>
                 <Annotation Term="SAP__common.Label" String="Net Order Price"/>
                 <Annotation Term="SAP__common.Heading" String="Net Price"/>
@@ -634,6 +644,13 @@
                 <Annotation Term="SAP__common.IsDigitSequence"/>
                 <Annotation Term="SAP__common.Label" String="Item Number for RFQ"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Item Number for Request for Quotation"/>
+            </Annotations>
+            <Annotations Target="SAP__self.SupplierQuotationItemType/AccountingAssignment">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Acct Assignment Cat."/>
+                <Annotation Term="SAP__common.Heading" String="A"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Account Assignment Category"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=KNTTP"/>
             </Annotations>
             <Annotations Target="SAP__self.Container/SupplierQuotationItem">
                 <Annotation Term="SAP__capabilities.NavigationRestrictions">
@@ -687,7 +704,7 @@
                         <PropertyValue Property="FilterExpressionRestrictions">
                             <Collection>
                                 <Record>
-                                    <PropertyValue Property="Property" PropertyPath="OrderQuantity"/>
+                                    <PropertyValue Property="Property" PropertyPath="ScheduleLineOrderQuantity"/>
                                     <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
                                 </Record>
                                 <Record>
@@ -695,7 +712,7 @@
                                     <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
                                 </Record>
                                 <Record>
-                                    <PropertyValue Property="Property" PropertyPath="NetPriceAmount"/>
+                                    <PropertyValue Property="Property" PropertyPath="NetOrderPrice"/>
                                     <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
                                 </Record>
                             </Collection>
@@ -707,7 +724,7 @@
                 <Annotation Term="SAP__common.Label" String="Supplier Quotation Item"/>
             </Annotations>
             <Annotations Target="SAP__self.QuotationComparisonType/QuotationComparison">
-                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__core.Computed"/>
             </Annotations>
             <Annotations Target="SAP__self.QuotationComparisonType/__CreateByAssociationControl">
                 <Annotation Term="SAP__core.Computed"/>
@@ -794,6 +811,10 @@
             <Annotations Target="SAP__self.QuotationComparisonType">
                 <Annotation Term="SAP__common.Label" String="Quotation Comparison Header"/>
                 <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.SupplierQuotationType/CompanyCodeName">
+                <Annotation Term="SAP__common.Label" String="Company Name"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name of Company Code or Company"/>
             </Annotations>
             <Annotations Target="SAP__self.SupplierQuotationType/QuotationDate">
                 <Annotation Term="SAP__common.Label" String="Quotation Date"/>

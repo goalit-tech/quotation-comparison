@@ -1,4 +1,4 @@
-/* checksum : aa9c1135f87f0a0efeef0c80cbed8621 */
+/* checksum : f36bbbb6e50a2e21d6f917588e42019a */
 @cds.external : true
 @CodeList.CurrencyCodes.Url : '../../../../default/iwbep/common/0001/$metadata'
 @CodeList.CurrencyCodes.CollectionPath : 'Currencies'
@@ -96,7 +96,7 @@ service S4_API_QUOTATION_COMPARISON {
   @Capabilities.DeepUpdateSupport.ContentIDSupported : true
   @Capabilities.DeleteRestrictions.Deletable : ![__EntityControl/Deletable]
   entity QuotationComparison {
-    @Core.ComputedDefaultValue : true
+    @Core.Computed : true
     key QuotationComparison : String(10) not null;
     RequestForQuotation : String(10) not null;
     CompanyCode : String(4) not null;
@@ -143,9 +143,9 @@ service S4_API_QUOTATION_COMPARISON {
   @Capabilities.InsertRestrictions.Insertable : false
   @Capabilities.DeleteRestrictions.Deletable : ![__EntityControl/Deletable]
   entity QuotationComparisonItem {
-    @Core.ComputedDefaultValue : true
+    @Core.Computed : true
     key QuotationComparison : String(10) not null;
-    @Core.ComputedDefaultValue : true
+    @Core.Computed : true
     @Common.IsDigitSequence : true
     key SNo : String(5) not null;
     Description : String(200) not null;
@@ -153,6 +153,7 @@ service S4_API_QUOTATION_COMPARISON {
     Quantity : Decimal(13, 2) not null;
     @Common.IsUnit : true
     Units : String(3) not null;
+    SupplierCode : String(10) not null;
     SupplierName : String(80) not null;
     @Measures.ISOCurrency : Currency
     UnitRate : Decimal(precision: 15) not null;
@@ -222,6 +223,14 @@ service S4_API_QUOTATION_COMPARISON {
     @Common.QuickInfo : 'Request for Quotation'
     RequestForQuotation : String(10) not null;
     @Common.IsUpperCase : true
+    @Common.Label : 'Company Code'
+    @Common.Heading : 'CoCd'
+    @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=BUKRS'
+    CompanyCode : String(4) not null;
+    @Common.Label : 'Company Name'
+    @Common.QuickInfo : 'Name of Company Code or Company'
+    CompanyCodeName : String(25) not null;
+    @Common.IsUpperCase : true
     @Common.Label : 'Supplier'
     @Common.QuickInfo : 'Account Number of Supplier'
     @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=LIFNR'
@@ -271,9 +280,9 @@ service S4_API_QUOTATION_COMPARISON {
   @Capabilities.UpdateRestrictions.NonUpdatableNavigationProperties : [ '_Header' ]
   @Capabilities.UpdateRestrictions.QueryOptions.SelectSupported : true
   @Capabilities.FilterRestrictions.FilterExpressionRestrictions : [
-    { Property: OrderQuantity, AllowedExpressions: 'MultiValue' },
+    { Property: ScheduleLineOrderQuantity, AllowedExpressions: 'MultiValue' },
     { Property: NetAmount, AllowedExpressions: 'MultiValue' },
-    { Property: NetPriceAmount, AllowedExpressions: 'MultiValue' }
+    { Property: NetOrderPrice, AllowedExpressions: 'MultiValue' }
   ]
   entity SupplierQuotationItem {
     @Common.IsUpperCase : true
@@ -386,7 +395,7 @@ service S4_API_QUOTATION_COMPARISON {
     @Common.Heading : 'PO Quantity'
     @Common.QuickInfo : 'Purchase Order Quantity'
     @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=BSTMG'
-    OrderQuantity : Decimal(13, 3) not null;
+    ScheduleLineOrderQuantity : Decimal(13, 3) not null;
     @Common.Label : 'Price Date'
     @Common.QuickInfo : 'Date of Price Determination'
     @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=PREDT'
@@ -404,7 +413,7 @@ service S4_API_QUOTATION_COMPARISON {
     @Common.Heading : 'Net Price'
     @Common.QuickInfo : 'Net Price in Purchasing Document (in Document Currency)'
     @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=BPREI'
-    NetPriceAmount : Decimal(precision: 11) not null;
+    NetOrderPrice : Decimal(precision: 11) not null;
     @Common.Label : 'Price Unit'
     @Common.Heading : 'Per'
     NetPriceQuantity : Decimal(precision: 5) not null;
@@ -440,6 +449,12 @@ service S4_API_QUOTATION_COMPARISON {
     YY1_Specifications_PDI : String(200) not null;
     @Common.Label : 'Material Make'
     YY1_MaterialMake_PDI : String(70) not null;
+    @Common.IsUpperCase : true
+    @Common.Label : 'Acct Assignment Cat.'
+    @Common.Heading : 'A'
+    @Common.QuickInfo : 'Account Assignment Category'
+    @Common.DocumentationRef : 'urn:sap-com:documentation:key?=type=DE&id=KNTTP'
+    AccountingAssignment : String(1) not null;
     _Header : Association to one SupplierQuotation on _Header.SupplierQuotation = SupplierQuotation;
   };
 };
