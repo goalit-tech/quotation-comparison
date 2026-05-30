@@ -53,9 +53,9 @@ sap.ui.define(
                     name: "nlabs.ui.quotationcomparison.ext.fragments.Quotation"
                 });
 
-                if (isUpdate) {
+                // if (isUpdate) {
 
-                }
+                // }
 
                 // this.oDialog.setBindingContext(context);
                 this.getExtensionAPI().addDependent(this.oDialog);

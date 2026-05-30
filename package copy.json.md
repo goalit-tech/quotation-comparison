@@ -36,13 +36,9 @@
         "kind": "odata-v2",
         "model": "srv/external/API_RFQ_PROCESS_SRV",
         "[development]": {
-          "credentials": {
-            "destination": "S4_API",
-            "path": "sap/opu/odata/sap/API_RFQ_PROCESS_SRV/"
-          },
           "kind": "odata-v2",
           "model": "srv/external/API_RFQ_PROCESS_SRV",
-          "mocked": false
+          "mocked": true
         },
         "[production]": {
           "credentials": {
@@ -57,13 +53,9 @@
         "kind": "odata-v4",
         "model": "srv/external/API_QUOTATION_COMPARISON_SRV",
         "[development]": {
-          "credentials": {
-            "destination": "S4_API",
-            "path": "/sap/opu/odata4/sap/zsb_quot_comp/srvd/sap/zsd_quot_comp_hdr/0001/"
-          },
           "kind": "odata-v4",
           "model": "srv/external/API_QUOTATION_COMPARISON_SRV",
-          "mocked": false
+          "mocked": true
         },
         "[production]": {
           "credentials": {

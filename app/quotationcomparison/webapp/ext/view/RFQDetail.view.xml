@@ -64,13 +64,13 @@
                                     press=".onAddQuotationPress"
                                     visible="{= !${oLocalModel>/compareQuotationIsEditable} }"
                                 />
-                                <table:Action
+                                <!-- <table:Action
                                     id="_IDGenQuotationComparisonActionGroupUpdate"
                                     key="SaveACtionQuotation"
                                     text="Update Quotation"
                                     press=".onCompareQuotationUpdatePress"
                                     visible="{= !${oLocalModel>/compareQuotationIsEditable} }"
-                                />
+                                /> -->
                                     <!-- <table:Action
                                         id="_IDGenQuotationComparisonActionGroupSave"
                                         key="SaveACtionQuotation"
@@ -119,16 +119,15 @@
                 <ToolbarSpacer id="_IDGenToolbarSpacer" />
                 <Button
                     id="_IDGenButton"
-                    text="Approve"
+                    text="Send for Technical Review"
                     press=".onApprove"
-                    type="Accept"
+                    type="Emphasized"
                     icon=""
                 />
                 <Button
                     id="_IDGenButton1"
-                    text="Reject"
+                    text="Save As Draft"
                     press=".onReject"
-                    type="Reject"
                     icon=""
                 />
             </OverflowToolbar>

@@ -1,8 +1,8 @@
 using QuotationService as service from '../../srv/quotationService';
 
 annotate service.RFQs with @(UI.HeaderInfo: {
-    TypeName      : 'RFQ',
-    TypeNamePlural: 'RFQs',
+    TypeName      : '{i18n>RequestForQuotation}',
+    TypeNamePlural: '{i18n>RequestForQuotation}',
     Title         : {
         $Type: 'UI.DataField',
         Value: RequestForQuotation
@@ -22,99 +22,122 @@ annotate service.RFQs with @(UI: {
     ],
     LineItem       : [
         {
-            $Type: 'UI.DataField',
-            Label: 'Request For Quotation',
-            Value: RequestForQuotation,
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>RequestForQuotation}',
+            Value                : RequestForQuotation,
+            ![@HTML5.CssDefaults]: {width: 'auto'},
+            ![UI.Importance]     : 'High'
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'RFQ Type',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>RequestForQuotationDate}',
+            Value                : CreationDate,
+            ![@HTML5.CssDefaults]: {width: 'auto'},
+            ![UI.Importance]     : 'High'
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'RFQ Date',
-            Value: CreationDate,
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>RequestForQuotationDescription}',
+            Value                : RequestForQuotationName,
+            ![@HTML5.CssDefaults]: {width: 'auto'},
+            ![UI.Importance]     : 'High'
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'RFQ Description',
-            Value: RequestForQuotationName,
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>PurchasingOrganization}',
+            Value                : PurchasingOrganization,
+            ![@HTML5.CssDefaults]: {width: 'auto'},
+            ![UI.Importance]     : 'High'
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Purchasing Organization',
-            Value: PurchasingOrganization,
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>PurchasingGroup}',
+            Value                : PurchasingGroup,
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Purchasing Group',
-            Value: PurchasingGroup,
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>CompanyCode}',
+            Value                : CompanyCode,
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Company Code',
-            Value: CompanyCode,
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>Supplier}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Supplier',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>Currency}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Currency',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : 'RFQ Type',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Validity Start Date',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>ValidityStartDate}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Validity End Date',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>ValidityEndDate}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Quotation Deadline',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>QuotationDeadline}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Incoterms',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>Incoterms}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Requestor Name',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>RequestorName}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Purpose',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>Purpose}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Requisition Number',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>RequisitionNumber}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Requisition Date',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>RequisitionDate}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Account Assignment',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>AccountAssignment}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         },
         {
-            $Type: 'UI.DataField',
-            Label: 'Comparison Date',
-            Value: '',
+            $Type                : 'UI.DataField',
+            Label                : '{i18n>ComparisonDate}',
+            Value                : '',
+            ![@HTML5.CssDefaults]: {width: 'auto'}
         }
     ],
 });
@@ -800,18 +823,18 @@ annotate service.QuotationComparisonItems with @(UI: {LineItem: [
     },
 ], });
 
-annotate service.QuotationComparison with @(Capabilities: {
-    DeleteRestrictions: {
-        Deletable: false,
-    },
-     UpdateRestrictions: {
-        Updatable: false,
-    },  
-    InsertRestrictions: {
-        Insertable: false,
-    },
+annotate service.QuotationComparison with @(
+    Capabilities: {
+        DeleteRestrictions: {Deletable: false,
+        },
+        UpdateRestrictions: {Updatable: false,
+        },
+        InsertRestrictions: {Insertable: false,
+        },
     // UpdateRestrictions.Updatable : false,
     // @Capabilities.InsertRestrictions.Insertable: false,
     // Deletable : false,
     // Updatable : false,
-}, DeleteHidden: true, );
+    },
+    DeleteHidden: true,
+);

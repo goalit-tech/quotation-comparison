@@ -11,7 +11,7 @@
     	<headerToolbar>
 			<OverflowToolbar id="_idGenCompareQuotationDetailPanelToolbar" style="Clear">
             <ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer1"/>
-				<Title id="_idGenCompareQuotationDetailPanelTitle" text="Header"/>
+				<Title id="_idGenCompareQuotationDetailPanelTitle" text="EENADU TELEVISION PRIVATE LIMITED"/>
 				<ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer2"/>
 				<Button text="Edit" id="_idGenCompareQuotationDetailPanelButtonEdit" press=".onCompareQuotationEditPress" visible="{= !${oLocalModel>/compareQuotationIsEditable} }" />
 				<Button text="Cancel" id="_idGenCompareQuotationDetailPanelToolbarCancel" press=".onCompareQuotationCancelPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
