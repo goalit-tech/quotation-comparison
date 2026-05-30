@@ -35,9 +35,10 @@
       "S4_API_RFQ_PROCESS": {
         "kind": "odata-v2",
         "model": "srv/external/API_RFQ_PROCESS_SRV",
-        "credentials": {
-          "destination": "S4_API",
-          "path": "sap/opu/odata/sap/API_RFQ_PROCESS_SRV/"
+        "[development]": {
+          "kind": "odata-v2",
+          "model": "srv/external/API_RFQ_PROCESS_SRV",
+          "mocked": true
         },
         "[production]": {
           "credentials": {
@@ -48,28 +49,13 @@
         "csrf": true,
         "csrfInBatch": true
       },
-      "S4_API_SUPPLIER_QUOTATION": {
-        "kind": "odata-v4",
-        "model": "srv/external/API_SUPPLIER_QUOTATION_SRV",
-        "credentials": {
-          "destination": "S4_API",
-          "path": "sap/opu/odata4/sap/api_supplierquotation_2/srvd_a2x/sap/supplierquotation/0001/"
-        },
-        "[production]": {
-          "credentials": {
-            "destination": "S4_API",
-            "path": "sap/opu/odata4/sap/api_supplierquotation_2/srvd_a2x/sap/supplierquotation/0001/"
-          }
-        },
-        "csrf": true,
-        "csrfInBatch": true
-      },
       "S4_API_QUOTATION_COMPARISON": {
         "kind": "odata-v4",
         "model": "srv/external/API_QUOTATION_COMPARISON_SRV",
-        "credentials": {
-          "destination": "S4_API",
-          "path": "/sap/opu/odata4/sap/zsb_quot_comp/srvd/sap/zsd_quot_comp_hdr/0001/"
+        "[development]": {
+          "kind": "odata-v4",
+          "model": "srv/external/API_QUOTATION_COMPARISON_SRV",
+          "mocked": true
         },
         "[production]": {
           "credentials": {

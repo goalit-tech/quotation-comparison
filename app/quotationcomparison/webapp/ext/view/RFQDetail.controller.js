@@ -26,19 +26,6 @@ sap.ui.define(
                         ComparisonDate: null,
                     },
                     SupplierQuotationItems: [],
-                    compareQuotationData: {
-                        RequestForQuotation: '',
-                        RequisitionNumber: '',
-                        CompanyCode: '',
-                        CompanyName: '',
-                        CompativeStatementTitle: '',
-                        NameOfRequester: '',
-                        AccountAssignment: '',
-                        RequisitionNumber: '',
-                        RequisitionDate: null,
-                        Purpose: '',
-                        ComparisonDate: null,
-                    },
                     compareQuotationIsEditable: false,
                     compareQuotationItemData: [],
                     compareQuotationItemSelected: false,
@@ -50,22 +37,25 @@ sap.ui.define(
             // onAfterRendering: async function (oContext) {
             //     return;
             // },
+            onCompareQuotationUpdatePress: function (oEvent) {
 
+            },
             onAddQuotationPress: async function (oEvent) {
                 const context = oEvent.getSource().getBindingContext();
                 const keyId = this.extractKey(context.getPath());
                 const rfqContextObject = context.getObject();
                 console.log("RFQID", keyId);
-                // const sPath =
-                //     `/RFQs('${keyId}')/SupplierQuotation('${keyId}')/`;
-                // console.log("SPath", sPath);
-                // this.editFlow.getView().getModel("ui").setProperty('/customUIQuotationPath', sPath);
+
                 const aSupplierQuotationData = await this.getSupplierQuotationForRFQ(keyId, true);
                 await this.updateContextForCompareQuotation(aSupplierQuotationData, rfqContextObject, true);
 
                 this.oDialog ??= await this.loadFragment({
                     name: "nlabs.ui.quotationcomparison.ext.fragments.Quotation"
                 });
+
+                if (isUpdate) {
+
+                }
 
                 // this.oDialog.setBindingContext(context);
                 this.getExtensionAPI().addDependent(this.oDialog);
@@ -75,12 +65,7 @@ sap.ui.define(
                 const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
                     ? aSupplierQuotation
                     : (aSupplierQuotation?.value || []);
-                // aSupplierQuotationData.forEach(({ _SupplierQuotationItem, SupplierCode, SupplierName }) => {
-                //     (_SupplierQuotationItem || []).forEach(item => {
-                //         item.SupplierCode = SupplierCode ? SupplierCode : "";
-                //         item.SupplierName = SupplierName ? SupplierName : "";
-                //     });
-                // });
+
                 const oLocalModelData = {
                     CompareQuotation: {
                         QuotationComparison: '',
@@ -253,6 +238,27 @@ sap.ui.define(
                 console.log("Selected Supplier Quotations", aSelectedObjects);
                 return aSelectedObjects;
             },
+            setSelectedSupplierQuotations: function (aItemToBeSelected) {
+                const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationSupplierUITable");
+                const oModel = oTable.getModel();
+                const sPath = oTable.getBindingInfo("rows").path;
+                const aTableData = oModel.getProperty(sPath);
+
+                const aSelectedIndices = [];
+
+                aItemToBeSelected.forEach((oItem) => {
+                    const iIndex = aTableData.findIndex((oRow) => {
+                        // Match by a unique key — adjust "SupplierQuotationID" to your actual key field
+                        return oRow.SupplierQuotationID === oItem.SupplierQuotationID;
+                    });
+
+                    if (iIndex !== -1) {
+                        aSelectedIndices.push(iIndex);
+                    }
+                });
+
+                oTable.setSelectedIndices(aSelectedIndices);
+            },
             // getSelectedSupplierQuotationItems: function () {
             //     const aSelectedQuotations = this.getSelectedSupplierQuotations();
 
@@ -296,7 +302,7 @@ sap.ui.define(
                 const selectedContextObject = contexts.map(context => context.getObject());
                 const aCompareQuotationItems = await this.getSelectedCompareQuotationItemDetails(selectedContextObject[0]);
                 const transformRows = this.transformDataforComparison(aCompareQuotationItems);
-                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationData", selectedContextObject[0]);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/CompareQuotation", selectedContextObject[0]);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemData", transformRows);
                 this.generateCOlumnsForComparison(aCompareQuotationItems);
 
@@ -324,33 +330,35 @@ sap.ui.define(
 
             transformDataforComparison: function (aSelectedData) {
                 const aProperties = [
-                    "QuotationComparison",
-                    "SNo",
+                    // "QuotationComparison",
+                    //"SNo",
+                    // "SupplierCode",
+                    // "SupplierName",
                     "Description",
+                    "MaterialMake",
+                    "ModelNumber",
+                    "Specifications",
+                    "Warranty",
                     "Quantity",
                     "Units",
-                    "SupplierCode",
-                    "SupplierName",
                     "UnitRate",
                     "TotalAmount",
                     "Currency",
-                    "MaterialMake",
-                    "Specifications",
-                    "ModelNumber",
-                    "Warranty",
-                    "TaxAmount",
-                    "FreightCharges",
-                    "Discount",
-                    "TechnicalCompliance",
                     "ConversionRs",
+                    "AddDuties",
                     "BcdPercent",
                     "SwcPercentOnBcd",
                     "HsnCode",
                     "Gst",
+                    "TaxAmount",
+                    "FreightCharges",
+                    "Discount",
+                    "TechnicalCompliance",
                     "InsuranceCharges",
                     "BankCharges",
                     "LocalTransportCharges",
                     "LandingCost",
+                    "TermsAndConditions",
                     "Density",
                     "ContactPerson",
                     "PhoneNumber",
@@ -374,47 +382,111 @@ sap.ui.define(
                 const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationDetailUITable");
                 oTable.removeAllColumns();
 
-                //
+                const headerRows = [
+                    "AddDuties",
+                    "TermsAndConditions"
+                ];
+                const nonEditableHeaderRows = [
+                    "Description",
+                    "MaterialMake",
+                    "ModelNumber",
+                    "Specifications",
+                    "Warranty",
+                    "Quantity",
+                    "Units",
+                    "UnitRate",
+                    "TotalAmount",
+                    "Currency",
+                    "ConversionRs",
+                ];
+
                 // Property column
-                //
                 oTable.addColumn(
                     new sap.ui.table.Column({
-                        label: new sap.m.Label({
-                            text: "Property"
-                        }),
-                        template: new sap.m.Text({
-                            text: "{oLocalModel>property}"
+                        label: new sap.m.Title({ text: "Property" }),
+                        template: new sap.m.HBox({
+                            items: [
+                                new sap.m.Title({
+                                    text: "{oLocalModel>property}",
+                                    visible: {
+                                        path: "oLocalModel>property",
+                                        formatter: function (sProperty) {
+                                            return headerRows.includes(sProperty) ? true : false;
+                                        }
+                                    }
+                                }),
+
+                                new sap.m.Text({
+                                    text: "{oLocalModel>property}",
+                                    visible: {
+                                        path: "oLocalModel>property",
+                                        formatter: function (sProperty) {
+                                            return headerRows.includes(sProperty) ? false : true;
+                                        }
+                                    }
+                                })
+                            ]
                         }),
                         width: "200px"
                     })
                 );
 
-                //
-                // Dynamic item columns
-                //
+                // Dynamic supplier columns
                 aSelectedData.forEach((oItem) => {
-
                     const sSupplierName = oItem.SupplierName;
+
+                    // HBox holds both controls; visibility toggled per row
+                    const oTemplate = new sap.m.HBox({
+                        items: [
+                            // Show Input when property is NOT in headerRows and isEditable
+                            new sap.m.Input({
+                                value: "{oLocalModel>" + sSupplierName + "}",
+                                // editable: "{oLocalModel>/compareQuotationIsEditable}",
+                                editable: {
+                                    parts: [
+                                        { path: "oLocalModel>property" },
+                                        { path: "oLocalModel>/compareQuotationIsEditable" }
+                                    ],
+                                    formatter: function (sProperty, bEditable) {
+                                        return nonEditableHeaderRows.includes(sProperty) ? false : true;
+                                    }
+                                },
+                                visible: {
+                                    parts: [
+                                        { path: "oLocalModel>property" },
+                                        { path: "oLocalModel>/compareQuotationIsEditable" }
+                                    ],
+                                    formatter: function (sProperty, bEditable) {
+                                        const headerRows = ["AddDuties", "TermsAndConditions"];
+                                        return bEditable && !headerRows.includes(sProperty);
+                                    }
+                                }
+                            }),
+                            // Always show Text when property IS in headerRows OR not editable
+                            new sap.m.Text({
+                                text: "{oLocalModel>" + sSupplierName + "}",
+                                visible: {
+                                    parts: [
+                                        { path: "oLocalModel>property" },
+                                        { path: "oLocalModel>/compareQuotationIsEditable" }
+                                    ],
+                                    formatter: function (sProperty, bEditable) {
+                                        const headerRows = ["AddDuties", "TermsAndConditions"];
+                                        return !bEditable || headerRows.includes(sProperty);
+                                    }
+                                }
+                            })
+                        ]
+                    });
 
                     oTable.addColumn(
                         new sap.ui.table.Column({
-
-                            label: new sap.m.Label({
-                                text: sSupplierName
-                            }),
-
-                            template: new sap.m.Input({
-                                value: "{oLocalModel>" + sSupplierName + "}",
-                                editable: "{oLocalModel>/compareQuotationIsEditable}"
-                            }),
-
+                            label: new sap.m.Title({ text: sSupplierName }),
+                            template: oTemplate,
                             width: "200px"
                         })
                     );
-
                 });
-
-
             },
             getGroup: function (oContext) {
                 return oContext.getProperty('Description');
@@ -425,6 +497,63 @@ sap.ui.define(
                 return new sap.m.GroupHeaderListItem({
                     title: oGroup.key
                 });
+            },
+            reverseTransformDataForSave: function () {
+                const oLocalModel = this.editFlow.getView().getModel("oLocalModel");
+                const aRows = oLocalModel.getProperty("/compareQuotationItemData");
+                const oCompareQuotation = oLocalModel.getProperty("/CompareQuotation");
+
+                // Get supplier names dynamically from the first row's keys (excluding "property")
+                const aSupplierNames = Object.keys(aRows[0]).filter(key => key !== "property");
+
+                // Reconstruct one object per supplier
+                const aRestoredItems = aSupplierNames.map(sSupplierName => {
+                    const oItem = {
+                        QuotationComparison: oCompareQuotation?.QuotationComparison,
+                        SupplierName: sSupplierName
+                    };
+
+                    // Map each row back to its property on the supplier object
+                    aRows.forEach(oRow => {
+                        oItem[oRow.property] = oRow[sSupplierName];
+                    });
+
+                    return oItem;
+                });
+
+                return aRestoredItems;
+            },
+
+            onCompareQuotationSavePress: function () {
+                this.onSaveCompareQuotation();
+            },
+            onSaveCompareQuotation: async function () {
+                debugger
+                const aItemsToSave = this.reverseTransformDataForSave();
+                console.log("Items to save:", aItemsToSave);
+
+                const oModel = this.editFlow.getView().getModel();
+                const oLocalModel = this.editFlow.getView().getModel("oLocalModel");
+                const oCompareQuotation = oLocalModel.getProperty("/CompareQuotation");
+                debugger
+                try {
+                    for (const oItem of aItemsToSave) {
+                        const sPath = `/QuotationComparison('${oCompareQuotation?.QuotationComparison}')/_CompareQuotationItem`;
+                        const oListBinding = oModel.bindList(sPath);
+
+                        // If your OData supports PATCH/UPDATE by key, adjust path accordingly
+                        // e.g., /CompareQuotationItem(QuotationComparison='...',SupplierName='...')
+                        const oContext = oListBinding.create(oItem); // or use update if record exists
+                        await oContext.created();
+                    }
+
+                    sap.m.MessageToast.show("Saved successfully!");
+                    oLocalModel.setProperty("/compareQuotationIsEditable", false);
+
+                } catch (oError) {
+                    console.error("Error saving comparison items:", oError);
+                    sap.m.MessageToast.show("Save failed. Check console.");
+                }
             },
         });
     }

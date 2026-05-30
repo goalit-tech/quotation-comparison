@@ -1,0 +1,6 @@
+QuotationComparison,SNo,Description,Quantity,Units,SupplierCode,SupplierName,UnitRate,TotalAmount,Currency,MaterialMake,Specifications,ModelNumber,Warranty,TaxAmount,FreightCharges,Discount,TechnicalCompliance,ConversionRs,BcdPercent,SwcPercentOnBcd,HsnCode,Gst,InsuranceCharges,BankCharges,LocalTransportCharges,LandingCost,Density,ContactPerson,PhoneNumber
+QC10000001,1,Steel Plate,100,EA,SUP000005,Essar Steel,470,47000,INR,ESSAR,IS2062,MDL001,12 Months,8460,1000,500,Compliant,47000,0,0,7208,18,500,100,250,48810,7.85,Prakash Rao,9876543210
+QC10000001,2,Steel Rod,50,EA,SUP000006,JSW Steel,470,23500,INR,ESSAR,GradeA,MDL002,12 Months,4230,500,250,Compliant,23500,0,0,7213,18,250,50,150,24430,7.85,Prakash Rao,9876543210
+QC10000001,3,Steel Pipe,75,EA,SUP000007,Jindal Steel,470,35250,INR,ESSAR,Seamless,MDL003,12 Months,6345,750,350,Compliant,35250,0,0,7306,18,350,75,200,36620,7.85,Prakash Rao,9876543210
+QC10000002,1,Pipe Item A,100,EA,SUP000002,JSW Steel,480,48000,INR,JSW,Pipe Grade,MDL004,12 Months,8640,1000,500,Compliant,48000,0,0,7306,18,500,100,250,49990,7.85,Amit Verma,9876543211
+QC10000003,1,Rod Item A,100,EA,SUP000001,Tata Steel,500,50000,INR,TATA,Rod Grade,MDL005,24 Months,9000,1000,500,Compliant,50000,0,0,7213,18,500,100,250,51990,7.85,Rahul Sharma,9876543212

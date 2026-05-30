@@ -65,20 +65,34 @@
                                     visible="{= !${oLocalModel>/compareQuotationIsEditable} }"
                                 />
                                 <table:Action
-                                    id="_IDGenQuotationComparisonCancelActionGroup2"
-                                    key="CancelACtionCompareQuotation"
-                                    text="Cancel"
-                                    press=".onCompareQuotationCancelPress"
-                                    visible="{= ${oLocalModel>/compareQuotationIsEditable} }"
-                                />
-                                <table:Action
-                                    id="_IDGenQuotationComparisonEditActionGroup2"
-                                    key="EditACtionCompareQuotation"
-                                    text="Edit"
-                                    press=".onCompareQuotationEditPress"
-                                    requiresSelection="true"
+                                    id="_IDGenQuotationComparisonActionGroupUpdate"
+                                    key="SaveACtionQuotation"
+                                    text="Update Quotation"
+                                    press=".onCompareQuotationUpdatePress"
                                     visible="{= !${oLocalModel>/compareQuotationIsEditable} }"
                                 />
+                                    <!-- <table:Action
+                                        id="_IDGenQuotationComparisonActionGroupSave"
+                                        key="SaveACtionQuotation"
+                                        text="Save"
+                                        press=".onEditSaveQuotationPress"
+                                        visible="{= ${oLocalModel>/compareQuotationIsEditable} }"
+                                    />
+                                    <table:Action
+                                        id="_IDGenQuotationComparisonCancelActionGroup2"
+                                        key="CancelACtionCompareQuotation"
+                                        text="Cancel"
+                                        press=".onCompareQuotationCancelPress"
+                                        visible="{= ${oLocalModel>/compareQuotationIsEditable} }"
+                                    />
+                                    <table:Action
+                                        id="_IDGenQuotationComparisonEditActionGroup2"
+                                        key="EditACtionCompareQuotation"
+                                        text="Edit"
+                                        press=".onCompareQuotationEditPress"
+                                        requiresSelection="true"
+                                        visible="{= !${oLocalModel>/compareQuotationIsEditable} }"
+                                    /> -->
                                 <table:Action
                                     id="_IDGenQuotationComparisonDeleteActionGroup3"
                                     key="DeleteACtionCompareQuotation"

@@ -1,0 +1,6 @@
+SupplierQuotation,RequestForQuotation,CompanyCode,CompanyCodeName,SupplierCode,SupplierName,QuotationDate,Currency,ExchangeRate,ValidityDate,ContactPerson,SupplierRemarks
+SQ10000001,RFQ1000001,1000,ABC Manufacturing,SUP000001,Tata Steel,2026-05-20,INR,1.00000,2026-06-30,Rahul Sharma,Best quality material
+SQ10000002,RFQ1000001,1000,ABC Manufacturing,SUP000002,JSW Steel,2026-05-21,INR,1.00000,2026-06-30,Amit Verma,Freight included
+SQ10000003,RFQ1000001,1000,ABC Manufacturing,SUP000003,SAIL,2026-05-21,INR,1.00000,2026-06-30,Deepak Singh,Price negotiable
+SQ10000004,RFQ1000001,1000,ABC Manufacturing,SUP000004,Jindal Steel,2026-05-22,INR,1.00000,2026-06-30,Sandeep Kumar,Ready stock available
+SQ10000005,RFQ1000001,1000,ABC Manufacturing,SUP000005,Essar Steel,2026-05-22,INR,1.00000,2026-06-30,Prakash Rao,Fast delivery

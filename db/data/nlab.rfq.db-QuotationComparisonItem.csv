@@ -1,16 +1,1 @@
-ID,comparison_rfq,serialNumber,description,quantity,units,supplier,unitRate,totalAmount,currency,materialMake,specifications,modelNumber,warranty,taxAmount,freightCharges,discount,technicalCompliance,conversionRateInRs,bcdPercentage,swcOnBcdPercentage,hsnCode,gst,insuranceCharges,bankCharges,localTransportationCharges,landingCost,density,contactPerson,phoneNumber
-1,3150000001,10,"PEN DRIVE 16GB",10,NOS,3060000002,10000,100000,INR,3010000004,"PEN DRIVE 16GB",,,,0,0,"Compliant",1,0,0,,0,0,0,0,100000,0,,
-2,3150000002,10,"9x4 GLASS",50,NOS,3060000081,1250,62500,INR,3010000089,"9x4 GLASS",,,,0,0,"Compliant",1,0,0,,0,0,0,0,62500,0,,
-3,3150000002,20,"9x4 GLASS",10,NOS,3060000081,1250,12500,INR,3010000089,"9x4 GLASS",,,,0,0,"Compliant",1,0,0,,0,0,0,0,12500,0,,
-4,3150000002,10,"9x4 GLASS",50,NOS,1000083,1500,75000,INR,3010000089,"9x4 GLASS",,,,0,0,"Compliant",1,0,0,,0,0,0,0,75000,0,,
-5,3150000002,20,"9x4 GLASS",10,NOS,1000083,1500,15000,INR,3010000089,"9x4 GLASS",,,,0,0,"Compliant",1,0,0,,0,0,0,0,15000,0,,
-6,3150000003,10,"9x4 GLASS",50,NOS,1000083,1400,70000,INR,3010000089,"9x4 GLASS",,,,0,0,"Compliant",1,0,0,,0,0,0,0,70000,0,,
-7,3150000003,20,"9x4 GLASS",10,NOS,1000083,1400,14000,INR,3010000089,"9x4 GLASS",,,,0,0,"Compliant",1,0,0,,0,0,0,0,14000,0,,
-8,3150000003,10,"9x4 GLASS",50,NOS,3060000081,1250,62500,INR,3010000089,"9x4 GLASS",,,,0,0,"Compliant",1,0,0,,0,0,0,0,62500,0,,
-9,3150000003,20,"9x4 GLASS",10,NOS,3060000081,1250,12500,INR,3010000089,"9x4 GLASS",,,,0,0,"Compliant",1,0,0,,0,0,0,0,12500,0,,
-10,3150000004,10,"MONITOR DELL 1",25,NOS,1000114,200000,5000000,INR,3010000097,"MONITOR DELL 1",,,,0,0,"Compliant",1,0,0,,0,0,0,0,5000000,0,,
-11,3150000004,10,"MONITOR DELL 1",25,NOS,1000083,300000,7500000,INR,3010000097,"MONITOR DELL 1",,,,0,0,"Compliant",1,0,0,,0,0,0,0,7500000,0,,
-12,3150000013,10,"256 GB Hardisk SSD",100,NOS,3060000002,10000,1000000,INR,3010000061,"256 GB Hardisk SSD",,,,0,0,"Compliant",1,0,0,,0,0,0,0,1000000,0,,
-13,3150000013,20,"Macbook Air 2025 M2 Chip",100,EA,3060000002,10000,1000000,INR,3010000093,"Macbook Air 2025 M2 Chip",,,,0,0,"Compliant",1,0,0,,0,0,0,0,1000000,0,,
-14,3150000013,10,"256 GB Hardisk SSD",100,NOS,3060000001,1000,100000,INR,3010000061,"256 GB Hardisk SSD",,,,0,0,"Compliant",1,0,0,,0,0,0,0,100000,0,,
-15,3150000013,20,"Macbook Air 2025 M2 Chip",100,EA,3060000001,9000,900000,INR,3010000093,"Macbook Air 2025 M2 Chip",,,,0,0,"Compliant",1,0,0,,0,0,0,0,900000,0,,
+ID,comparison_rfq,serialNumber,description,quantity,units,supplier,unitRate,totalAmount,currency,materialMake,specifications,modelNumber,warranty,taxAmount,freightCharges,discount,technicalCompliance,conversionRateInRs,bcdPercentage,swcOnBcdPercentage,hsnCode,gst,insuranceCharges,bankCharges,localTransportationCharges,landingCost,density,contactPerson,phoneNumber,createdAt,createdBy,modifiedAt,modifiedBy

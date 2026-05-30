@@ -1,0 +1,6 @@
+QuotationComparison,RequestForQuotation,CompanyCode,CompanyName,CompativeStatementTitle,NameOfRequester,AccountAssignment,RequisitionNumber,RequisitionDate,Purpose,ComparisonDate
+QC10000001,RFQ1000001,1000,ABC Manufacturing,Steel Procurement Comparison,Sachin Kumar,K,PR1000001,2026-05-15,Vendor Selection,2026-05-29
+QC10000002,RFQ1000002,1000,ABC Manufacturing,Pipe Procurement Comparison,Sachin Kumar,K,PR1000002,2026-05-16,Vendor Selection,2026-05-29
+QC10000003,RFQ1000003,1000,ABC Manufacturing,Rod Procurement Comparison,Sachin Kumar,K,PR1000003,2026-05-17,Vendor Selection,2026-05-29
+QC10000004,RFQ1000004,1000,ABC Manufacturing,Valve Procurement Comparison,Sachin Kumar,K,PR1000004,2026-05-18,Vendor Selection,2026-05-29
+QC10000005,RFQ1000005,1000,ABC Manufacturing,Pump Procurement Comparison,Sachin Kumar,K,PR1000005,2026-05-19,Vendor Selection,2026-05-29

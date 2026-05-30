@@ -10,14 +10,15 @@ service QuotationService {
     entity RFQs                      as
         projection on API_RFQ_PROCESS_SRV.A_RequestForQuotation {
             *,
-            to_RequestForQuotationItem,
+            to_RequestForQuotationItem : Association to many A_RequestForQuotationItem
+                                             on to_RequestForQuotationItem.RequestForQuotation = RequestForQuotation,
             // to_RequestForQuotationBidder,
 
             // NEW ASSOCIATION
-            SupplierQuotation   : Association to many SupplierQuotation
-                                      on SupplierQuotation.RequestForQuotation = RequestForQuotation,
-            QuotationComparison : Association to many QuotationComparison
-                                      on QuotationComparison.RequestForQuotation = RequestForQuotation,
+            SupplierQuotation          : Association to many SupplierQuotation
+                                             on SupplierQuotation.RequestForQuotation = RequestForQuotation,
+            QuotationComparison        : Association to many QuotationComparison
+                                             on QuotationComparison.RequestForQuotation = RequestForQuotation,
 
 
         };

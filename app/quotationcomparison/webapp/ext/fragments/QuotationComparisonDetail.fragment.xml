@@ -8,9 +8,20 @@
     xmlns:core="sap.ui.core"
 >
     <Panel id="_IDGenPanel" expandable="false" expanded="true">
+    	<headerToolbar>
+			<OverflowToolbar id="_idGenCompareQuotationDetailPanelToolbar" style="Clear">
+            <ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer1"/>
+				<Title id="_idGenCompareQuotationDetailPanelTitle" text="Header"/>
+				<ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer2"/>
+				<Button text="Edit" id="_idGenCompareQuotationDetailPanelButtonEdit" press=".onCompareQuotationEditPress" visible="{= !${oLocalModel>/compareQuotationIsEditable} }" />
+				<Button text="Cancel" id="_idGenCompareQuotationDetailPanelToolbarCancel" press=".onCompareQuotationCancelPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
+				<Button text="Save" id="_idGenCompareQuotationDetailPanelToolbarSave" press=".onCompareQuotationSavePress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
+			</OverflowToolbar>
+		</headerToolbar>
     <f:SimpleForm
             id="_idGenCompareQuotationDetailDetailForm"
             editable="true"
+            title=""
             layout="ResponsiveGridLayout"
             labelSpanXL="4"
             labelSpanL="4"
@@ -27,89 +38,105 @@
             singleContainerFullSize="false"
         >
             <f:content>
-                <core:Title id="_idGenCompareQuotationDetailFormTitle1" text="" />
+                <core:Title id="_IDGenCompareQuotationDetailFormTitle1" text="" />
                 <Label
-                    id="_idGenCompareQuotationDetailFormLabel6"
-                    text="RFQ"
+                    id="_IDGenCompareQuotationDetailFormLabel"
+                    text="Request For Quotation"
                 />
                 <Input
-                    id="_idGenCompareQuotationDetailFormInput"
-                    value="{oLocalModel>/compareQuotationData/requisitionNumber}"
+                    id="_IDGenCompareQuotationDetailFormInput"
+                    value="{oLocalModel>/CompareQuotation/RequestForQuotation}"
                     editable="false"
                 />
                 <Label
-                    id="_idGenCompareQuotationDetailFormLabel7"
-                    text="company Name"
+                    id="_IDGenCompareQuotationDetailFormLabel3"
+                    text="Company Code"
                 />
                 <Input
-                    id="_idGenCompareQuotationDetailFormInput1"
-                    value="{oLocalModel>/compareQuotationData/companyName}"
-                    editable="{oLocalModel>/compareQuotationIsEditable}"
+                    id="_IDGenCompareQuotationDetailFormInput3"
+                    value="{oLocalModel>/CompareQuotation/CompanyCode}"
+                    editable="false"
                 />
+                    <!-- value="{oLocalModel>/CompareQuotation/CompanyCode}" -->
+                    <!-- value="{oLocalModel>/CompareQuotation/CompanyName} ({oLocalModel>/CompareQuotation/CompanyCode})" -->
                 <Label
-                    id="_idGenCompareQuotationDetailFormLabel8"
-                    text="comparativeStatementTitle"
+                    id="_IDGenCompareQuotationDetailCompativeFormLabel"
+                    text="Comparative Statement Title"
                 />
                 <Input
-                    id="_idGenCompareQuotationDetailFormInput2"
-                    value="{oLocalModel>/compareQuotationData/comparativeStatementTitle}"
+                    id="_IDGenCompareQuotationDetailCompativeFormInput"
+                    value="{oLocalModel>/CompareQuotation/CompativeStatementTitle}"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                 />
 
                 <Label
-                    id="_idGenCompareQuotationDetailFormLabel9"
-                    text="requestorName"
+                    id="_IDGenCompareQuotationDetailNameOfRequesterFormLabel"
+                    text="Requestor Name"
                 />
                 <Input
-                    id="_idGenCompareQuotationDetailFormInput3"
-                    value="{oLocalModel>/compareQuotationData/requestorName}"
-                    editable="{oLocalModel>/compareQuotationIsEditable}"
+                    id="_IDGenCompareQuotationDetailNameOfRequesterFormInput"
+                    value="{oLocalModel>/CompareQuotation/NameOfRequester}"
+                    editable="false"
                 />
                 <Label
-                    id="_idGenCompareQuotationDetailFormLabel10"
-                    text="accountAssignment"
+                    id="_IDGenCompareQuotationDetailAccountAssignmentFormLabel"
+                    text="Account Assignment"
                 />
                 <Input
-                    id="_idGenCompareQuotationDetailFormInput4"
-                    value="{oLocalModel>/compareQuotationData/accountAssignment}"
-                    editable="{oLocalModel>/compareQuotationIsEditable}"
+                    id="_IDGenCompareQuotationDetailAccountAssignmentFormInput"
+                    value="{oLocalModel>/CompareQuotation/AccountAssignment}"
+                    editable="false"
                 />
-                <core:Title id="_idGenCompareQuotationDetailFormTitle2" text="" />
+                <core:Title id="_IDGenCompareQuotationDetailFormTitle2" text="" />
                 <Label
-                    id="_idGenCompareQuotationDetailFormLabel11"
-                    text="requisitionNumber"
+                    id="_IDGenCompareQuotationDetailRequisitionNumberFormLabel"
+                    text="Requisition Number"
                 />
                 <Input
-                    id="_idGenCompareQuotationDetailFormInput5"
-                    value="{oLocalModel>/compareQuotationData/requisitionNumber}"
+                    id="_IDGenCompareQuotationDetailRequisitionNumberFormInput"
+                    value="{oLocalModel>/CompareQuotation/RequisitionNumber}"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                 />
 
                 <Label
-                    id="_idGenCompareQuotationDetailFormLabel12"
-                    text="requisitionDate"
+                    id="_IDGenCompareQuotationDetailRequisitionDateFormLabel"
+                    text="Requisition Date"
                 />
-                <DateTimePicker
-                    id="_idGenCompareQuotationDetailFormDateTimePicker"
-                    value="{oLocalModel>/compareQuotationData/requisitionDate}"
+                <!-- value="{oLocalModel>/CompareQuotation/RequisitionDate}" -->
+                <DatePicker
+                    id="_IDGenCompareQuotationDetailRequisitionDateFormDateTimePicker"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
+                    	value="{
+						'path':'oLocalModel>/CompareQuotation/RequisitionDate',
+						'type':'sap.ui.model.type.Date',
+						'formatOptions': {
+							'pattern': 'yyyy-MM-dd'
+						}
+					}"
                 />
                 <Label
-                    id="_idGenCompareQuotationDetailFormLabel13"
-                    text="purpose"
+                    id="_IDGenCompareQuotationDetailPurposeFormLabel"
+                    text="Purpose"
                 />
                 <Input
-                    id="_idGenCompareQuotationDetailFormDateTimePicker1"
-                    value="{oLocalModel>/compareQuotationData/purpose}"
+                    id="_IDGenCompareQuotationDetailPurposeFormInput"
+                    value="{oLocalModel>/CompareQuotation/Purpose}"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                 />
                 <Label
-                    id="_idGenCompareQuotationDetailFormLabel14"
-                    text="comparisonDate"
+                    id="_IDGenCompareQuotationDetailComparisonDateFormLabel"
+                    text="Comparison Date"
                 />
-                <DateTimePicker
-                    id="_idGenCompareQuotationDetailFormDateTimePicker2"
-                    value="{oLocalModel>/compareQuotationData/comparisonDate}"
+                <!-- value="{oLocalModel>/CompareQuotation/ComparisonDate}" -->
+                <DatePicker
+                    id="_IDGenCompareQuotationDetailComparisonDateFormDateTimePicker"
+                    value="{
+						'path':'oLocalModel>/CompareQuotation/ComparisonDate',
+						'type':'sap.ui.model.type.Date',
+						'formatOptions': {
+							'pattern': 'yyyy-MM-dd'
+						}
+					}"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                 />
             </f:content>
@@ -131,7 +158,7 @@
             >
               <!-- items="{ path: '<your_path>', sorter: { path: '<Property_to_Sort>', descending: <true/false>, group: '.getGroup' }, groupHeaderFactory: '.getGroupHeader'}" -->
               
-               <uiTable:extension>
+               <!-- <uiTable:extension>
                     <OverflowToolbar
                         id="_IDGenCompareQuotationDetailToolbar1"
                         style="Clear"
@@ -142,11 +169,11 @@
                         />
                         <ToolbarSpacer id="_IDGenCompareQuotationDetailToolbarSpacer1" />
                         <ToolbarSeparator id="_IDGenCompareQuotationDetailToolbarSeparator" />
-                        <Button id="_IDGenCompareQuotationDetailAddButton" text='Add'></Button>
-                        <Button id="_IDGenCompareQuotationDetailRemoveButton" text='Remove'></Button>
-                        <Button id="_IDGenCompareQuotationDetailTermsAndConditionsButton" text='Terms And Conditions'></Button>
+                        <Button id="_IDGenCompareQuotationDetailAddButton" text='Add' press=".onAddQuotationComparisonItemRowsPress"></Button>
+                        <Button id="_IDGenCompareQuotationDetailRemoveButton" text='Remove' press=".onRemoveQuotationComparisonItemRowsPress"></Button>
                     </OverflowToolbar>
-                </uiTable:extension>
+                </uiTable:extension> -->
+                        <!-- <Button id="_IDGenCompareQuotationDetailTermsAndConditionsButton" text='Terms And Conditions'></Button> -->
             </uiTable:Table>
         </VBox>
     </Panel>
