@@ -80,7 +80,6 @@
     "app/*"
   ],
   "sapux": [
-    "app/quotationcomparison",
-    "app/compare-quotation"
+    "app/quotationcomparison"
   ]
 }

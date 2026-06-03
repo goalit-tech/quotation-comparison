@@ -106,7 +106,7 @@
                 <Property Name="CompanyCode" Type="Edm.String" Nullable="false" MaxLength="4"/>
                 <Property Name="CompanyCodeName" Type="Edm.String" Nullable="false" MaxLength="25"/>
                 <Property Name="SupplierCode" Type="Edm.String" Nullable="false" MaxLength="10"/>
-                <Property Name="SupplierName" Type="Edm.String" Nullable="false" MaxLength="220"/>
+                <Property Name="SupplierName" Type="Edm.String" Nullable="false" MaxLength="80"/>
                 <Property Name="QuotationDate" Type="Edm.Date"/>
                 <Property Name="Currency" Type="Edm.String" Nullable="false" MaxLength="5"/>
                 <Property Name="ExchangeRate" Type="Edm.Decimal" Nullable="false" Precision="9" Scale="5"/>
@@ -115,6 +115,23 @@
                 <Property Name="SupplierRemarks" Type="Edm.String" Nullable="false" MaxLength="255"/>
                 <NavigationProperty Name="_SupplierQuotationItem" Type="Collection(com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.SupplierQuotationItemType)" Partner="_Header">
                     <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="TermsAndConditionsType">
+                <Key>
+                    <PropertyRef Name="QuotationComparison"/>
+                    <PropertyRef Name="QuotationComparisonItem"/>
+                    <PropertyRef Name="ItemNo"/>
+                </Key>
+                <Property Name="QuotationComparison" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="QuotationComparisonItem" Type="Edm.String" Nullable="false" MaxLength="5"/>
+                <Property Name="ItemNo" Type="Edm.String" Nullable="false" MaxLength="5"/>
+                <Property Name="KeyField" Type="Edm.String" Nullable="false" MaxLength="80"/>
+                <Property Name="ValueField" Type="Edm.String" Nullable="false" MaxLength="255"/>
+                <Property Name="__EntityControl" Type="com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.EntityControl"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.SAP__Message)" Nullable="false"/>
+                <NavigationProperty Name="_Header" Type="com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.QuotationComparisonType" Nullable="false" Partner="_TermsAndConditions">
+                    <ReferentialConstraint Property="QuotationComparison" ReferencedProperty="QuotationComparison"/>
                 </NavigationProperty>
             </EntityType>
             <EntityType Name="SupplierQuotationItemType">
@@ -176,15 +193,23 @@
                 <Property Name="RequisitionDate" Type="Edm.Date"/>
                 <Property Name="Purpose" Type="Edm.String" Nullable="false" MaxLength="250"/>
                 <Property Name="ComparisonDate" Type="Edm.Date"/>
+                <Property Name="CreatedBy" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="CreatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="LastChangedBy" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="LastChangedAt" Type="Edm.DateTimeOffset" Precision="7"/>
                 <Property Name="__CreateByAssociationControl" Type="com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.QuotationComparisonCbAControl"/>
                 <Property Name="__EntityControl" Type="com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.EntityControl"/>
                 <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.SAP__Message)" Nullable="false"/>
                 <NavigationProperty Name="_CompareQuotationItem" Type="Collection(com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.QuotationComparisonItemType)" Partner="_Header">
                     <OnDelete Action="Cascade"/>
                 </NavigationProperty>
+                <NavigationProperty Name="_TermsAndConditions" Type="Collection(com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.TermsAndConditionsType)" Partner="_Header">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
             </EntityType>
             <ComplexType Name="QuotationComparisonCbAControl">
                 <Property Name="_CompareQuotationItem" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="_TermsAndConditions" Type="Edm.Boolean" Nullable="false"/>
             </ComplexType>
             <ComplexType Name="EntityControl">
                 <Property Name="Deletable" Type="Edm.Boolean" Nullable="false"/>
@@ -202,6 +227,7 @@
             <EntityContainer Name="Container">
                 <EntitySet Name="QuotationComparison" EntityType="com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.QuotationComparisonType">
                     <NavigationPropertyBinding Path="_CompareQuotationItem" Target="QuotationComparisonItem"/>
+                    <NavigationPropertyBinding Path="_TermsAndConditions" Target="TermsAndConditions"/>
                 </EntitySet>
                 <EntitySet Name="QuotationComparisonItem" EntityType="com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.QuotationComparisonItemType">
                     <NavigationPropertyBinding Path="_Header" Target="QuotationComparison"/>
@@ -212,12 +238,15 @@
                 <EntitySet Name="SupplierQuotationItem" EntityType="com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.SupplierQuotationItemType">
                     <NavigationPropertyBinding Path="_Header" Target="SupplierQuotation"/>
                 </EntitySet>
+                <EntitySet Name="TermsAndConditions" EntityType="com.sap.gateway.srvd.zsd_quot_comp_hdr.v0001.TermsAndConditionsType">
+                    <NavigationPropertyBinding Path="_Header" Target="QuotationComparison"/>
+                </EntitySet>
             </EntityContainer>
             <Annotations Target="SAP__self.QuotationComparisonItemType/QuotationComparison">
                 <Annotation Term="SAP__core.Computed"/>
             </Annotations>
             <Annotations Target="SAP__self.QuotationComparisonItemType/SNo">
-                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
                 <Annotation Term="SAP__common.IsDigitSequence"/>
             </Annotations>
             <Annotations Target="SAP__self.QuotationComparisonItemType/Quantity">
@@ -436,11 +465,6 @@
                 <Annotation Term="SAP__common.QuickInfo" String="Account Number of Supplier"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=LIFNR"/>
             </Annotations>
-            <Annotations Target="SAP__self.SupplierQuotationType/SupplierName">
-                <Annotation Term="SAP__common.IsUpperCase"/>
-                <Annotation Term="SAP__common.Label" String="Supplier Name"/>
-                <Annotation Term="SAP__common.QuickInfo" String="Supplier Full Name"/>
-            </Annotations>
             <Annotations Target="SAP__self.SupplierQuotationType/Currency">
                 <Annotation Term="SAP__common.IsCurrency"/>
                 <Annotation Term="SAP__common.IsUpperCase"/>
@@ -502,6 +526,103 @@
             </Annotations>
             <Annotations Target="SAP__self.SupplierQuotationType">
                 <Annotation Term="SAP__common.Label" String="Supplier Quotation Header"/>
+            </Annotations>
+            <Annotations Target="SAP__self.TermsAndConditionsType/QuotationComparison">
+                <Annotation Term="SAP__core.Computed"/>
+            </Annotations>
+            <Annotations Target="SAP__self.TermsAndConditionsType/QuotationComparisonItem">
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+            </Annotations>
+            <Annotations Target="SAP__self.TermsAndConditionsType/ItemNo">
+                <Annotation Term="SAP__core.ComputedDefaultValue"/>
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+            </Annotations>
+            <Annotations Target="SAP__self.TermsAndConditionsType/__EntityControl">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/TermsAndConditions">
+                <Annotation Term="SAP__capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="_Header"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                    <PropertyValue Property="DeepUpdateSupport">
+                                        <Record>
+                                            <PropertyValue Property="Supported" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>__EntityControl</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>__EntityControl</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="DeltaUpdateSupported" Bool="true"/>
+                        <PropertyValue Property="Updatable" Path="__EntityControl/Updatable"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>_Header</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeepUpdateSupport">
+                    <Record>
+                        <PropertyValue Property="ContentIDSupported" Bool="true"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Path="__EntityControl/Deletable"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.TermsAndConditionsType">
+                <Annotation Term="SAP__common.Label" String="Quotation Terms"/>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
             </Annotations>
             <Annotations Target="SAP__self.SupplierQuotationItemType/SupplierQuotation">
                 <Annotation Term="SAP__common.IsUpperCase"/>
@@ -726,6 +847,18 @@
             <Annotations Target="SAP__self.QuotationComparisonType/QuotationComparison">
                 <Annotation Term="SAP__core.Computed"/>
             </Annotations>
+            <Annotations Target="SAP__self.QuotationComparisonType/CreatedBy">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Created By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Created By User"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_CREATION_USER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.QuotationComparisonType/LastChangedBy">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Changed By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Last Changed By User"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_LASTCHANGE_USER"/>
+            </Annotations>
             <Annotations Target="SAP__self.QuotationComparisonType/__CreateByAssociationControl">
                 <Annotation Term="SAP__core.Computed"/>
                 <Annotation Term="SAP__UI.HiddenFilter"/>
@@ -749,6 +882,14 @@
                                     <PropertyValue Property="InsertRestrictions">
                                         <Record>
                                             <PropertyValue Property="Insertable" Path="__CreateByAssociationControl/_CompareQuotationItem"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="_TermsAndConditions"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Path="__CreateByAssociationControl/_TermsAndConditions"/>
                                         </Record>
                                     </PropertyValue>
                                 </Record>
@@ -788,6 +929,7 @@
                         <PropertyValue Property="NonUpdatableNavigationProperties">
                             <Collection>
                                 <PropertyPath>_CompareQuotationItem</PropertyPath>
+                                <PropertyPath>_TermsAndConditions</PropertyPath>
                             </Collection>
                         </PropertyValue>
                         <PropertyValue Property="QueryOptions">
@@ -808,6 +950,9 @@
                     </Record>
                 </Annotation>
             </Annotations>
+            <Annotations Target="SAP__self.QuotationComparisonType/_TermsAndConditions">
+                <Annotation Term="SAP__common.Composition"/>
+            </Annotations>
             <Annotations Target="SAP__self.QuotationComparisonType">
                 <Annotation Term="SAP__common.Label" String="Quotation Comparison Header"/>
                 <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
@@ -815,6 +960,10 @@
             <Annotations Target="SAP__self.SupplierQuotationType/CompanyCodeName">
                 <Annotation Term="SAP__common.Label" String="Company Name"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Name of Company Code or Company"/>
+            </Annotations>
+            <Annotations Target="SAP__self.SupplierQuotationType/SupplierName">
+                <Annotation Term="SAP__common.Label" String="Name of Supplier"/>
+                <Annotation Term="SAP__common.Heading" String="Supplier"/>
             </Annotations>
             <Annotations Target="SAP__self.SupplierQuotationType/QuotationDate">
                 <Annotation Term="SAP__common.Label" String="Quotation Date"/>
@@ -887,7 +1036,22 @@
             <Annotations Target="SAP__self.SupplierQuotationItemType/YY1_MaterialMake_PDI">
                 <Annotation Term="SAP__common.Label" String="Material Make"/>
             </Annotations>
+            <Annotations Target="SAP__self.QuotationComparisonType/CreatedAt">
+                <Annotation Term="SAP__common.Label" String="Created On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Creation Date Time"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_CREATION_TSTMPL"/>
+            </Annotations>
+            <Annotations Target="SAP__self.QuotationComparisonType/LastChangedAt">
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Last Change Date Time"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_LASTCHANGE_TSTMPL"/>
+            </Annotations>
             <Annotations Target="SAP__self.QuotationComparisonCbAControl/_CompareQuotationItem">
+                <Annotation Term="SAP__common.Label" String="Dynamic CbA-Control"/>
+                <Annotation Term="SAP__common.Heading" String="Dynamic Create by Association Control"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Dynamic Create via Association Control Property"/>
+            </Annotations>
+            <Annotations Target="SAP__self.QuotationComparisonCbAControl/_TermsAndConditions">
                 <Annotation Term="SAP__common.Label" String="Dynamic CbA-Control"/>
                 <Annotation Term="SAP__common.Heading" String="Dynamic Create by Association Control"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Dynamic Create via Association Control Property"/>
