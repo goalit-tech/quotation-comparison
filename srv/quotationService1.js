@@ -27,10 +27,6 @@ module.exports = async (srv) => {
         }
         isEntitySetAvailable = entitySetAvailableInUrl(from, 'QuotationComparison');
         if (isEntitySetAvailable) {
-            // const { QuotationComparison } = this.entities;
-            // const query = SELECT.from(QuotationComparison)
-            //     .where({ rfq: rfqId });
-            // Carry over $top, $skip, $count, $select from the original request
 
             const { QuotationComparison } = S4_QUOTATION_COMPARISON_SRV.entities;
             const query = SELECT.from(QuotationComparison)
