@@ -168,7 +168,7 @@
                 <uiTable:columns>
                 <uiTable:Column
                         id="_IDGenSupplierQuotationColumn"
-                        width="11rem"
+                        width="9rem"
                         sortProperty="SupplierQuotation"
                         filterProperty="SupplierQuotation"
                     >
@@ -184,8 +184,26 @@
                         </uiTable:template>
                     </uiTable:Column>
                 <uiTable:Column
-                        id="_IDGenSupplierCodeColumn"
+                        id="_IDGenSupplierNameColumn"
                         width="11rem"
+                        sortProperty="SupplierName"
+                        filterProperty="SupplierName"
+                    >
+                        <Label
+                            id="_IDGenQuotationSupplierNameTableLabel"
+                            text="Supplier Name" wrapping="true"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenQuotationSupplierNameTableText"
+                                text="{oLocalModel>SupplierName}"
+                                wrapping="true"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                <uiTable:Column
+                        id="_IDGenSupplierCodeColumn"
+                        width="9rem"
                         sortProperty="SupplierCode"
                         filterProperty="SupplierCode"
                     >
@@ -196,14 +214,14 @@
                         <uiTable:template>
                             <Text
                                 id="_IDGenQuotationSupplierCodeTableText"
-                                text="{= ${oLocalModel>SupplierCode} ? ${oLocalModel>SupplierName} + ' (' + ${oLocalModel>SupplierCode} + ')' : '' }"
+                                text="{oLocalModel>SupplierCode}"
                                 wrapping="true"
                             />
                         </uiTable:template>
                     </uiTable:Column>
                     <uiTable:Column
                         id="_IDGenRequestForQuotationItemColumn"
-                        width="8rem"
+                        width="6rem"
                         sortProperty="RequestForQuotationItem"
                         filterProperty="RequestForQuotationItem"
                     >
@@ -219,8 +237,25 @@
                         </uiTable:template>
                     </uiTable:Column>
                     <uiTable:Column
-                        id="_IDGenMaterialTextColumn"
+                        id="_IDGenPurchasingDocumentItemTextColumn"
                         width="11rem"
+                        sortProperty="PurchasingDocumentItemText"
+                        filterProperty="PurchasingDocumentItemText"
+                    >
+                        <Label
+                            id="_IDGenPurchasingDocumentItemTextLabel1"
+                            text="Material Description" wrapping="true"
+                        />
+                        <uiTable:template>
+                            <Text
+                                id="_IDGenPurchasingDocumentItemText1"
+                                text="{oLocalModel>PurchasingDocumentItemText}" wrapping="true"
+                            />
+                        </uiTable:template>
+                    </uiTable:Column>
+                    <uiTable:Column
+                        id="_IDGenMaterialTextColumn"
+                        width="8rem"
                         sortProperty="Material"
                         filterProperty="Material"
                     >
@@ -232,23 +267,6 @@
                             <Text
                                 id="_IDGenMaterialText1"
                                 text="{oLocalModel>Material}" wrapping="true"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column
-                        id="_IDGenPurchasingDocumentItemTextColumn"
-                        width="11rem"
-                        sortProperty="PurchasingDocumentItemText"
-                        filterProperty="PurchasingDocumentItemText"
-                    >
-                        <Label
-                            id="_IDGenPurchasingDocumentItemTextLabel1"
-                            text="Material" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text
-                                id="_IDGenPurchasingDocumentItemText1"
-                                text="{oLocalModel>PurchasingDocumentItemText}" wrapping="true"
                             />
                         </uiTable:template>
                     </uiTable:Column>

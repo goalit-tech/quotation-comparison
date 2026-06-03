@@ -81,7 +81,13 @@ sap.ui.define(
                         ComparisonDate: aSupplierQuotationData[0]?.ComparisonDate || null,
                     },
                     SupplierQuotation: aSupplierQuotationData,
-                    SupplierQuotationItems: aSupplierQuotationData.flatMap(quotation => quotation._SupplierQuotationItem || [])
+                    SupplierQuotationItems: aSupplierQuotationData.flatMap(quotation =>
+                        (quotation._SupplierQuotationItem || []).map(item => ({
+                            ...item,
+                            SupplierCode: quotation.SupplierCode,
+                            SupplierName: quotation.SupplierName
+                        }))
+                    )
                 };
                 if (!isCreateMode) {
                     oLocalModelData.CompareQuotation = {}
@@ -300,6 +306,7 @@ sap.ui.define(
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemSelected", true);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
                 const selectedContextObject = contexts.map(context => context.getObject());
+                debugger
                 const aCompareQuotationItems = await this.getSelectedCompareQuotationItemDetails(selectedContextObject[0]);
                 const transformRows = this.transformDataforComparison(aCompareQuotationItems);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/CompareQuotation", selectedContextObject[0]);

@@ -370,9 +370,10 @@ annotate service.SupplierQuotation with @(UI: {
     LineItem                            : [
         {
             $Type: 'UI.DataField',
-            Label: 'Supplier Quotation Number',
+            Label: 'Supplier Quotation',
             Value: SupplierQuotation,
         },
+        
         {
             $Type: 'UI.DataField',
             Label: 'Supplier Name',
