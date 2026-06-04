@@ -1,4 +1,4 @@
-/* checksum : fea94dbac43ba140a5bde04d18383eef */
+/* checksum : 0dd8318fcc0ecfad16a1e28e1b1e68b0 */
 @cds.external : true
 @CodeList.CurrencyCodes.Url : '../../../../default/iwbep/common/0001/$metadata'
 @CodeList.CurrencyCodes.CollectionPath : 'Currencies'
@@ -196,29 +196,6 @@ service S4_API_QUOTATION_COMPARISON {
     MaterialMake : String(70) not null;
     Specifications : String(200) not null;
     ModelNumber : String(40) not null;
-    Warranty : String(100) not null;
-    @Measures.ISOCurrency : Currency
-    TaxAmount : Decimal(precision: 15) not null;
-    @Measures.ISOCurrency : Currency
-    FreightCharges : Decimal(precision: 15) not null;
-    @Measures.ISOCurrency : Currency
-    Discount : Decimal(precision: 15) not null;
-    TechnicalCompliance : String(100) not null;
-    @Measures.ISOCurrency : Currency
-    ConversionRs : Decimal(precision: 15) not null;
-    BcdPercent : Decimal(5, 2) not null;
-    SwcPercentOnBcd : Decimal(5, 2) not null;
-    HsnCode : String(16) not null;
-    Gst : Decimal(5, 2) not null;
-    @Measures.ISOCurrency : Currency
-    InsuranceCharges : Decimal(precision: 15) not null;
-    @Measures.ISOCurrency : Currency
-    BankCharges : Decimal(precision: 15) not null;
-    @Measures.ISOCurrency : Currency
-    LocalTransportCharges : Decimal(precision: 15) not null;
-    @Measures.ISOCurrency : Currency
-    LandingCost : Decimal(precision: 15) not null;
-    Density : Decimal(10, 2) not null;
     ContactPerson : String(40) not null;
     PhoneNumber : String(20) not null;
     @Core.Computed : true
@@ -520,7 +497,9 @@ service S4_API_QUOTATION_COMPARISON {
     @Common.IsDigitSequence : true
     key ItemNo : String(5) not null;
     KeyField : String(80) not null;
+    KeyFieldDesc : String(120) not null;
     ValueField : String(255) not null;
+    Field_Property : String(80) not null;
     @Core.Computed : true
     @UI.HiddenFilter : true
     @UI.Hidden : true
