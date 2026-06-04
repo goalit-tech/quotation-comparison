@@ -13,9 +13,9 @@
             <ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer1"/>
 				<Title id="_idGenCompareQuotationDetailPanelTitle" text="EENADU TELEVISION PRIVATE LIMITED"/>
 				<ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer2"/>
-				<Button text="Edit" id="_idGenCompareQuotationDetailPanelButtonEdit" press=".onCompareQuotationEditPress" visible="{= !${oLocalModel>/compareQuotationIsEditable} }" />
-				<Button text="Cancel" id="_idGenCompareQuotationDetailPanelToolbarCancel" press=".onCompareQuotationCancelPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
-				<Button text="Save" id="_idGenCompareQuotationDetailPanelToolbarSave" press=".onCompareQuotationSavePress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
+				<Button text="Edit" id="_idGenCompareQuotationDetailPanelButtonEdit" press=".onCompareQuotationDetailEditPress" visible="{= !${oLocalModel>/compareQuotationIsEditable} }" />
+				<Button text="Cancel" id="_idGenCompareQuotationDetailPanelToolbarCancel" press=".onCompareQuotationDetailCancelPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
+				<Button text="Save" id="_idGenCompareQuotationDetailPanelToolbarSave" press=".onCompareQuotationDetailSavePress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
 			</OverflowToolbar>
 		</headerToolbar>
     <f:SimpleForm
@@ -107,11 +107,14 @@
                     id="_IDGenCompareQuotationDetailRequisitionDateFormDateTimePicker"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                     	value="{
-						'path':'oLocalModel>/CompareQuotation/RequisitionDate',
-						'type':'sap.ui.model.type.Date',
-						'formatOptions': {
-							'pattern': 'yyyy-MM-dd'
-						}
+						path: 'oLocalModel>/CompareQuotation/RequisitionDate',
+                            type: 'sap.ui.model.type.Date',
+                            formatOptions: {
+                                source: {
+                                    pattern: 'yyyy-MM-dd'
+                                },
+                                pattern: 'yyyy-MM-dd'
+                            }
 					}"
                 />
                 <Label
@@ -131,14 +134,18 @@
                 <DatePicker
                     id="_IDGenCompareQuotationDetailComparisonDateFormDateTimePicker"
                     value="{
-						'path':'oLocalModel>/CompareQuotation/ComparisonDate',
-						'type':'sap.ui.model.type.Date',
-						'formatOptions': {
-							'pattern': 'yyyy-MM-dd'
-						}
+						path: 'oLocalModel>/CompareQuotation/ComparisonDate',
+                            type: 'sap.ui.model.type.Date',
+                            formatOptions: {
+                                source: {
+                                    pattern: 'yyyy-MM-dd'
+                                },
+                                pattern: 'yyyy-MM-dd'
+                            }
 					}"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                 />
+                
             </f:content>
         </f:SimpleForm>
         <VBox id="_IDGenCompareQuotationDetailVBox">
@@ -156,25 +163,7 @@
                     }
                 }"
             >
-              <!-- items="{ path: '<your_path>', sorter: { path: '<Property_to_Sort>', descending: <true/false>, group: '.getGroup' }, groupHeaderFactory: '.getGroupHeader'}" -->
-              
-               <!-- <uiTable:extension>
-                    <OverflowToolbar
-                        id="_IDGenCompareQuotationDetailToolbar1"
-                        style="Clear"
-                    >
-                        <Title
-                            id="_IDGenCompareQuotationDetailToolbarTitle1"
-                            text="Quotation Items"
-                        />
-                        <ToolbarSpacer id="_IDGenCompareQuotationDetailToolbarSpacer1" />
-                        <ToolbarSeparator id="_IDGenCompareQuotationDetailToolbarSeparator" />
-                        <Button id="_IDGenCompareQuotationDetailAddButton" text='Add' press=".onAddQuotationComparisonItemRowsPress"></Button>
-                        <Button id="_IDGenCompareQuotationDetailRemoveButton" text='Remove' press=".onRemoveQuotationComparisonItemRowsPress"></Button>
-                    </OverflowToolbar>
-                </uiTable:extension> -->
-                        <!-- <Button id="_IDGenCompareQuotationDetailTermsAndConditionsButton" text='Terms And Conditions'></Button> -->
-            </uiTable:Table>
+               </uiTable:Table>
         </VBox>
     </Panel>
 </core:FragmentDefinition>

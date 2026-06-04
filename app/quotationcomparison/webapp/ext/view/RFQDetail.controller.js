@@ -169,26 +169,11 @@ sap.ui.define(
             onAddCompareQuotationCreatePress: async function (oEvent) {
                 this.oDialog.setBusy(true);
                 try {
-                    debugger;
                     const aSelectedSupplierQuotationItems = this.getSelectedSupplierQuotations();
                     console.log("Selected Quotation Items:", aSelectedSupplierQuotationItems);
                     this.editFlow.getView().getModel("oLocalModel").setProperty("/supplierQuotationItemSelected", aSelectedSupplierQuotationItems);
-                    this.callActionForQuotationComparison('upsertCompareQuotation', { type: "Create" })
-                }
-                catch (error) {
-                    console.error("Error occurred:", error);
-                    this.oDialog.setBusy(false);
-                    // this.oDialog.close();
-                }
-            },
-            callActionForQuotationComparison: async function (sActionName, mUrlParameters) {
-
-                // const oModel = this.editFlow.getView().getModel();
-
-                try {
                     const oCompareQuotation = this.editFlow.getView().getModel("oLocalModel").getProperty("/CompareQuotation");
                     const aCompareQuotationItem = this.prepareCompareQuotationItemData();
-                    const oModel = this.getView().getModel();
                     oCompareQuotation.ComparisonDate = oCompareQuotation.ComparisonDate ? (oCompareQuotation.ComparisonDate instanceof Date
                         ? oCompareQuotation.ComparisonDate.toISOString().split("T")[0]
                         : oCompareQuotation.ComparisonDate)
@@ -197,33 +182,40 @@ sap.ui.define(
                         ? oCompareQuotation.RequisitionDate.toISOString().split("T")[0]
                         : oCompareQuotation.RequisitionDate)
                         : null;
-                    // oCompareQuotation.ComparisonDate ? oCompareQuotation.ComparisonDate.toISOString().split("T")[0] : "";
-                    // /oCompareQuotation.RequisitionDate = oCompareQuotation.RequisitionDate ? oCompareQuotation.RequisitionDate.toISOString().split("T")[0] : "";
-                    // Create action binding
-                    const oAction = oModel.bindContext("/upsertCompareQuotation(...)");
 
-                    // Set parameters
-                    // Set action parameters
+                    const oResult = await this.callActionUpsertCompareQuotation(oCompareQuotation, aCompareQuotationItem, "CREATE");
+                    if (oResult?.status === "Error") {
+                        this.oDialog.setBusy(false);
+                        sap.m.MessageToast.show(`Error on Create Quotation Comparison ${oResult?.message || oResult?.error}`);
+                    } else {
+                        sap.m.MessageToast.show("Quotation Created successfully");
+                        this.oDialog?.setBusy(false);
+                        this.oDialog?.close();
+                    }
+                }
+                catch (error) {
+                    console.error("Error occurred:", error);
+                    this.oDialog.setBusy(false);
+                    // this.oDialog.close();
+                }
+            },
+
+            callActionUpsertCompareQuotation: async function (oCompareQuotation, aCompareQuotationItem, sType) {
+                try {
+                    const oModel = this.editFlow.getView().getModel();
+                    const oAction = oModel.bindContext("/upsertCompareQuotation(...)");
                     oAction.setParameter("quotationComparison", oCompareQuotation);
                     oAction.setParameter("quotationComparisonItem", aCompareQuotationItem);
-                    oAction.setParameter("type", "CREATE");
+                    oAction.setParameter("type", sType);
 
                     await oAction.execute();
 
                     const oResult = oAction.getBoundContext().getObject();
-                    if (oResult?.error) {
-                        this.oDialog.setBusy(false);
-                        sap.m.MessageToast.show(`Error on Add Quotation ${oResult?.error}`);
-                    } else {
-                        sap.m.MessageToast.show("Action executed successfully");
-                        this.oDialog.setBusy(false);
-                        this.oDialog.close();
-                    }
-
+                    return oResult;
                 } catch (oError) {
                     console.error("Error calling action", oError);
                     // this.oDialog.close();
-                    this.oDialog.setBusy(false);
+                    this.oDialog?.setBusy(false);
                     throw oError;
                 }
             },
@@ -265,16 +257,6 @@ sap.ui.define(
 
                 oTable.setSelectedIndices(aSelectedIndices);
             },
-            // getSelectedSupplierQuotationItems: function () {
-            //     const aSelectedQuotations = this.getSelectedSupplierQuotations();
-
-            //     const aAllItems = aSelectedQuotations.flatMap((oQuotation) => {
-            //         return oQuotation._SupplierQuotationItem || oQuotation.items || [];
-            //     });
-
-            //     console.log("Selected Items", aAllItems);
-            //     return aAllItems;
-            // },
 
             onAddCompareQuotationCancelPress: function (oEvent) {
                 this.oDialog.close();
@@ -284,15 +266,7 @@ sap.ui.define(
                 const match = sPath.match(/\('(.+)'\)/);
                 return match ? match[1] : null;
             },
-            onCompareQuotationCancelPress: function () {
-                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
-                this.editFlow.getView().getModel("oLocalModel").setProperty("/cqUITableSelectionMode", 'Single');
-                console.log("Cancel button pressed");
-            },
-            onCompareQuotationEditPress: function () {
-                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", true);
-                console.log("Edit button pressed");
-            },
+
             onCompareQuotationDeletePress: function () {
 
             },
@@ -306,7 +280,6 @@ sap.ui.define(
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemSelected", true);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
                 const selectedContextObject = contexts.map(context => context.getObject());
-                debugger
                 const aCompareQuotationItems = await this.getSelectedCompareQuotationItemDetails(selectedContextObject[0]);
                 const transformRows = this.transformDataforComparison(aCompareQuotationItems);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/CompareQuotation", selectedContextObject[0]);
@@ -333,14 +306,43 @@ sap.ui.define(
                 }
             },
 
-            // },
+            onCompareQuotationDetailCancelPress: function () {
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/cqUITableSelectionMode", 'Single');
+                console.log("Cancel button pressed");
+            },
+            onCompareQuotationDetailEditPress: function () {
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", true);
+                console.log("Edit button pressed");
+            },
+            onCompareQuotationDetailSavePress: async function () {
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", true);
+                const oCompareQuotation = this.editFlow.getView().getModel("oLocalModel").getProperty("/CompareQuotation");
+                const aCompareQuotationItem = this.reverseTransformDataForSave();
+                const oModel = this.getView().getModel();
+                oCompareQuotation.ComparisonDate = oCompareQuotation.ComparisonDate ? (oCompareQuotation.ComparisonDate instanceof Date
+                    ? oCompareQuotation.ComparisonDate.toISOString().split("T")[0]
+                    : oCompareQuotation.ComparisonDate)
+                    : null;
+                oCompareQuotation.RequisitionDate = oCompareQuotation.RequisitionDate ? (oCompareQuotation.RequisitionDate instanceof Date
+                    ? oCompareQuotation.RequisitionDate.toISOString().split("T")[0]
+                    : oCompareQuotation.RequisitionDate)
+                    : null;
+
+                const oResult = await this.callActionUpsertCompareQuotation(oCompareQuotation, aCompareQuotationItem, "UPDATE");
+                if (oResult?.status === "Error") {
+                    sap.m.MessageToast.show(`Error on Updation Quotation Comparison ${oResult?.message || oResult?.error}`);
+                } else {
+                    sap.m.MessageToast.show("Quotation Updated successfully");
+                }
+            },
 
             transformDataforComparison: function (aSelectedData) {
                 const aProperties = [
-                    // "QuotationComparison",
-                    //"SNo",
-                    // "SupplierCode",
-                    // "SupplierName",
+                    //"QuotationComparison",
+                    "SNo",
+                    //"SupplierCode",
+                    //"SupplierName",
                     "Description",
                     "MaterialMake",
                     "ModelNumber",
@@ -531,37 +533,7 @@ sap.ui.define(
                 return aRestoredItems;
             },
 
-            onCompareQuotationSavePress: function () {
-                this.onSaveCompareQuotation();
-            },
-            onSaveCompareQuotation: async function () {
-                debugger
-                const aItemsToSave = this.reverseTransformDataForSave();
-                console.log("Items to save:", aItemsToSave);
 
-                const oModel = this.editFlow.getView().getModel();
-                const oLocalModel = this.editFlow.getView().getModel("oLocalModel");
-                const oCompareQuotation = oLocalModel.getProperty("/CompareQuotation");
-                debugger
-                try {
-                    for (const oItem of aItemsToSave) {
-                        const sPath = `/QuotationComparison('${oCompareQuotation?.QuotationComparison}')/_CompareQuotationItem`;
-                        const oListBinding = oModel.bindList(sPath);
-
-                        // If your OData supports PATCH/UPDATE by key, adjust path accordingly
-                        // e.g., /CompareQuotationItem(QuotationComparison='...',SupplierName='...')
-                        const oContext = oListBinding.create(oItem); // or use update if record exists
-                        await oContext.created();
-                    }
-
-                    sap.m.MessageToast.show("Saved successfully!");
-                    oLocalModel.setProperty("/compareQuotationIsEditable", false);
-
-                } catch (oError) {
-                    console.error("Error saving comparison items:", oError);
-                    sap.m.MessageToast.show("Save failed. Check console.");
-                }
-            },
         });
     }
 );

@@ -127,18 +127,55 @@ class CapCompareQuotationService extends cds.ApplicationService {
     }
 
     async upsertCompareQuotation(quotationComparison, quotationComparisonItem, type) {
+        var oMessage = {
+            message: "",
+            status: ""
+        }
         try {
             if (!quotationComparison) {
-                return { message: "No payload provided" };
+                return oMessage = {
+                    message: "No payload provided",
+                    status: "Error"
+                };
             }
 
             const S4_QUOTATION_COMPARISON_SRV = await cds.connect.to("S4_API_QUOTATION_COMPARISON");
-            quotationComparison["_CompareQuotationItem"] = quotationComparisonItem;
-            const resultHeader = await S4_QUOTATION_COMPARISON_SRV.create('QuotationComparison', quotationComparison);
-            return { message: `Quotation upserted successfully with ComparisonId: ${resultHeader?.CompareQuotation}` };
+            // quotationComparison["_CompareQuotationItem"] = quotationComparisonItem;
+            if (type === "UPDATE" && quotationComparison.QuotationComparison) {
+                const resultHeader = await S4_QUOTATION_COMPARISON_SRV
+                    .update('QuotationComparison')
+                    .where({
+                        QuotationComparison: quotationComparison.QuotationComparison
+                    })
+                    .with(quotationComparison);
+                const aResults = await Promise.all(
+                    quotationComparisonItem.map(item =>
+                        S4_QUOTATION_COMPARISON_SRV
+                            .update('QuotationComparisonItem')
+                            .where({
+                                CompareQuotation: quotationComparison.CompareQuotation,
+                                SNo: item.SNo
+                            })
+                            .with(item)
+                    )
+                );
+                oMessage = {
+                    message: `Quotation Updated successfully for Quotation Comparison: ${resultHeader?.QuotationComparison}`,
+                    status: "Success"
+                };
+            } else {
+                const resultHeader = await S4_QUOTATION_COMPARISON_SRV.create('QuotationComparison', quotationComparison);
+                oMessage = {
+                    message: `Quotation created successfully for Quotation Comparison: ${resultHeader?.QuotationComparison}`,
+                    status: "Success"
+                };
+            }
+            return oMessage;
         } catch (err) {
-            // req.log?.error?.(err);
-            return { error: err.message || String(err) };
+            return oMessage = {
+                message: err.message || String(err),
+                status: "Error"
+            };
         }
     }
     workflowForCompareQuotation(req) {

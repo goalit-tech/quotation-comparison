@@ -305,23 +305,6 @@
                         </uiTable:template>
                     </uiTable:Column>
                     <uiTable:Column
-                        id="_IDGenNetPriceQuantityColumn"
-                        width="6rem"
-                        sortProperty="NetPriceQuantity"
-                        filterProperty="NetPriceQuantity"
-                    >
-                        <Label
-                            id="_IDGenNetPriceQuantityLabel3"
-                            text="Unit Price" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text
-                                id="_IDGenNetPriceQuantityText2"
-                                text="{oLocalModel>NetPriceQuantity}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column
                         id="_IDGenNetPriceAmountColumn"
                         width="8rem"
                         sortProperty="NetPriceAmount"
