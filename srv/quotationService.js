@@ -149,15 +149,17 @@ class CapCompareQuotationService extends cds.ApplicationService {
                     })
                     .with(quotationComparison);
                 const aResults = await Promise.all(
-                    quotationComparisonItem.map(item =>
-                        S4_QUOTATION_COMPARISON_SRV
+                    quotationComparisonItem.map(item => {
+                        const { QuotationComparison, SNo, ...itemPayload } = item;
+
+                        return S4_QUOTATION_COMPARISON_SRV
                             .update('QuotationComparisonItem')
                             .where({
-                                CompareQuotation: quotationComparison.CompareQuotation,
-                                SNo: item.SNo
+                                QuotationComparison: QuotationComparison,
+                                SNo:SNo
                             })
-                            .with(item)
-                    )
+                            .with(itemPayload);
+                    })
                 );
                 oMessage = {
                     message: `Quotation Updated successfully for Quotation Comparison: ${resultHeader?.QuotationComparison}`,
