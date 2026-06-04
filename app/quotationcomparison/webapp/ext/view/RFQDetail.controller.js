@@ -29,6 +29,7 @@ sap.ui.define(
                     SupplierQuotationItems: [],
                     compareQuotationIsEditable: false,
                     compareQuotationItemData: [],
+                    compareQuotationItemSelectedData: [],
                     compareQuotationItemSelected: false,
                     cqUITableSelectionMode: 'Single'
                 });
@@ -38,8 +39,33 @@ sap.ui.define(
             // onAfterRendering: async function (oContext) {
             //     return;
             // },
-            onCompareQuotationUpdatePress: function (oEvent) {
+            onCompareQuotationUpdatePress: async function (oEvent) {
+                const context = oEvent.getSource().getBindingContext();
+                const keyId = this.extractKey(context.getPath());
+                const rfqContextObject = context.getObject();
+                console.log("RFQID", keyId);
+                const aSupplierQuotation = await this.getSupplierQuotationForRFQ(keyId);
+                const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
+                    ? aSupplierQuotation
+                    : (aSupplierQuotation?.value || []);
 
+                const aSupplierQuotationItems = aSupplierQuotationData.flatMap(quotation =>
+                    (quotation._SupplierQuotationItem || []).map(item => ({
+                        ...item,
+                        SupplierCode: quotation.SupplierCode,
+                        SupplierName: quotation.SupplierName
+                    }))
+                );
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/SupplierQuotation", aSupplierQuotationData);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/SupplierQuotationItem", aSupplierQuotationItems);
+                this.oDialog ??= await this.loadFragment({
+                    name: "nlabs.ui.quotationcomparison.ext.fragments.Quotation"
+                });
+                // updated the selected Row in table
+                const aCompareQuotationItemSelectedData = this.editFlow.getView().getModel("oLocalModel").getProperty("/compareQuotationItemSelectedData");
+                this.setSelectedSupplierQuotations(aCompareQuotationItemSelectedData);
+                this.getExtensionAPI().addDependent(this.oDialog);
+                this.oDialog.open();
             },
             onAddQuotationPress: async function (oEvent) {
                 const context = oEvent.getSource().getBindingContext();
@@ -47,18 +73,12 @@ sap.ui.define(
                 const rfqContextObject = context.getObject();
                 console.log("RFQID", keyId);
 
-                const aSupplierQuotationData = await this.getSupplierQuotationForRFQ(keyId, true);
+                const aSupplierQuotationData = await this.getSupplierQuotationForRFQ(keyId);
                 await this.updateContextForCompareQuotation(aSupplierQuotationData, rfqContextObject, true);
 
                 this.oDialog ??= await this.loadFragment({
                     name: "nlabs.ui.quotationcomparison.ext.fragments.Quotation"
                 });
-
-                // if (isUpdate) {
-
-                // }
-
-                // this.oDialog.setBindingContext(context);
                 this.getExtensionAPI().addDependent(this.oDialog);
                 this.oDialog.open();
             },
@@ -105,6 +125,9 @@ sap.ui.define(
                     var newQuotationComparisonItem = {
                         QuotationComparison: item?.QuotationComparison || '',
                         SNo: ((index + 1) * 10).toString(),
+                        //Material: item?.Material || '',
+                        // SQItemNumber: item?.ItemNumber || '',
+                        // SupplierQuotation:item?.SupplierQuotation||'',
                         Description: item?.PurchasingDocumentItemText || '',
                         Quantity: item?.ScheduleLineOrderQuantity || 0,
                         Units: item?.BaseUnit || '',
@@ -116,21 +139,21 @@ sap.ui.define(
                         MaterialMake: item?.MaterialMake || '',
                         Specifications: item?.YY1_Specifications_PDI || '',
                         ModelNumber: item?.YY1_MaterialMake_PDI || '',
-                        Warranty: item?.Warranty || '',
-                        TaxAmount: item?.TaxAmount || 0,
-                        FreightCharges: item?.FreightCharges || 0,
-                        Discount: item?.Discount || 0,
-                        TechnicalCompliance: item?.TechnicalCompliance || '',
-                        ConversionRs: item?.Conversion || 1,
-                        BcdPercent: item?.BcdPerce || 0,
-                        SwcPercentOnBcd: item?.SwcPercentOnBcd || 0,
-                        HsnCode: item?.HsnCode || '',
-                        Gst: item?.Gst || 0,
-                        InsuranceCharges: item?.InsuranceCharges || 0,
-                        BankCharges: item?.BankCharges || 0,
-                        LocalTransportCharges: item?.LocalTransportCharges || 0,
-                        LandingCost: item?.LandingCost || 0,
-                        Density: item?.Density || 0,
+                        // Warranty: item?.Warranty || '',
+                        // TaxAmount: item?.TaxAmount || 0,
+                        // FreightCharges: item?.FreightCharges || 0,
+                        // Discount: item?.Discount || 0,
+                        // TechnicalCompliance: item?.TechnicalCompliance || '',
+                        // ConversionRs: item?.Conversion || 1,
+                        // BcdPercent: item?.BcdPerce || 0,
+                        // SwcPercentOnBcd: item?.SwcPercentOnBcd || 0,
+                        // HsnCode: item?.HsnCode || '',
+                        // Gst: item?.Gst || 0,
+                        // InsuranceCharges: item?.InsuranceCharges || 0,
+                        // BankCharges: item?.BankCharges || 0,
+                        // LocalTransportCharges: item?.LocalTransportCharges || 0,
+                        // LandingCost: item?.LandingCost || 0,
+                        // Density: item?.Density || 0,
                         ContactPerson: item?.ContactPerson || '',
                         PhoneNumber: item?.PhoneNumber || ''
                     };
@@ -238,6 +261,9 @@ sap.ui.define(
                 return aSelectedObjects;
             },
             setSelectedSupplierQuotations: function (aItemToBeSelected) {
+                if (!aItemToBeSelected || aItemToBeSelected.length === 0) {
+                    return;
+                }
                 const oTable = this.editFlow.getView().byId("_IDGenCompareQuotationSupplierUITable");
                 const oModel = oTable.getModel();
                 const sPath = oTable.getBindingInfo("rows").path;
@@ -248,9 +274,9 @@ sap.ui.define(
                 aItemToBeSelected.forEach((oItem) => {
                     const iIndex = aTableData.findIndex((oRow) => {
                         // Match by a unique key — adjust "SupplierQuotationID" to your actual key field
-                        return oRow.SupplierQuotationID === oItem.SupplierQuotationID;
+                        return (oRow.SupplierQuotation === oItem.SupplierQuotation &&
+                            oRow.SQItemNumber === oItem.ItemNumber);
                     });
-
                     if (iIndex !== -1) {
                         aSelectedIndices.push(iIndex);
                     }
@@ -282,15 +308,15 @@ sap.ui.define(
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationIsEditable", false);
                 const selectedContextObject = contexts.map(context => context.getObject());
                 const aCompareQuotationItems = await this.getSelectedCompareQuotationItemDetails(selectedContextObject[0]);
-                const transformRows = Utils.transformDataforComparisonTable(aCompareQuotationItems);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/CompareQuotation", selectedContextObject[0]);
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemSelectedData", aCompareQuotationItems);
+                const transformRows = Utils.transformDataforComparisonTable(aCompareQuotationItems);
                 this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemData", transformRows);
                 //this.generateCOlumnsForComparison(aCompareQuotationItems);
                 Utils.generateCOlumnsForComparisonTable(this.editFlow.getView(), aCompareQuotationItems);
 
             },
             getSelectedCompareQuotationItemDetails: async function (selectedItem) {
-                //    getSupplierQuotationForRFQ: async function (keyId) {
                 const oModel = this.editFlow.getView().getModel();
                 const sPath = `/QuotationComparison('${selectedItem?.QuotationComparison}')/_CompareQuotationItem`;
                 try {
@@ -340,6 +366,22 @@ sap.ui.define(
                     sap.m.MessageToast.show("Quotation Updated successfully");
                 }
             },
+            onCompareQuotationDetailAddTermsPress: function () {
+                const aSelectedData = this.editFlow.getView().getModel("oLocalModel").getProperty("/compareQuotationItemSelectedData");
+                const aRows = this.editFlow.getView().getModel("oLocalModel").getProperty("/compareQuotationItemData");
+                const oNewRow = {
+                    property: "TermsAndConditions1"
+                };
+
+                aSelectedData.forEach((oItem) => {
+                    const sSupplierName = oItem.SupplierName + "_" + oItem.SNo;
+                    oNewRow[sSupplierName] = "";
+                });
+
+                aRows.push(oNewRow);
+
+                this.editFlow.getView().getModel("oLocalModel").setProperty("/compareQuotationItemData", aRows);
+            }
             /** 
                         transformDataforComparison: function (aSelectedData) {
                             const aProperties = [

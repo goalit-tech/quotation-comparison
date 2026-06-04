@@ -373,7 +373,7 @@ annotate service.SupplierQuotation with @(UI: {
             Label: 'Supplier Quotation',
             Value: SupplierQuotation,
         },
-        
+
         {
             $Type: 'UI.DataField',
             Label: 'Supplier Name',
@@ -510,11 +510,6 @@ annotate service.SupplierQuotationItem with @(UI: {LineItem: [
         Label: 'Material Description',
         Value: PurchasingDocumentItemText,
     },
-    // {
-    //     $Type: 'UI.DataField',
-    //     Label: 'Quantity',
-    //     Value: ScheduleLineOrderQuantity,
-    // },
     {
         $Type: 'UI.DataField',
         Label: 'Base unit of Measure',
@@ -535,31 +530,6 @@ annotate service.SupplierQuotationItem with @(UI: {LineItem: [
         Label: 'Currency',
         Value: DocumentCurrency,
     },
-    // {
-    //     $Type: 'UI.DataField',
-    //     Label: 'Delivery Date',
-    //     Value: 'ScheduleLineDeliveryDate',
-    // },
-    // {
-    //     $Type: 'UI.DataField',
-    //     Label: 'Tax Percentage',
-    //     Value: '',
-    // },
-    // {
-    //     $Type: 'UI.DataField',
-    //     Label: 'Discount',
-    //     Value: '',
-    // },
-    // {
-    //     $Type: 'UI.DataField',
-    //     Label: 'Freight Charges',
-    //     Value: '',
-    // },
-    // {
-    //     $Type: 'UI.DataField',
-    //     Label: 'Insurance Charges',
-    //     Value: '',
-    // },
     {
         $Type: 'UI.DataField',
         Label: 'Make',
@@ -569,76 +539,11 @@ annotate service.SupplierQuotationItem with @(UI: {LineItem: [
         $Type: 'UI.DataField',
         Label: 'Specifications',
         Value: YY1_Specifications_PDI,
-    },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'Warranty',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'Technical Compliance',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'Conversion @ Rs',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'BCD @ 10%',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'SWC 15% on BCD',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'HSN Code',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'GST',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'Bank Charges',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'Local Transportation Charges',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'Landing Cost',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'Density',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'PO Test',
-//     Value: '',
-// },
-// {
-//     $Type: 'UI.DataField',
-//     Label: 'Phone Number',
-//     Value: '',
-// },
+    }
 ], });
 
 annotate service.QuotationComparison with @(UI: {
-    HeaderInfo                            : {
+    HeaderInfo: {
         $Type         : 'UI.HeaderInfoType',
         TypeName      : 'Quotation Comparison',
         TypeNamePlural: 'Quotation Comparisons',
@@ -651,7 +556,7 @@ annotate service.QuotationComparison with @(UI: {
             Value: companyName,
         },
     },
-    LineItem                              : [
+    LineItem  : [
         {
             $Type: 'UI.DataField',
             Value: QuotationComparison,
@@ -708,121 +613,8 @@ annotate service.QuotationComparison with @(UI: {
             Value: RequisitionDate,
             Label: 'Requisition Date',
         },
-    // {
-    //     $Type  : 'UI.DataFieldForAction',
-    //     Action : 'QuotationService.CREATEQuotationComparison',
-    //     Label  : 'Create Comparison',
-    //     Enabled: true,
-    // },
     ],
-    Facets                                : [
-        {
-            $Type : 'UI.ReferenceFacet',
-            ID    : 'QuotationComparisonGeneralInfo',
-            Label : 'General Information',
-            Target: '@UI.FieldGroup#QuotationComparisonDetails',
-        },
-        {
-            $Type : 'UI.ReferenceFacet',
-            ID    : 'QuotationComparisonItems',
-            Label : 'Items',
-            Target: 'items/@UI.LineItem',
-        },
-    ],
-    FieldGroup #QuotationComparisonDetails: {
-        $Type: 'UI.FieldGroupType',
-        Data : [
-            {
-                $Type: 'UI.DataField',
-                Label: 'RFQ',
-                Value: rfq,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Company Name',
-                Value: companyName,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Comparative Statement Title',
-                Value: comparativeStatementTitle,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Requestor Name',
-                Value: requestorName,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Account Assignment',
-                Value: accountAssignment,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Requisition Number',
-                Value: requisitionNumber,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Requisition Date',
-                Value: requisitionDate,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Purpose',
-                Value: purpose,
-            },
-            {
-                $Type: 'UI.DataField',
-                Label: 'Comparison Date',
-                Value: comparisonDate,
-            },
-        ],
-    },
 });
-
-annotate service.QuotationComparisonItems with @(UI: {LineItem: [
-    {
-        $Type: 'UI.DataField',
-        Value: serialNumber,
-        Label: 'Serial Number',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: description,
-        Label: 'Description',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: quantity,
-        Label: 'Quantity',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: units,
-        Label: 'Units',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: supplier,
-        Label: 'Supplier',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: unitRate,
-        Label: 'Unit Rate',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: totalAmount,
-        Label: 'Total Amount',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: currency,
-        Label: 'Currency',
-    },
-], });
 
 annotate service.QuotationComparison with @(
     Capabilities: {
@@ -832,10 +624,6 @@ annotate service.QuotationComparison with @(
         },
         InsertRestrictions: {Insertable: false,
         },
-    // UpdateRestrictions.Updatable : false,
-    // @Capabilities.InsertRestrictions.Insertable: false,
-    // Deletable : false,
-    // Updatable : false,
     },
     DeleteHidden: true,
 );

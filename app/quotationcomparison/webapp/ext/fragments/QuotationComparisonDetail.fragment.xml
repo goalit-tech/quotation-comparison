@@ -16,6 +16,7 @@
 				<Button text="Edit" id="_idGenCompareQuotationDetailPanelButtonEdit" press=".onCompareQuotationDetailEditPress" visible="{= !${oLocalModel>/compareQuotationIsEditable} }" />
 				<Button text="Cancel" id="_idGenCompareQuotationDetailPanelToolbarCancel" press=".onCompareQuotationDetailCancelPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
 				<Button text="Save" id="_idGenCompareQuotationDetailPanelToolbarSave" press=".onCompareQuotationDetailSavePress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
+				<Button text="Add Terms &amp; Conditions" id="_idGenCompareQuotationDetailPanelToolbarAddTerms" press=".onCompareQuotationDetailAddTermsPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
 			</OverflowToolbar>
 		</headerToolbar>
     <f:SimpleForm

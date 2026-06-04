@@ -64,13 +64,13 @@
                                     press=".onAddQuotationPress"
                                     visible="{= !${oLocalModel>/compareQuotationIsEditable} }"
                                 />
-                                <!-- <table:Action
+                                <table:Action
                                     id="_IDGenQuotationComparisonActionGroupUpdate"
                                     key="SaveACtionQuotation"
                                     text="Update Quotation"
                                     press=".onCompareQuotationUpdatePress"
                                     visible="{= !${oLocalModel>/compareQuotationIsEditable} }"
-                                /> -->
+                                />
                                     <!-- <table:Action
                                         id="_IDGenQuotationComparisonActionGroupSave"
                                         key="SaveACtionQuotation"

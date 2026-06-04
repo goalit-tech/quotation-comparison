@@ -140,7 +140,6 @@ class CapCompareQuotationService extends cds.ApplicationService {
             }
 
             const S4_QUOTATION_COMPARISON_SRV = await cds.connect.to("S4_API_QUOTATION_COMPARISON");
-            // quotationComparison["_CompareQuotationItem"] = quotationComparisonItem;
             if (type === "UPDATE" && quotationComparison.QuotationComparison) {
                 const resultHeader = await S4_QUOTATION_COMPARISON_SRV
                     .update('QuotationComparison')
@@ -156,7 +155,7 @@ class CapCompareQuotationService extends cds.ApplicationService {
                             .update('QuotationComparisonItem')
                             .where({
                                 QuotationComparison: QuotationComparison,
-                                SNo:SNo
+                                SNo: SNo
                             })
                             .with(itemPayload);
                     })
@@ -166,6 +165,7 @@ class CapCompareQuotationService extends cds.ApplicationService {
                     status: "Success"
                 };
             } else {
+                quotationComparison["_CompareQuotationItem"] = quotationComparisonItem;
                 const resultHeader = await S4_QUOTATION_COMPARISON_SRV.create('QuotationComparison', quotationComparison);
                 oMessage = {
                     message: `Quotation created successfully for Quotation Comparison: ${resultHeader?.QuotationComparison}`,
