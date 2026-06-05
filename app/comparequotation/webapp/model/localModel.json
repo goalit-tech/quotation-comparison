@@ -1,0 +1,19 @@
+{
+    "SelectedRFQForComparison": null,
+    "SupplierQuotation": [],
+    "SupplierQuotationItem": [],
+    "Mode": "DISPLAY",
+    "CompareQuotationHeader": {
+        "QuotationComparison": "",
+        "RequestForQuotation": "",
+        "CompanyCode": "",
+        "CompanyName": "",
+        "CompativeStatementTitle": "",
+        "NameOfRequester": "",
+        "AccountAssignment": "",
+        "RequisitionNumber": "",
+        "RequisitionDate": null,
+        "Purpose": "",
+        "ComparisonDate": null
+    }
+}

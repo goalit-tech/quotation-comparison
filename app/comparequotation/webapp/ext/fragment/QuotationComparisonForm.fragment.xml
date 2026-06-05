@@ -1,0 +1,170 @@
+<core:FragmentDefinition
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:uiTable="sap.ui.table"
+    xmlns:macros="sap.fe.macros"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:core="sap.ui.core"
+>
+    <Panel id="_IDGenPanel" expandable="false" expanded="true">
+    	<headerToolbar>
+			<OverflowToolbar id="_idGenCompareQuotationDetailPanelToolbar" style="Clear">
+            <ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer1"/>
+				<Title id="_idGenCompareQuotationDetailPanelTitle" text="EENADU TELEVISION PRIVATE LIMITED"/>
+				<ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer2"/>
+				<Button text="Edit" id="_idGenCompareQuotationDetailPanelButtonEdit" press=".onCompareQuotationDetailEditPress" visible="{= !${oLocalModel>/compareQuotationIsEditable} }" />
+				<Button text="Cancel" id="_idGenCompareQuotationDetailPanelToolbarCancel" press=".onCompareQuotationDetailCancelPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
+				<Button text="Save" id="_idGenCompareQuotationDetailPanelToolbarSave" press=".onCompareQuotationDetailSavePress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
+				<Button text="Add Terms &amp; Conditions" id="_idGenCompareQuotationDetailPanelToolbarAddTerms" press=".onCompareQuotationDetailAddTermsPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
+			</OverflowToolbar>
+		</headerToolbar>
+    <f:SimpleForm
+            id="_idGenCompareQuotationDetailDetailForm"
+            editable="true"
+            title=""
+            layout="ResponsiveGridLayout"
+            labelSpanXL="4"
+            labelSpanL="4"
+            labelSpanM="4"
+            labelSpanS="12"
+            adjustLabelSpan="false"
+            emptySpanXL="0"
+            emptySpanL="0"
+            emptySpanM="0"
+            emptySpanS="0"
+            columnsXL="3"
+            columnsL="2"
+            columnsM="2"
+            singleContainerFullSize="false"
+        >
+            <f:content>
+                <core:Title id="_IDGenCompareQuotationDetailFormTitle1" text="" />
+                <Label
+                    id="_IDGenCompareQuotationDetailFormLabel"
+                    text="Request For Quotation"
+                />
+                <Input
+                    id="_IDGenCompareQuotationDetailFormInput"
+                    value="{oLocalModel>/CompareQuotation/RequestForQuotation}"
+                    editable="false"
+                />
+                <Label
+                    id="_IDGenCompareQuotationDetailFormLabel3"
+                    text="Company Code"
+                />
+                <Input
+                    id="_IDGenCompareQuotationDetailFormInput3"
+                    value="{oLocalModel>/CompareQuotation/CompanyCode}"
+                    editable="false"
+                />
+                    <!-- value="{oLocalModel>/CompareQuotation/CompanyCode}" -->
+                    <!-- value="{oLocalModel>/CompareQuotation/CompanyName} ({oLocalModel>/CompareQuotation/CompanyCode})" -->
+                <Label
+                    id="_IDGenCompareQuotationDetailCompativeFormLabel"
+                    text="Comparative Statement Title"
+                />
+                <Input
+                    id="_IDGenCompareQuotationDetailCompativeFormInput"
+                    value="{oLocalModel>/CompareQuotation/CompativeStatementTitle}"
+                    editable="{oLocalModel>/compareQuotationIsEditable}"
+                />
+
+                <Label
+                    id="_IDGenCompareQuotationDetailNameOfRequesterFormLabel"
+                    text="Requestor Name"
+                />
+                <Input
+                    id="_IDGenCompareQuotationDetailNameOfRequesterFormInput"
+                    value="{oLocalModel>/CompareQuotation/NameOfRequester}"
+                    editable="false"
+                />
+                <Label
+                    id="_IDGenCompareQuotationDetailAccountAssignmentFormLabel"
+                    text="Account Assignment"
+                />
+                <Input
+                    id="_IDGenCompareQuotationDetailAccountAssignmentFormInput"
+                    value="{oLocalModel>/CompareQuotation/AccountAssignment}"
+                    editable="false"
+                />
+                <core:Title id="_IDGenCompareQuotationDetailFormTitle2" text="" />
+                <Label
+                    id="_IDGenCompareQuotationDetailRequisitionNumberFormLabel"
+                    text="Requisition Number"
+                />
+                <Input
+                    id="_IDGenCompareQuotationDetailRequisitionNumberFormInput"
+                    value="{oLocalModel>/CompareQuotation/RequisitionNumber}"
+                    editable="{oLocalModel>/compareQuotationIsEditable}"
+                />
+
+                <Label
+                    id="_IDGenCompareQuotationDetailRequisitionDateFormLabel"
+                    text="Requisition Date"
+                />
+                <!-- value="{oLocalModel>/CompareQuotation/RequisitionDate}" -->
+                <DatePicker
+                    id="_IDGenCompareQuotationDetailRequisitionDateFormDateTimePicker"
+                    editable="{oLocalModel>/compareQuotationIsEditable}"
+                    	value="{
+						path: 'oLocalModel>/CompareQuotation/RequisitionDate',
+                            type: 'sap.ui.model.type.Date',
+                            formatOptions: {
+                                source: {
+                                    pattern: 'yyyy-MM-dd'
+                                },
+                                pattern: 'yyyy-MM-dd'
+                            }
+					}"
+                />
+                <Label
+                    id="_IDGenCompareQuotationDetailPurposeFormLabel"
+                    text="Purpose"
+                />
+                <Input
+                    id="_IDGenCompareQuotationDetailPurposeFormInput"
+                    value="{oLocalModel>/CompareQuotation/Purpose}"
+                    editable="{oLocalModel>/compareQuotationIsEditable}"
+                />
+                <Label
+                    id="_IDGenCompareQuotationDetailComparisonDateFormLabel"
+                    text="Comparison Date"
+                />
+                <!-- value="{oLocalModel>/CompareQuotation/ComparisonDate}" -->
+                <DatePicker
+                    id="_IDGenCompareQuotationDetailComparisonDateFormDateTimePicker"
+                    value="{
+						path: 'oLocalModel>/CompareQuotation/ComparisonDate',
+                            type: 'sap.ui.model.type.Date',
+                            formatOptions: {
+                                source: {
+                                    pattern: 'yyyy-MM-dd'
+                                },
+                                pattern: 'yyyy-MM-dd'
+                            }
+					}"
+                    editable="{oLocalModel>/compareQuotationIsEditable}"
+                />
+                
+            </f:content>
+        </f:SimpleForm>
+        <VBox id="_IDGenCompareQuotationDetailVBox">
+                <!-- rows="{oLocalModel>/compareQuotationItemData}" -->
+            <uiTable:Table
+                id="_IDGenCompareQuotationDetailUITable"
+                enableCellFilter="true"
+                showNoData="true"
+                selectionMode="None"
+                rows="{
+                    path: 'oLocalModel>/compareQuotationItemData',
+                    sorter: {
+                        path: 'Description',
+                        descending: false
+                    }
+                }"
+            >
+               </uiTable:Table>
+        </VBox>
+    </Panel>
+</core:FragmentDefinition>

@@ -625,5 +625,5 @@ annotate service.QuotationComparison with @(
         InsertRestrictions: {Insertable: false,
         },
     },
-    DeleteHidden: true,
+    DeleteHidden: false,
 );

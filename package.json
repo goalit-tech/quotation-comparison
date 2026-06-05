@@ -27,7 +27,7 @@
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
     "watch-quotationcompare": "cds watch --open com.nlab.ui.quotationcompare/index.html?sap-ui-xx-viewCache=false --livereload false",
     "watch-compare-quotation": "cds watch --open nlabs.ui.comparequotation/index.html?sap-ui-xx-viewCache=false --livereload false",
-    "watch-comparequotation": "cds watch --open nlabs.ui.comparequotation/index.html?sap-ui-xx-viewCache=false --livereload false"
+    "watch-comparequotation": "cds watch --open nlabs.ai.cq.comparequotation/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "private": true,
   "cds": {
@@ -80,6 +80,7 @@
     "app/*"
   ],
   "sapux": [
-    "app/quotationcomparison"
+    "app/quotationcomparison",
+    "app/comparequotation"
   ]
 }

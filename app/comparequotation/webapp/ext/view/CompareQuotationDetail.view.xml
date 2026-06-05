@@ -1,0 +1,66 @@
+<mvc:View
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:macros="sap.fe.macros"
+    xmlns:table="sap.fe.macros.table"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="nlabs.ai.cq.comparequotation.ext.view.CompareQuotationDetail"
+>
+    	<macros:Page id="_IDGenCQuotationDetailPage1"
+		title="{LocalModel>/CompareQuotationHeader/CompativeStatementTitle}"
+		description="{LocalModel>/CompareQuotationHeader/QuotationComparison}"
+		avatarSrc="sap-icon://travel-expense"
+		showFooter="true"
+		stickySubheaderProvider="stickySubheaderBar"
+	>
+
+
+
+		<!-- Actions aggregation -->
+		<macros:actions>
+			<Button id="_IDGenCQuotationDetailButton" text="Edit" press=".onEdit" type="Ghost" />
+			<Button id="_IDGenCQuotationDetailButton1" text="Check Policies" press=".onCheckPolicies" type="Ghost" />
+		</macros:actions>
+
+		<!-- Header content aggregation (content after avatar) -->
+		<macros:headerContent>
+			<VBox id="_IDGenCQuotationDetailVBox">
+				<Title id="_IDGenCQuotationDetailTitle" text="Request for Quotation" />
+				<Text id="_IDGenCQuotationDetailRFQText" text="{LocalModel>/CompareQuotationHeader/RequestForQuotation}" class="sapMObjectNumberLarge" />
+			</VBox>
+		</macros:headerContent>
+
+		<!-- Main content -->
+		<macros:items>
+			<IconTabBar id="stickySubheaderBar" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter id="_IDGenCQuotationDetailIconTabFilter" text="Quotation Comparison">
+						 <VBox id="_IDGenCQuotationDetailVBox1" visible="{= ${LocalModel>/Mode} === 'CREATE'? false:true}">
+                          <core:Fragment id="_IDGenCQuotationDetailCompareFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonForm" type="XML" />
+                        </VBox>
+						<VBox id="_IDGenCQuotationDetailVBox2" visible="{= ${LocalModel>/Mode} === 'CREATE'? true:false}">
+                          <core:Fragment id="_IDGenCQuotationDetailCreateFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonManage" type="XML" />
+                        </VBox>
+					</IconTabFilter>
+					<IconTabFilter id="_IDGenCQuotationDetailIconTabFilter1" text="Terms &amp; Conditions">
+						<Text id="_IDGenCQuotationDetailTermsText" text="Terms & Conditions content goes here ..." />
+						
+					</IconTabFilter>
+					<IconTabFilter id="_IDGenCQuotationDetailIconTabFilter2" text="RFQ">
+						<Text id="_IDGenCQuotationDetailText" text="Statistics content goes here ..." />
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</macros:items>
+
+		<!-- Footer aggregation -->
+		<macros:footer>
+			<OverflowToolbar id="_IDGenCQuotationDetailOverflowToolbar">
+				<ToolbarSpacer id="_IDGenCQuotationDetailToolbarSpacer" />
+				<Button id="_IDGenCQuotationDetailButton2" text="Approve" press=".onApprove" type="Accept" icon="" />
+				<Button id="_IDGenCQuotationDetailButton3" text="Reject" press=".onReject" type="Reject" icon="" />
+			</OverflowToolbar>
+		</macros:footer>
+	</macros:Page>
+</mvc:View>

@@ -1,0 +1,42 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" 
+    xmlns:filterBar="sap.fe.macros.filterBar"
+xmlns="sap.m" xmlns:macros="sap.fe.macros"
+    xmlns:html="http://www.w3.org/1999/xhtml" controllerName="nlabs.ai.cq.comparequotation.ext.view.Main">
+     <macros:Page id="_IDGenCQuotationLRPage1"
+        title="Quotation Comparison"
+    >
+        <!-- <VBox id="_IDGenCQuotationLRVBox" visible="false">
+            <macros:FilterBar id="_IDGenCQuotationLRFilterBar"
+                metaPath="/CompareQuotation/@com.sap.vocabularies.UI.v1.SelectionFields"
+                showMessages="true"
+            />
+            <macros:Table id="_IDGenCQuotationLRTable"
+                metaPath="@com.sap.vocabularies.UI.v1.LineItem"
+                filterBar="_IDGenCQuotationLRFilterBar"
+                selectionMode="Multi"
+                enableAutoColumnWidth="true"
+                initialLoad="true">
+
+                <macros:actions>
+                    <table:Action id="_IDGenCQuotationLRAction"
+                        key="CreateActionCompareQuotation"
+                        text="Create"
+                        press=".onAddQuotationPress"
+                    />
+                    <table:Action id="_IDGenCQuotationLRAction1"
+                        key="UpdateActionCompareQuotation"
+                        text="Update"
+                        press=".onAddQuotationPress"
+                    requiresSelection="true"
+                    />
+                    <table:Action id="_IDGenCQuotationLRAction2"
+                        key="DeleteActionCompareQuotation"
+                        text="Delete"
+                        press=".onAddQuotationPress"
+                    requiresSelection="true"
+                    />
+                </macros:actions>
+            </macros:Table> 
+        </VBox>-->
+    </macros:Page>
+</mvc:View>
