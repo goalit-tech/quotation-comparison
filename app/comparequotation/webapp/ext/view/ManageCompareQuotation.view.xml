@@ -1,0 +1,65 @@
+<mvc:View
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:macros="sap.fe.macros"
+    xmlns:table="sap.fe.macros.table"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="nlabs.ai.cq.comparequotation.ext.view.ManageCompareQuotation"
+>
+    	<macros:Page id="_IDGenManageCQPage1"
+		title="{LocalModel>/CompareQuotationHeader/CompativeStatementTitle}"
+		description="{LocalModel>/CompareQuotationHeader/QuotationComparison}"
+		avatarSrc="sap-icon://travel-expense"
+		showFooter="true"
+		stickySubheaderProvider="_IDGenManageCQIconTabstickySubheaderBar"
+	>
+
+
+
+		<!-- Actions aggregation -->
+		<macros:actions>
+			<Button id="_IDGenManageCQButton" text="Compare Quotation" press=".onCompareQuotationPress" type="Ghost" />
+			<!-- <Button id="_IDGenManageCQButton1" text="Check Policies" press=".onCheckPolicies" type="Ghost" /> -->
+		</macros:actions>
+
+		<!-- Header content aggregation (content after avatar) -->
+		<macros:headerContent>
+			<VBox id="_IDGenManageCQVBox">
+				<Title id="_IDGenManageCQTitle" text="Request for Quotation" />
+				<Text id="_IDGenManageCQRFQText" text="{LocalModel>/CompareQuotationHeader/RequestForQuotation}" class="sapMObjectNumberLarge" />
+			</VBox>
+		</macros:headerContent>
+
+		<!-- Main content -->
+		<macros:items>
+			<IconTabBar visible="{= ${LocalModel>/IsDisplayCompareQuotation} ? false:true}" id="_IDGenManageCQIconTabstickySubheaderBar" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter id="_IDGenManageCQIconTabFilter" text="Quotation Comparison">
+						 <!-- <VBox id="_IDGenManageCQVBox1" > -->
+						 <core:Fragment id="_IDGenManageCQCreateFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonManage" type="XML" />
+                        <!-- </VBox> -->
+					</IconTabFilter>
+					<IconTabFilter id="_IDGenManageCQIconTabFilter2" text="RFQ">
+						<Text id="_IDGenManageCQText" text="RFQ Content" />
+					</IconTabFilter>
+					<IconTabFilter id="_IDGenManageCQIconTabFilter3" text="Workflow">
+						<Text id="_IDGenManageCQText1" text="Workflow" />
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+			<VBox id="_IDGenManageCQVBox2" visible="{= ${LocalModel>/IsDisplayCompareQuotation} ? true:false}">
+				<core:Fragment id="_IDGenManageCQCompareFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonForm" type="XML" />
+			</VBox>
+		</macros:items>
+
+		<!-- Footer aggregation -->
+		<macros:footer >
+			<OverflowToolbar id="_IDGenManageCQOverflowToolbar">
+				<ToolbarSpacer id="_IDGenManageCQToolbarSpacer"/>
+				<Button id="_IDGenManageCQButton2" text="Save" press=".onSaveMCQPress" type="Emphasized" icon="" />
+				<Button id="_IDGenManageCQButton3" text="Cancel" press=".onCancelonMCQPress" type="Default" icon="" />
+			</OverflowToolbar>
+		</macros:footer>
+	</macros:Page>
+</mvc:View>

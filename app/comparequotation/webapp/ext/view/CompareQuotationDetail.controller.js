@@ -21,58 +21,16 @@ sap.ui.define(
 
             onObjectMatched: async function (oEvent) {
                 const oArgs = oEvent.getParameter("arguments");
-                const sCompareQuotationId = oArgs.key;
+                // const sCompareQuotationId = oArgs.key;
                 const oQuery = oArgs["?query"];
                 // console.log(sCompareQuotationId);      // 3150000001
                 // console.log(oQuery.Mode); // CREATE
                 // console.log(oQuery.RequestForQuotation); // 1000
+                // console.log(oQuery.QuotationComparison); // 00000000
                 // const oLocalModel = this.editFlow.getAppComponent().getModel("LocalModel");
-                if (oQuery && oQuery?.Mode === "CREATE") {
-                    // if (oQuery?.Mode === "CREATE") {
-                    const aSupplierQuotation = await this.getSupplierQuotationForRFQ(oQuery?.RequestForQuotation);
-                    const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
-                        ? aSupplierQuotation
-                        : (aSupplierQuotation?.value || []);
 
-                    const aSupplierQuotationItems = aSupplierQuotationData.flatMap(quotation =>
-                        (quotation._SupplierQuotationItem || []).map(item => ({
-                            ...item,
-                            SupplierCode: quotation.SupplierCode,
-                            SupplierName: quotation.SupplierName
-                        }))
-                    );
-                    this.editFlow.getView().getModel("LocalModel").setProperty("/SupplierQuotation", aSupplierQuotationData);
-                    this.editFlow.getView().getModel("LocalModel").setProperty("/SupplierQuotationItem", aSupplierQuotationItems);
 
-                }else{
-                    
-                }
-
-            },
-            getSupplierQuotationForRFQ: async function (keyId) {
-                const oModel = this.editFlow.getView().getModel();
-                const sPath = `/A_RequestForQuotation('${keyId}')/SupplierQuotation`;
-                try {
-                    const oListBinding = oModel.bindList(
-                        sPath,
-                        undefined,
-                        undefined,
-                        undefined,
-                        {
-                            $expand: "_SupplierQuotationItem"
-                        }
-                    );
-                    const aContexts = await oListBinding.requestContexts(0, 100);
-                    const aSupplierQuotation = aContexts.map((oContext) => oContext.getObject());
-
-                    console.log("Supplier Quotations", aSupplierQuotation);
-                    return aSupplierQuotation;
-
-                } catch (oError) {
-                    console.error("Error loading supplier items", oError);
-                    return [];
-                }
-            },
+            }
 
         });
     }

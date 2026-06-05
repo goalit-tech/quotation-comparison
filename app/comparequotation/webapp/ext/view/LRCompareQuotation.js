@@ -16,10 +16,10 @@ sap.ui.define([
             oCQActions.oRFQListDialog.open();
         },
         onUpdateLRActionPress: function () {
-
+            // oCQActions.oRFQListDialog.close();
         },
         onDeleteLRActionPress: function () {
-
+            // oCQActions.oRFQListDialog.open();
         },
         onAddRFQConfirmPress: function (oEvent) {
             const oEditFlow = oCQActions?._oExtThis?.editFlow;
@@ -29,18 +29,13 @@ sap.ui.define([
                 sap.m.MessageToast.show("Please select a Request for Quotation to Create Compare Quotation.");
                 return;
             }
-            const oCompareQuotationHeader = oEditFlow.getView().getModel("LocalModel").getProperty("/CompareQuotationHeader");
-            oCompareQuotationHeader.QuotationComparison = '00000000';
-            oCompareQuotationHeader.RequestForQuotation = oSelectedRFQForComparison?.RequestForQuotation || "";
-            oCompareQuotationHeader.CompativeStatementTitle = 'New Quotation Comparison';
-            oCompareQuotationHeader.CompanyCode = oSelectedRFQForComparison?.CompanyCode || "";
-            oEditFlow.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
-            oEditFlow.getView().getModel("LocalModel").setProperty("/Mode", "CREATE");
+            
             oRouter.navTo("QuotationComparisonObjectPage", {
-                key: '00000000',
+                key:'000000',
                 query: {
-                    Mode: "CREATE",
-                    RequestForQuotation: oSelectedRFQForComparison?.RequestForQuotation || ""
+                    Mode: "CREATE",//UPDATE
+                    RequestForQuotation: oSelectedRFQForComparison?.RequestForQuotation || "",
+                    // QuotationComparison:''
                 }
             });
             oCQActions.oRFQListDialog?.close();

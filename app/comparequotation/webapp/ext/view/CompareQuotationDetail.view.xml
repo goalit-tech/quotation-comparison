@@ -18,10 +18,10 @@
 
 
 		<!-- Actions aggregation -->
-		<macros:actions>
+		<!-- <macros:actions>
 			<Button id="_IDGenCQuotationDetailButton" text="Edit" press=".onEdit" type="Ghost" />
 			<Button id="_IDGenCQuotationDetailButton1" text="Check Policies" press=".onCheckPolicies" type="Ghost" />
-		</macros:actions>
+		</macros:actions> -->
 
 		<!-- Header content aggregation (content after avatar) -->
 		<macros:headerContent>
@@ -43,10 +43,10 @@
                           <core:Fragment id="_IDGenCQuotationDetailCreateFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonManage" type="XML" />
                         </VBox>
 					</IconTabFilter>
-					<IconTabFilter id="_IDGenCQuotationDetailIconTabFilter1" text="Terms &amp; Conditions">
-						<Text id="_IDGenCQuotationDetailTermsText" text="Terms & Conditions content goes here ..." />
+					<!-- <IconTabFilter id="_IDGenCQuotationDetailIconTabFilter1" text="Terms &amp; Conditions">
+						<Text id="_IDGenCQuotationDetailTermsText" text="Terms &amp; Conditions content goes here ..." />
 						
-					</IconTabFilter>
+					</IconTabFilter> -->
 					<IconTabFilter id="_IDGenCQuotationDetailIconTabFilter2" text="RFQ">
 						<Text id="_IDGenCQuotationDetailText" text="Statistics content goes here ..." />
 					</IconTabFilter>
@@ -55,11 +55,11 @@
 		</macros:items>
 
 		<!-- Footer aggregation -->
-		<macros:footer>
+		<macros:footer >
 			<OverflowToolbar id="_IDGenCQuotationDetailOverflowToolbar">
-				<ToolbarSpacer id="_IDGenCQuotationDetailToolbarSpacer" />
-				<Button id="_IDGenCQuotationDetailButton2" text="Approve" press=".onApprove" type="Accept" icon="" />
-				<Button id="_IDGenCQuotationDetailButton3" text="Reject" press=".onReject" type="Reject" icon="" />
+				<ToolbarSpacer id="_IDGenCQuotationDetailToolbarSpacer"/>
+				<Button id="_IDGenCQuotationDetailButton2" text="Save" press=".onApprove" type="Emphasized" icon="" />
+				<Button id="_IDGenCQuotationDetailButton3" text="Cancel" press=".onReject" type="Default" icon="" />
 			</OverflowToolbar>
 		</macros:footer>
 	</macros:Page>

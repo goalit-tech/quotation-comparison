@@ -94,6 +94,11 @@
           "target": "QuotationComparisonMain"
         },
         {
+          "pattern": "ManageQuotationComparison:?query:",
+          "name": "ManageQuotationComparisonPage",
+          "target": "ManageQuotationComparisonPage"
+        },
+        {
           "pattern": "QuotationComparison({key}):?query:",
           "name": "QuotationComparisonObjectPage",
           "target": "QuotationComparisonObjectPage"
@@ -145,7 +150,19 @@
           "title": "Quotation Comparison Detail",
           "options": {
             "settings": {
-              "viewName": "nlabs.ai.cq.comparequotation.ext.view.CompareQuotationDetail",
+              "viewName": "nlabs.ai.cq.comparequotation.ext.view.ManageCompareQuotation",
+              "contextPath": "/QuotationComparison"
+            }
+          }
+        },
+        "ManageQuotationComparisonPage": {
+          "type": "Component",
+          "id": "ManageQuotationComparisonPage",
+          "name": "sap.fe.core.fpm",
+          "title": "Quotation Comparison Detail",
+          "options": {
+            "settings": {
+              "viewName": "nlabs.ai.cq.comparequotation.ext.view.ManageCompareQuotation",
               "contextPath": "/QuotationComparison"
             }
           }

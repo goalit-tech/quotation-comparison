@@ -5,24 +5,22 @@
     xmlns:uiTable="sap.ui.table"
     xmlns:macros="sap.fe.macros"
     xmlns:smartTable="sap.ui.comp.smarttable"
-    xmlns:core="sap.ui.core"
->
-    <Panel id="_IDGenPanel" expandable="false" expanded="true">
-    	<headerToolbar>
-			<OverflowToolbar id="_idGenCompareQuotationDetailPanelToolbar" style="Clear">
-            <ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer1"/>
-				<Title id="_idGenCompareQuotationDetailPanelTitle" text="EENADU TELEVISION PRIVATE LIMITED"/>
-				<ToolbarSpacer id="_idGenCompareQuotationDetailPanelToolbarSpacer2"/>
-				<Button text="Edit" id="_idGenCompareQuotationDetailPanelButtonEdit" press=".onCompareQuotationDetailEditPress" visible="{= !${oLocalModel>/compareQuotationIsEditable} }" />
-				<Button text="Cancel" id="_idGenCompareQuotationDetailPanelToolbarCancel" press=".onCompareQuotationDetailCancelPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
-				<Button text="Save" id="_idGenCompareQuotationDetailPanelToolbarSave" press=".onCompareQuotationDetailSavePress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
-				<Button text="Add Terms &amp; Conditions" id="_idGenCompareQuotationDetailPanelToolbarAddTerms" press=".onCompareQuotationDetailAddTermsPress" visible="{= ${oLocalModel>/compareQuotationIsEditable} }"/>
-			</OverflowToolbar>
-		</headerToolbar>
+    xmlns:core="sap.ui.core">
+    <OverflowToolbar
+                id="_IDGenQCFormFragmentOverflowToolbar"
+                style="Clear"
+            >
+            <ToolbarSpacer id="_IDGenQCFormFragmentToolbarSpacer" />
+                <Title
+                    id="_IDGenQCFormFragmentTitle2"
+                    text="EENADU TELEVISION PRIVATE LIMITED"
+                />
+                <ToolbarSeparator id="_IDGenQCFormFragmentToolbarSeparator" />
+            </OverflowToolbar>
     <f:SimpleForm
-            id="_idGenCompareQuotationDetailDetailForm"
+            id="_IDGenQCFormFragmentSimpleForm"
             editable="true"
-            title=""
+            title="{LocalModel>/CompareQuotationHeader/CompativeStatementTitle}"
             layout="ResponsiveGridLayout"
             labelSpanXL="4"
             labelSpanL="4"
@@ -39,76 +37,74 @@
             singleContainerFullSize="false"
         >
             <f:content>
-                <core:Title id="_IDGenCompareQuotationDetailFormTitle1" text="" />
+                <core:Title id="_IDGenQCFormFragmentFormTitle1" text="" />
                 <Label
-                    id="_IDGenCompareQuotationDetailFormLabel"
+                    id="_IDGenQCFormFragmentFormLabel"
                     text="Request For Quotation"
                 />
                 <Input
-                    id="_IDGenCompareQuotationDetailFormInput"
-                    value="{oLocalModel>/CompareQuotation/RequestForQuotation}"
+                    id="_IDGenQCFormFragmentFormInput"
+                    value="{LocalModel>/CompareQuotationHeader/RequestForQuotation}"
                     editable="false"
                 />
                 <Label
-                    id="_IDGenCompareQuotationDetailFormLabel3"
+                    id="_IDGenQCFormFragmentFormLabel3"
                     text="Company Code"
                 />
                 <Input
-                    id="_IDGenCompareQuotationDetailFormInput3"
-                    value="{oLocalModel>/CompareQuotation/CompanyCode}"
+                    id="_IDGenQCFormFragmentFormInput3"
+                    value="{LocalModel>/CompareQuotationHeader/CompanyCode}"
                     editable="false"
                 />
-                    <!-- value="{oLocalModel>/CompareQuotation/CompanyCode}" -->
-                    <!-- value="{oLocalModel>/CompareQuotation/CompanyName} ({oLocalModel>/CompareQuotation/CompanyCode})" -->
                 <Label
-                    id="_IDGenCompareQuotationDetailCompativeFormLabel"
+                    id="_IDGenQCFormFragmentCompativeFormLabel"
                     text="Comparative Statement Title"
                 />
                 <Input
-                    id="_IDGenCompareQuotationDetailCompativeFormInput"
-                    value="{oLocalModel>/CompareQuotation/CompativeStatementTitle}"
+                    id="_IDGenQCFormFragmentCompativeFormInput"
+                    value="{LocalModel>/CompareQuotationHeader/CompativeStatementTitle}"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                 />
 
                 <Label
-                    id="_IDGenCompareQuotationDetailNameOfRequesterFormLabel"
+                    id="_IDGenQCFormFragmentNameOfRequesterFormLabel"
                     text="Requestor Name"
                 />
                 <Input
-                    id="_IDGenCompareQuotationDetailNameOfRequesterFormInput"
-                    value="{oLocalModel>/CompareQuotation/NameOfRequester}"
+                    id="_IDGenQCFormFragmentNameOfRequesterFormInput"
+                    value="{LocalModel>/CompareQuotationHeader/NameOfRequester}"
                     editable="false"
                 />
                 <Label
-                    id="_IDGenCompareQuotationDetailAccountAssignmentFormLabel"
+                    id="_IDGenQCFormFragmentAccountAssignmentFormLabel"
                     text="Account Assignment"
                 />
                 <Input
-                    id="_IDGenCompareQuotationDetailAccountAssignmentFormInput"
-                    value="{oLocalModel>/CompareQuotation/AccountAssignment}"
+                    id="_IDGenQCFormFragmentAccountAssignmentFormInput"
+                    value="{LocalModel>/CompareQuotationHeader/AccountAssignment}"
                     editable="false"
                 />
-                <core:Title id="_IDGenCompareQuotationDetailFormTitle2" text="" />
+                <core:Title id="_IDGenQCFormFragmentFormTitle2" text="" />
                 <Label
-                    id="_IDGenCompareQuotationDetailRequisitionNumberFormLabel"
+                    id="_IDGenQCFormFragmentRequisitionNumberFormLabel"
                     text="Requisition Number"
                 />
                 <Input
-                    id="_IDGenCompareQuotationDetailRequisitionNumberFormInput"
-                    value="{oLocalModel>/CompareQuotation/RequisitionNumber}"
+                    id="_IDGenQCFormFragmentRequisitionNumberFormInput"
+                    value="{LocalModel>/CompareQuotationHeader/RequisitionNumber}"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                 />
 
                 <Label
-                    id="_IDGenCompareQuotationDetailRequisitionDateFormLabel"
+                    id="_IDGenQCFormFragmentRequisitionDateFormLabel"
                     text="Requisition Date"
                 />
-                <!-- value="{oLocalModel>/CompareQuotation/RequisitionDate}" -->
+                <!-- value="{LocalModel>/CompareQuotationHeader/RequisitionDate}" -->
                 <DatePicker
-                    id="_IDGenCompareQuotationDetailRequisitionDateFormDateTimePicker"
+                    id="_IDGenQCFormFragmentRequisitionDateFormDateTimePicker"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                     	value="{
-						path: 'oLocalModel>/CompareQuotation/RequisitionDate',
+						path: 'LocalModel>/CompareQuotationHeader/RequisitionDate',
                             type: 'sap.ui.model.type.Date',
                             formatOptions: {
                                 source: {
@@ -119,23 +115,23 @@
 					}"
                 />
                 <Label
-                    id="_IDGenCompareQuotationDetailPurposeFormLabel"
+                    id="_IDGenQCFormFragmentPurposeFormLabel"
                     text="Purpose"
                 />
                 <Input
-                    id="_IDGenCompareQuotationDetailPurposeFormInput"
-                    value="{oLocalModel>/CompareQuotation/Purpose}"
+                    id="_IDGenQCFormFragmentPurposeFormInput"
+                    value="{LocalModel>/CompareQuotationHeader/Purpose}"
                     editable="{oLocalModel>/compareQuotationIsEditable}"
                 />
                 <Label
-                    id="_IDGenCompareQuotationDetailComparisonDateFormLabel"
+                    id="_IDGenQCFormFragmentComparisonDateFormLabel"
                     text="Comparison Date"
                 />
-                <!-- value="{oLocalModel>/CompareQuotation/ComparisonDate}" -->
+                <!-- value="{LocalModel>/CompareQuotationHeader/ComparisonDate}" -->
                 <DatePicker
-                    id="_IDGenCompareQuotationDetailComparisonDateFormDateTimePicker"
+                    id="_IDGenQCFormFragmentComparisonDateFormDateTimePicker"
                     value="{
-						path: 'oLocalModel>/CompareQuotation/ComparisonDate',
+						path: 'LocalModel>/CompareQuotationHeader/ComparisonDate',
                             type: 'sap.ui.model.type.Date',
                             formatOptions: {
                                 source: {
@@ -149,10 +145,10 @@
                 
             </f:content>
         </f:SimpleForm>
-        <VBox id="_IDGenCompareQuotationDetailVBox">
+        <VBox id="_IDGenQCFormFragmentVBox">
                 <!-- rows="{oLocalModel>/compareQuotationItemData}" -->
             <uiTable:Table
-                id="_IDGenCompareQuotationDetailUITable"
+                id="_IDGenQCFormFragmentUITable"
                 enableCellFilter="true"
                 showNoData="true"
                 selectionMode="None"
@@ -166,5 +162,4 @@
             >
                </uiTable:Table>
         </VBox>
-    </Panel>
 </core:FragmentDefinition>

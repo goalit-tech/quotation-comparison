@@ -43,6 +43,6 @@ service QuotationService {
 
     entity QuotationComparisonItem   as projection on API_QUOTATION_COMPARISON_SRV.QuotationComparisonItem;
 
-    action upsertCompareQuotation(quotationComparison: QuotationComparison, quotationComparisonItem: QuotationComparisonItem, type: String) returns String;
-    action workflowForCompareQuotation(quotationComparison: QuotationComparison, workflowType: String)                                      returns String;
+    // action upsertCompareQuotation(quotationComparison: QuotationComparison, quotationComparisonItem: QuotationComparisonItem, type: String) returns String;
+    // action workflowForCompareQuotation(quotationComparison: QuotationComparison, workflowType: String)                                      returns String;
 }

@@ -7,447 +7,414 @@
     xmlns:smartTable="sap.ui.comp.smarttable"
     xmlns:core="sap.ui.core"
 >
-        <f:SimpleForm id="_IDGenQCManageFragmentSimpleForm1"
-            editable="true"
-            layout="ResponsiveGridLayout"
-            labelSpanXL="4"
-            labelSpanL="4"
-            labelSpanM="4"
-            labelSpanS="12"
-            adjustLabelSpan="false"
-            emptySpanXL="0"
-            emptySpanL="0"
-            emptySpanM="0"
-            emptySpanS="0"
-            columnsXL="3"
-            columnsL="2"
-            columnsM="2"
-            singleContainerFullSize="false"
-        >
-            <f:content>
-                <core:Title id="_IDGenQCManageFragmentTitle"  text="" />
-                <Label id="_IDGenQCManageFragmentLabel"
-                    
-                    text="Request For Quotation"
-                />
-                <Input id="_IDGenQCManageFragmentInput"
-                    
-                    value="{LocalModel>/CompareQuotation/RequestForQuotation}"
-                    editable="false"
-                />
-                <Label id="_IDGenQCManageFragmentLabel1"
-                    
-                    text="Company Code"
-                />
-                <Input id="_IDGenQCManageFragmentInput1"
-                    
-                    value="{LocalModel>/CompareQuotation/CompanyName} ({LocalModel>/CompareQuotation/CompanyCode})"
-                    editable="false"
-                />
-                    <!-- value="{LocalModel>/CompareQuotation/CompanyCode}" -->
-                    <!-- value="{LocalModel>/CompareQuotation/CompanyName} ({LocalModel>/CompareQuotation/CompanyCode})" -->
-                <Label id="_IDGenQCManageFragmentLabel2"
-                    
-                    text="Comparative Statement Title"
-                />
-                <Input id="_IDGenQCManageFragmentInput2"
-                    
-                    value="{LocalModel>/CompareQuotation/CompativeStatementTitle}"
-                />
+    <f:SimpleForm
+        id="_IDGenQCManageFragmentSimpleForm1"
+        editable="true"
+        layout="ResponsiveGridLayout"
+        labelSpanXL="4"
+        labelSpanL="4"
+        labelSpanM="4"
+        labelSpanS="12"
+        adjustLabelSpan="false"
+        emptySpanXL="0"
+        emptySpanL="0"
+        emptySpanM="0"
+        emptySpanS="0"
+        columnsXL="3"
+        columnsL="2"
+        columnsM="2"
+        singleContainerFullSize="false"
+    >
+        <f:content>
+            <core:Title
+                id="_IDGenQCManageFragmentTitle"
+                text=""
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabel"
+                text="Request For Quotation"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput"
+                value="{LocalModel>/CompareQuotationHeader/RequestForQuotation}"
+                editable="false"
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabelCompanyCode"
+                text="Company Code"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInputCompanyCode"
+                value="{LocalModel>/CompareQuotationHeader/CompanyCode}"
+                editable="false"
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabelCompanyName"
+                text="Company Name"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInputCompanyName"
+                value="{LocalModel>/CompareQuotationHeader/CompanyName}"
+                editable="false"
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabel2"
+                text="Comparative Statement Title"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput2"
+                value="{LocalModel>/CompareQuotationHeader/CompativeStatementTitle}"
+            />
+             <Label
+                id="_IDGenQCManageFragmentLabel7"
+                text="Purpose"
+            />
+            
+            <Input
+                id="_IDGenQCManageFragmentInput6"
+                value="{LocalModel>/CompareQuotationHeader/Purpose}"
+            />
+            <core:Title
+                id="_IDGenQCManageFragmentTitle1"
+                text=""
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabel5"
+                text="Requisition Number"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput5"
+                value="{LocalModel>/CompareQuotationHeader/RequisitionNumber}"
+                editable="false"
+            />
+             <Label
+                id="_IDGenQCManageFragmentLabel3"
+                text="Requestor Name"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput3"
+                value="{LocalModel>/CompareQuotationHeader/NameOfRequester}"
+                editable="false"
 
-                <Label id="_IDGenQCManageFragmentLabel3"
-                    
-                    text="Requestor Name"
-                />
-                <Input id="_IDGenQCManageFragmentInput3"
-                    
-                    value="{LocalModel>/CompareQuotation/NameOfRequester}"
-                />
-                <Label id="_IDGenQCManageFragmentLabel4"
-                    
-                    text="Account Assignment"
-                />
-                <Input id="_IDGenQCManageFragmentInput4"
-                    
-                    value="{LocalModel>/CompareQuotation/AccountAssignment}"
-                />
-                <core:Title id="_IDGenQCManageFragmentTitle1"  text="" />
-                <Label id="_IDGenQCManageFragmentLabel5"
-                    
-                    text="Requisition Number"
-                />
-                <Input id="_IDGenQCManageFragmentInput5"
-                    
-                    value="{LocalModel>/CompareQuotation/RequisitionNumber}"
-                />
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabel4"
+                text="Account Assignment"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput4"
+                value="{LocalModel>/CompareQuotationHeader/AccountAssignment}"
+                editable="false"
+            />
 
-                <Label id="_IDGenQCManageFragmentLabel6"
-                    
-                    text="Requisition Date"
-                />
-                <!-- value="{LocalModel>/CompareQuotation/RequisitionDate}" -->
-                <DatePicker id="_IDGenQCManageFragmentDatePicker"
-                    
-                    	value="{
-						'path':'LocalModel>/CompareQuotation/RequisitionDate',
+            <Label
+                id="_IDGenQCManageFragmentLabel6"
+                text="Requisition Date"
+            />
+            <!-- value="{LocalModel>/CompareQuotationHeader/RequisitionDate}" -->
+            <DatePicker
+                id="_IDGenQCManageFragmentDatePicker"
+                value="{
+						'path':'LocalModel>/CompareQuotationHeader/RequisitionDate',
 						'type':'sap.ui.model.type.Date',
 						'formatOptions': {
 							'pattern': 'yyyy-MM-dd'
 						}
 					}"
-                />
-                <Label id="_IDGenQCManageFragmentLabel7"
-                    
-                    text="Purpose"
-                />
-                <Input id="_IDGenQCManageFragmentInput6"
-                    
-                    value="{LocalModel>/CompareQuotation/Purpose}"
-                />
-                <Label id="_IDGenQCManageFragmentLabel8"
-                    
-                    text="Comparison Date"
-                />
-                <!-- value="{LocalModel>/CompareQuotation/ComparisonDate}" -->
-                <DatePicker id="_IDGenQCManageFragmentDatePicker1"
-                    
-                    value="{
-						'path':'LocalModel>/CompareQuotation/ComparisonDate',
+                    editable="false"
+            />
+             <Label
+                id="_IDGenQCManageFragmentLabel8"
+                text="Comparison Date"
+            />
+            <!-- value="{LocalModel>/CompareQuotationHeader/ComparisonDate}" -->
+            <DatePicker
+                id="_IDGenQCManageFragmentDatePicker1"
+                value="{
+						'path':'LocalModel>/CompareQuotationHeader/ComparisonDate',
 						'type':'sap.ui.model.type.Date',
 						'formatOptions': {
 							'pattern': 'yyyy-MM-dd'
 						}
 					}"
-                />
-            </f:content>
-        </f:SimpleForm>
+            />
+        </f:content>
+    </f:SimpleForm>
 
-        <!-- <VBox id="_IDGenQCManageFragmentVBox" > -->
-        
-                <!-- rowSelectionChange=".onCompareQuotationTableRowSelectionChange" -->
-                <!-- rows="{path:'LocalModel>/SupplierQuotation', parameters: {arrayNames:['_SupplierQuotationItem']}}" -->
-            <uiTable:Table id="_IDGenQCManageFragmentTable"
-                
-                selectionMode="MultiToggle"
-                enableSelectAll="false"
-                rows="{LocalModel>/SupplierQuotationItem}"
-                enableCellFilter="true"
-                filter=".filterPrice"
-                ariaLabelledBy="title"
+    <!-- <VBox id="_IDGenQCManageFragmentVBox" > -->
+
+    <!-- rowSelectionChange=".onCompareQuotationTableRowSelectionChange" -->
+    <!-- rows="{path:'LocalModel>/SupplierQuotation', parameters: {arrayNames:['_SupplierQuotationItem']}}" -->
+    <uiTable:Table
+        id="_IDGenQCManageFragmentTable"
+        selectionMode="MultiToggle"
+        enableSelectAll="false"
+        rows="{LocalModel>/SupplierQuotationItem}"
+        enableCellFilter="true"
+        filter=".filterPrice"
+        ariaLabelledBy="title"
+    >
+        <uiTable:extension>
+            <OverflowToolbar
+                id="_IDGenQCManageFragmentOverflowToolbar"
+                style="Clear"
             >
-                <uiTable:extension>
-                    <OverflowToolbar id="_IDGenQCManageFragmentOverflowToolbar"
-                        
-                        style="Clear"
-                    >
-                        <Title id="_IDGenQCManageFragmentTitle2"
-                            
-                            text="Supplier Quotation and Items"
-                        />
-                        <ToolbarSpacer id="_IDGenQCManageFragmentToolbarSpacer"  />
-                        <ToolbarSeparator id="_IDGenQCManageFragmentToolbarSeparator"  />
-                        <SearchField id="_IDGenQCManageFragmentSearchField"
-                            
-                            placeholder="Filter"
-                            search=".filterGlobally"
-                            width="15rem"
-                            visible="false"
-                        />
-                    </OverflowToolbar>
-                </uiTable:extension>
-                <uiTable:columns>
-                <uiTable:Column id="_IDGenQCManageFragmentColumn"
-                        
-                        width="9rem"
-                        sortProperty="SupplierQuotation"
-                        filterProperty="SupplierQuotation"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel9"
-                            
-                            text="Supplier Quotation" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText"
-                                
-                                text="{LocalModel>SupplierQuotation}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                <uiTable:Column id="_IDGenQCManageFragmentColumn1"
-                        
-                        width="11rem"
-                        sortProperty="SupplierName"
-                        filterProperty="SupplierName"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel10"
-                            
-                            text="Supplier Name" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText1"
-                                
-                                text="{LocalModel>SupplierName}"
-                                wrapping="true"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                <uiTable:Column id="_IDGenQCManageFragmentColumn2"
-                        
-                        width="9rem"
-                        sortProperty="SupplierCode"
-                        filterProperty="SupplierCode"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel11"
-                            
-                            text="Supplier Code" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText2"
-                                
-                                text="{LocalModel>SupplierCode}"
-                                wrapping="true"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn3"
-                        
-                        width="6rem"
-                        sortProperty="RequestForQuotationItem"
-                        filterProperty="RequestForQuotationItem"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel12"
-                            
-                            text="Item No" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText3"
-                                
-                                text="{LocalModel>RequestForQuotationItem}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn4"
-                        
-                        width="11rem"
-                        sortProperty="PurchasingDocumentItemText"
-                        filterProperty="PurchasingDocumentItemText"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel13"
-                            
-                            text="Material Description" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText4"
-                                
-                                text="{LocalModel>PurchasingDocumentItemText}" wrapping="true"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn5"
-                        
-                        width="8rem"
-                        sortProperty="Material"
-                        filterProperty="Material"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel14"
-                            
-                            text="Material" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText5"
-                                
-                                text="{LocalModel>Material}" wrapping="true"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn6"
-                        
-                        width="6rem"
-                        sortProperty="ScheduleLineOrderQuantity"
-                        filterProperty="ScheduleLineOrderQuantity"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel15"
-                            
-                            text="Quantity" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText6"
-                                
-                                text="{LocalModel>ScheduleLineOrderQuantity}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn7"
-                        
-                        width="8rem"
-                        sortProperty="BaseUnit"
-                        filterProperty="BaseUnit"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel16"
-                            
-                            text="Base Unit of Measure" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText7"
-                                
-                                text="{LocalModel>BaseUnit}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn8"
-                        
-                        width="8rem"
-                        sortProperty="NetPriceAmount"
-                        filterProperty="NetPriceAmount"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel17"
-                            
-                            text="Total value" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText8"
-                                
-                                text="{LocalModel>NetPriceAmount}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn9"
-                        
-                        width="8rem"
-                        sortProperty="NetAmount"
-                        filterProperty="NetAmount"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel18"
-                            
-                            text="Total value" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText9"
-                                
-                                text="{LocalModel>NetAmount}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn10"
-                        
-                        width="8rem"
-                        sortProperty="ScheduleLineDeliveryDate"
-                        filterProperty="ScheduleLineDeliveryDate"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel19"
-                            
-                            text="Delivery Date"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText10"
-                                
-                                text="{LocalModel>ScheduleLineDeliveryDate}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <!-- <uiTable:Column
-                        
-                        width="6rem"
-                        sortProperty="Taxrate"
-                        filterProperty="Taxrate"
-                    >
-                        <Label
-                            
-                            text="Tax Rate" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text
-                                
-                                text="{LocalModel>Taxrate}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column
-                        
-                        width="6rem"
-                        sortProperty="Discount"
-                        filterProperty="Discount"
-                    >
-                        <Label
-                            
-                            text="Discount" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text
-                                
-                                text="{LocalModel>CashDiscount1Percent}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column
-                        
-                        width="6rem"
-                        sortProperty="FreightCharges"
-                        filterProperty="FreightCharges"
-                    >
-                        <Label
-                            
-                            text="Freight Charges" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text
-                                
-                                text="{LocalModel>FreightCharges}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column
-                        
-                        width="6rem"
-                        sortProperty="InsuranceCharges"
-                        filterProperty="InsuranceCharges"
-                    >
-                        <Label
-                            
-                            text="Insurance Charges" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text
-                                
-                                text="{LocalModel>InsuranceCharges}"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column> -->
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn11"
-                        
-                        width="6rem"
-                        sortProperty="YY1_MaterialMake_PDI"
-                        filterProperty="YY1_MaterialMake_PDI"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel20"
-                            
-                            text="Make" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText11"
-                                
-                                text="{LocalModel>YY1_MaterialMake_PDI}" wrapping="true"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                    <uiTable:Column id="_IDGenQCManageFragmentColumn12"
-                        
-                        width="6rem"
-                        sortProperty="YY1_Specifications_PDI"
-                        filterProperty="YY1_Specifications_PDI"
-                    >
-                        <Label id="_IDGenQCManageFragmentLabel21"
-                            
-                            text="Specifications" wrapping="true"
-                        />
-                        <uiTable:template>
-                            <Text id="_IDGenQCManageFragmentText12"
-                                
-                                text="{LocalModel>YY1_Specifications_PDI}" wrapping="true"
-                            />
-                        </uiTable:template>
-                    </uiTable:Column>
-                </uiTable:columns>
-            </uiTable:Table>
-        <!-- </VBox> -->
-       </core:FragmentDefinition>
+                <Title
+                    id="_IDGenQCManageFragmentTitle2"
+                    text="Supplier Quotation and Items"
+                />
+                <ToolbarSpacer id="_IDGenQCManageFragmentToolbarSpacer" />
+                <ToolbarSeparator id="_IDGenQCManageFragmentToolbarSeparator" />
+                <SearchField
+                    id="_IDGenQCManageFragmentSearchField"
+                    placeholder="Filter"
+                    search=".filterGlobally"
+                    width="15rem"
+                    visible="false"
+                />
+            </OverflowToolbar>
+        </uiTable:extension>
+        <uiTable:columns>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn"
+                width="9rem"
+                sortProperty="SupplierQuotation"
+                filterProperty="SupplierQuotation"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel9"
+                    text="Supplier Quotation"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText"
+                        text="{LocalModel>SupplierQuotation}"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn1"
+                width="11rem"
+                sortProperty="SupplierName"
+                filterProperty="SupplierName"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel10"
+                    text="Supplier Name"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText1"
+                        text="{LocalModel>SupplierName}"
+                        wrapping="true"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn2"
+                width="9rem"
+                sortProperty="SupplierCode"
+                filterProperty="SupplierCode"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel11"
+                    text="Supplier Code"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText2"
+                        text="{LocalModel>SupplierCode}"
+                        wrapping="true"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn3"
+                width="6rem"
+                sortProperty="RequestForQuotationItem"
+                filterProperty="RequestForQuotationItem"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel12"
+                    text="Item No"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText3"
+                        text="{LocalModel>RequestForQuotationItem}"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn4"
+                width="11rem"
+                sortProperty="PurchasingDocumentItemText"
+                filterProperty="PurchasingDocumentItemText"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel13"
+                    text="Material Description"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText4"
+                        text="{LocalModel>PurchasingDocumentItemText}"
+                        wrapping="true"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn5"
+                width="8rem"
+                sortProperty="Material"
+                filterProperty="Material"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel14"
+                    text="Material"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText5"
+                        text="{LocalModel>Material}"
+                        wrapping="true"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn6"
+                width="6rem"
+                sortProperty="ScheduleLineOrderQuantity"
+                filterProperty="ScheduleLineOrderQuantity"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel15"
+                    text="Quantity"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText6"
+                        text="{LocalModel>ScheduleLineOrderQuantity}"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn7"
+                width="8rem"
+                sortProperty="BaseUnit"
+                filterProperty="BaseUnit"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel16"
+                    text="Base Unit of Measure"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText7"
+                        text="{LocalModel>BaseUnit}"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn8"
+                width="8rem"
+                sortProperty="NetPriceAmount"
+                filterProperty="NetPriceAmount"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel17"
+                    text="Total value"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText8"
+                        text="{LocalModel>NetPriceAmount}"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn9"
+                width="8rem"
+                sortProperty="NetAmount"
+                filterProperty="NetAmount"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel18"
+                    text="Total value"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText9"
+                        text="{LocalModel>NetAmount}"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn10"
+                width="8rem"
+                sortProperty="ScheduleLineDeliveryDate"
+                filterProperty="ScheduleLineDeliveryDate"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel19"
+                    text="Delivery Date"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText10"
+                        text="{LocalModel>ScheduleLineDeliveryDate}"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn11"
+                width="6rem"
+                sortProperty="YY1_MaterialMake_PDI"
+                filterProperty="YY1_MaterialMake_PDI"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel20"
+                    text="Make"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText11"
+                        text="{LocalModel>YY1_MaterialMake_PDI}"
+                        wrapping="true"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+            <uiTable:Column
+                id="_IDGenQCManageFragmentColumn12"
+                width="6rem"
+                sortProperty="YY1_Specifications_PDI"
+                filterProperty="YY1_Specifications_PDI"
+            >
+                <Label
+                    id="_IDGenQCManageFragmentLabel21"
+                    text="Specifications"
+                    wrapping="true"
+                />
+                <uiTable:template>
+                    <Text
+                        id="_IDGenQCManageFragmentText12"
+                        text="{LocalModel>YY1_Specifications_PDI}"
+                        wrapping="true"
+                    />
+                </uiTable:template>
+            </uiTable:Column>
+        </uiTable:columns>
+    </uiTable:Table>
+    <!-- </VBox> -->
+</core:FragmentDefinition>
