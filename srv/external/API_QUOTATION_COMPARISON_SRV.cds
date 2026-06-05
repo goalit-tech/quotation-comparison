@@ -1,4 +1,4 @@
-/* checksum : 0dd8318fcc0ecfad16a1e28e1b1e68b0 */
+/* checksum : 2abc32e468ab89f6cf864999b0828108 */
 @cds.external : true
 @CodeList.CurrencyCodes.Url : '../../../../default/iwbep/common/0001/$metadata'
 @CodeList.CurrencyCodes.CollectionPath : 'Currencies'
@@ -50,10 +50,6 @@ service S4_API_QUOTATION_COMPARISON {
     @Common.Heading : 'Dynamic Create by Association Control'
     @Common.QuickInfo : 'Dynamic Create via Association Control Property'
     _CompareQuotationItem : Boolean not null;
-    @Common.Label : 'Dynamic CbA-Control'
-    @Common.Heading : 'Dynamic Create by Association Control'
-    @Common.QuickInfo : 'Dynamic Create via Association Control Property'
-    _TermsAndConditions : Boolean not null;
   };
 
   @cds.external : true
@@ -88,10 +84,6 @@ service S4_API_QUOTATION_COMPARISON {
     {
       NavigationProperty: _CompareQuotationItem,
       InsertRestrictions: { Insertable: ![__CreateByAssociationControl/_CompareQuotationItem] }
-    },
-    {
-      NavigationProperty: _TermsAndConditions,
-      InsertRestrictions: { Insertable: ![__CreateByAssociationControl/_TermsAndConditions] }
     }
   ]
   @Capabilities.SearchRestrictions.Searchable : false
@@ -99,7 +91,7 @@ service S4_API_QUOTATION_COMPARISON {
   @Capabilities.SortRestrictions.NonSortableProperties : [ '__CreateByAssociationControl', '__EntityControl' ]
   @Capabilities.UpdateRestrictions.DeltaUpdateSupported : true
   @Capabilities.UpdateRestrictions.Updatable : ![__EntityControl/Updatable]
-  @Capabilities.UpdateRestrictions.NonUpdatableNavigationProperties : [ '_CompareQuotationItem', '_TermsAndConditions' ]
+  @Capabilities.UpdateRestrictions.NonUpdatableNavigationProperties : [ '_CompareQuotationItem' ]
   @Capabilities.UpdateRestrictions.QueryOptions.SelectSupported : true
   @Capabilities.DeepUpdateSupport.ContentIDSupported : true
   @Capabilities.DeleteRestrictions.Deletable : ![__EntityControl/Deletable]
@@ -149,8 +141,6 @@ service S4_API_QUOTATION_COMPARISON {
     SAP__Messages : many SAP__Message not null;
     @Common.Composition : true
     _CompareQuotationItem : Composition of many QuotationComparisonItem on _CompareQuotationItem._Header = $self;
-    @Common.Composition : true
-    _TermsAndConditions : Composition of many TermsAndConditions on _TermsAndConditions._Header = $self;
   };
 
   @cds.external : true
@@ -181,6 +171,9 @@ service S4_API_QUOTATION_COMPARISON {
     @Common.IsDigitSequence : true
     key SNo : String(5) not null;
     Description : String(200) not null;
+    Material : String(40) not null;
+    Supplierquotation : String(10) not null;
+    Supplierquotationitem : String(5) not null;
     @Measures.Unit : Units
     Quantity : Decimal(13, 2) not null;
     @Common.IsUnit : true
@@ -470,25 +463,16 @@ service S4_API_QUOTATION_COMPARISON {
   @cds.persistence.skip : true
   @Common.Label : 'Quotation Terms'
   @Common.Messages : SAP__Messages
-  @Capabilities.NavigationRestrictions.RestrictedProperties : [
-    {
-      NavigationProperty: _Header,
-      InsertRestrictions: { Insertable: false },
-      DeepUpdateSupport: { Supported: false }
-    }
-  ]
   @Capabilities.SearchRestrictions.Searchable : false
   @Capabilities.FilterRestrictions.NonFilterableProperties : [ '__EntityControl' ]
   @Capabilities.SortRestrictions.NonSortableProperties : [ '__EntityControl' ]
   @Capabilities.UpdateRestrictions.DeltaUpdateSupported : true
   @Capabilities.UpdateRestrictions.Updatable : ![__EntityControl/Updatable]
-  @Capabilities.UpdateRestrictions.NonUpdatableNavigationProperties : [ '_Header' ]
   @Capabilities.UpdateRestrictions.QueryOptions.SelectSupported : true
   @Capabilities.DeepUpdateSupport.ContentIDSupported : true
-  @Capabilities.InsertRestrictions.Insertable : false
   @Capabilities.DeleteRestrictions.Deletable : ![__EntityControl/Deletable]
   entity TermsAndConditions {
-    @Core.Computed : true
+    @Core.ComputedDefaultValue : true
     key QuotationComparison : String(10) not null;
     @Core.ComputedDefaultValue : true
     @Common.IsDigitSequence : true
@@ -505,7 +489,6 @@ service S4_API_QUOTATION_COMPARISON {
     @UI.Hidden : true
     __EntityControl : EntityControl;
     SAP__Messages : many SAP__Message not null;
-    _Header : Association to one QuotationComparison on _Header.QuotationComparison = QuotationComparison;
   };
 };
 
