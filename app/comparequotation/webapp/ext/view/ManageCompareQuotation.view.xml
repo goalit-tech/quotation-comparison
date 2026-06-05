@@ -49,7 +49,7 @@
 				</items>
 			</IconTabBar>
 			<VBox id="_IDGenManageCQVBox2" visible="{= ${LocalModel>/IsDisplayCompareQuotation} ? true:false}">
-				<core:Fragment id="_IDGenManageCQCompareFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonForm" type="XML" />
+				<core:Fragment id="_IDGenManageCQCompareFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonDisplay" type="XML" />
 			</VBox>
 		</macros:items>
 

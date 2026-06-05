@@ -1,0 +1,38 @@
+<core:FragmentDefinition
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:uiTable="sap.ui.table"
+    xmlns:macros="sap.fe.macros"
+    xmlns:smartTable="sap.ui.comp.smarttable"
+    xmlns:core="sap.ui.core">
+    <OverflowToolbar
+                id="_IDGenQCFormFragmentOverflowToolbar"
+                style="Clear"
+            >
+            <ToolbarSpacer id="_IDGenQCFormFragmentToolbarSpacer" />
+                <Title
+                    id="_IDGenQCFormFragmentTitle2"
+                    text="EENADU TELEVISION PRIVATE LIMITED"
+                />
+                <ToolbarSeparator id="_IDGenQCFormFragmentToolbarSeparator" />
+            </OverflowToolbar>
+    <core:Fragment id="_IDGenQCFormFragmentQCHeader" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonHeader" type="XML" />
+        <VBox id="_IDGenQCFormFragmentVBox">
+                <!-- rows="{oLocalModel>/compareQuotationItemData}" -->
+            <uiTable:Table
+                id="_IDGenQCFormFragmentUITable"
+                enableCellFilter="true"
+                showNoData="true"
+                selectionMode="None"
+                rows="{
+                    path: 'oLocalModel>/compareQuotationItemData',
+                    sorter: {
+                        path: 'Description',
+                        descending: false
+                    }
+                }"
+            >
+               </uiTable:Table>
+        </VBox>
+</core:FragmentDefinition>
