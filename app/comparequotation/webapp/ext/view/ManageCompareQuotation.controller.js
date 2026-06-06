@@ -74,42 +74,92 @@ sap.ui.define(
                 } else {
                     const oSelectedCompareQuotation = await Utils.getCompareQuotation(sCompareQuotationId, this.getView());
                     const { _CompareQuotationItem, ...oCompareQuotationHeader } = oSelectedCompareQuotation;
-                    const aSupplierQuotation = await Utils.getSupplierQuotationForRFQ(oCompareQuotationHeader?.RequestForQuotation, this.getView());
-                    const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
-                        ? aSupplierQuotation
-                        : (aSupplierQuotation?.value || []);
 
-                    const aSupplierQuotationItems = aSupplierQuotationData.flatMap(quotation =>
-                        (quotation._SupplierQuotationItem || []).map(item => ({
-                            ...item,
-                            SupplierCode: quotation.SupplierCode,
-                            SupplierName: quotation.SupplierName
-                        }))
-                    );
                     this._bindRFQSessionTab(oCompareQuotationHeader?.RequestForQuotation);
                     this.getView().getModel("LocalModel").setProperty("/IsDisplayCompareQuotation", true);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", _CompareQuotationItem);
-                    this.getView().getModel("LocalModel").setProperty("/SupplierQuotation", aSupplierQuotationData);
-                    this.getView().getModel("LocalModel").setProperty("/SupplierQuotationItem", aSupplierQuotationItems);
+
                     this.getView().getModel("LocalModel").setProperty("/Mode", "DISPLAY");
-                    //this.setSelectedSupplierQuotations(_CompareQuotationItem);
+                    //this.setSelectedSupplierQuotationItemRow(_CompareQuotationItem);
                     // this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oSelectedCompareQuotation);
-                    const transformRows = Utils.transformDataforComparisonTable(_CompareQuotationItem);
-                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", transformRows);
+                    const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(_CompareQuotationItem);
+                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData);
                     //this.generateCOlumnsForComparison(aCompareQuotationItems);
                     Utils.generateCOlumnsForComparisonTable(this.getView(), _CompareQuotationItem);
                 }
 
             },
+            onCQDynamicAddItemPress: async function () {
+                const oCompareQuotationHeader = this.getView().getModel("LocalModel").getProperty("/CompareQuotationHeader");
+                const aSupplierQuotation = await Utils.getSupplierQuotationForRFQ(oCompareQuotationHeader?.RequestForQuotation, this.getView());
+                const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
+                    ? aSupplierQuotation
+                    : (aSupplierQuotation?.value || []);
+
+                const aSupplierQuotationItems = aSupplierQuotationData.flatMap(quotation =>
+                    (quotation._SupplierQuotationItem || []).map(item => ({
+                        ...item,
+                        SupplierCode: quotation.SupplierCode,
+                        SupplierName: quotation.SupplierName
+                    }))
+                );
+                const aCompareQuotationItemData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationItemData");
+                const aFinalSupplierQuotationItemData = this.removeSelectedSupplierQuotationItemData(aSupplierQuotationItems, aCompareQuotationItemData);
+                this.getView().getModel("LocalModel").setProperty("/SupplierQuotation", aSupplierQuotationData);
+                this.getView().getModel("LocalModel").setProperty("/SupplierQuotationItem", aFinalSupplierQuotationItemData);
+                this.oSQItemDialog ??= await this.loadFragment({
+                    name: "nlabs.ai.cq.comparequotation.ext.fragment.SupplierQuotationSelection"
+                });
+                // this.setSelectedSupplierQuotationItemRow(aCompareQuotationItemData);
+                this.getView().addDependent(this.oDialog);
+                this.oSQItemDialog?.open();
+            },
+            onCQDynamicAddTermsAndConditionPress: function () {
+
+            },
+
+            onAddSQFragmentAddPress: function () {
+                const aSelectedSupplierQuotationItems = this.getSelectedSupplierQuotationItemData();
+                console.log("Selected Quotation Items:", aSelectedSupplierQuotationItems);
+                this.getView().getModel("LocalModel").setProperty("/supplierQuotationItemSelected", aSelectedSupplierQuotationItems);
+                const oCompareQuotationHeader = this.getView().getModel("LocalModel").getProperty("/CompareQuotationHeader");
+                const sMode = this.getView().getModel("LocalModel").getProperty("/Mode");
+                const aCompareQuotationItemData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationItemData");
+                const aCompareQuotationItem = this.prepareCompareQuotationItemData();
+                var currentIndex = aCompareQuotationItemData.length;
+                aCompareQuotationItem.forEach(eachItem => {
+                    if (sMode === 'CREATE') {
+                        eachItem.SNo = ((currentIndex + 1) * 10).toString();
+                    } else {
+
+                        eachItem.QuotationComparison = oCompareQuotationHeader?.QuotationComparison || '';
+                        eachItem.SNo = ((currentIndex + 1) * 10).toString();
+                    }
+                    aCompareQuotationItemData.push(eachItem);
+                })
+                const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(aCompareQuotationItemData);
+                this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData);
+                //this.generateCOlumnsForComparison(aCompareQuotationItems);
+                Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationItemData);
+
+                this.oSQItemDialog?.close();
+            },
+            onAddSQFragmentCancelPress: function () {
+                this.oSQItemDialog?.close();
+            },
+
             onSaveMCQPress: async function () {
+                debugger
                 this.getView().setBusy(true);
                 try {
-                    const aSelectedSupplierQuotationItems = this.getSelectedSupplierQuotations();
-                    console.log("Selected Quotation Items:", aSelectedSupplierQuotationItems);
-                    this.getView().getModel("LocalModel").setProperty("/supplierQuotationItemSelected", aSelectedSupplierQuotationItems);
-                    const oCompareQuotation = this.prepareCompareQuotationData();
-                    const aCompareQuotationItem = this.prepareCompareQuotationItemData();
+                    const oCompareQuotation = this.prepareCompareQuotationDataForSave();
+                    const aCompareQuotationRowsData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationRowsData");
+                    const aTransFormedCompareQuotationItem = Utils.reverseTransformCompareQuotationItemData(oCompareQuotation, aCompareQuotationRowsData);
+                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", aTransFormedCompareQuotationItem);
+
+                    // aTransFormedCompareQuotationItem
+                    const aCompareQuotationItem = this.prepareCompareQuotationItemDataForSave();
                     oCompareQuotation.ComparisonDate = oCompareQuotation.ComparisonDate ? (oCompareQuotation.ComparisonDate instanceof Date
                         ? oCompareQuotation.ComparisonDate.toISOString().split("T")[0]
                         : oCompareQuotation.ComparisonDate)
@@ -118,8 +168,8 @@ sap.ui.define(
                         ? oCompareQuotation.RequisitionDate.toISOString().split("T")[0]
                         : oCompareQuotation.RequisitionDate)
                         : null;
-
-                    const oResult = await this.callActionUpsertCompareQuotation(oCompareQuotation, aCompareQuotationItem, "CREATE");
+                    var sMode = this.getView().getModel("LocalModel").getProperty("/Mode");
+                    const oResult = await this.callActionUpsertCompareQuotation(oCompareQuotation, aCompareQuotationItem, sMode);
                     if (oResult?.status === "Error") {
                         this.getView().setBusy(false);
                         sap.m.MessageToast.show(`Error on Create Quotation Comparison ${oResult?.message || oResult?.error}`);
@@ -134,8 +184,9 @@ sap.ui.define(
                     // this.oDialog.close();
                 }
             },
-            getSelectedSupplierQuotations: function () {
-                const oTable = this.getView().byId("_IDGenQCManageFragmentTable");
+            getSelectedSupplierQuotationItemData: function () {
+                // const oTable = this.getView().byId("_IDGenQCManageFragmentTable");
+                const oTable = this.getView().byId("_IDGenSQFragmentTable");
                 const aSelectedIndices = oTable.getSelectedIndices();
                 const aRows = oTable.getRows();
 
@@ -151,12 +202,21 @@ sap.ui.define(
                 console.log("Selected Supplier Quotations", aSelectedObjects);
                 return aSelectedObjects;
             },
-            setSelectedSupplierQuotations: function (aItemToBeSelected) {
+            removeSelectedSupplierQuotationItemData: function (aSupplierItem, aItemToBeRemoved) {
+                return aSupplierItem.filter((oRow) => {
+                    return !aItemToBeRemoved.some((oItem) =>
+                        oRow.SupplierQuotation === oItem.Supplierquotation &&
+                        oRow.ItemNumber === oItem.Supplierquotationitem
+                    );
+                });
+            },
+            setSelectedSupplierQuotationItemRow: function (aItemToBeSelected) {
                 if (!aItemToBeSelected || aItemToBeSelected.length === 0) {
                     return;
                 }
-                const oTable = this.getView().byId("_IDGenQCManageFragmentTable");
-                const oModel = oTable.getModel();
+                // const oTable = this.getView().byId("_IDGenQCManageFragmentTable");
+                const oTable = this.getView().byId("_IDGenSQFragmentTable");
+                const oModel = oTable.getModel("LocalModel");
                 const sPath = oTable.getBindingInfo("rows").path;
                 const aTableData = oModel.getProperty(sPath);
 
@@ -165,17 +225,18 @@ sap.ui.define(
                 aItemToBeSelected.forEach((oItem) => {
                     const iIndex = aTableData.findIndex((oRow) => {
                         // Match by a unique key — adjust "SupplierQuotationID" to your actual key field
-                        return (oRow.SupplierQuotation === oItem.SupplierQuotation &&
-                            oRow.SQItemNumber === oItem.ItemNumber);
+                        return (oRow.SupplierQuotation === oItem.Supplierquotation &&
+                            oRow.ItemNumber === oItem.Supplierquotationitem);
                     });
                     if (iIndex !== -1) {
-                        aSelectedIndices.push(iIndex);
+                        // aSelectedIndices.push(iIndex);
+                        oTable.addSelectionInterval(iIndex, iIndex);
                     }
                 });
 
-                oTable.setSelectedIndices(aSelectedIndices);
+                // oTable.setSelectedIndices(aSelectedIndices);
             },
-            prepareCompareQuotationData: function () {
+            prepareCompareQuotationDataForSave: function () {
                 const oCompareQuotation = this.getView().getModel("LocalModel").getProperty("/CompareQuotationHeader");
                 const oCompareQuotationToSave = {
                     "QuotationComparison": oCompareQuotation?.QuotationComparison || '',
@@ -191,6 +252,39 @@ sap.ui.define(
                     "ComparisonDate": oCompareQuotation?.ComparisonDate || null,
                 };
                 return oCompareQuotationToSave;
+            },
+            prepareCompareQuotationItemDataForSave: function () {
+                const aSelectedItems = this.getView().getModel("LocalModel").getProperty("/CompareQuotationItemData") || [];
+                const aCompareQuotationItem = [];
+
+                aSelectedItems.forEach((item, index) => {
+                    var newQuotationComparisonItem = {
+                        QuotationComparison: item?.QuotationComparison || '',
+                        SNo: item?.SNo || '',
+                        Description: item?.Description || '',
+                        Material: item?.Material || '',
+                        Supplierquotation: item?.Supplierquotation || '',
+                        Supplierquotationitem: item?.Supplierquotationitem || '',
+                        Quantity: item?.Quantity || 0,
+                        Units: item?.Units || '',
+                        SupplierCode: item?.SupplierCode || '',
+                        SupplierName: item?.SupplierName || '',
+                        UnitRate: item?.UnitRate || 0,
+                        TotalAmount: item?.TotalAmount || 0,
+                        Currency: item?.Currency || '',
+                        MaterialMake: item?.MaterialMake || '',
+                        Specifications: item?.Specifications || '',
+                        ContactPerson: item?.ContactPerson || '',
+                        PhoneNumber: item?.PhoneNumber || '',
+                        // ModelNumber: item?.YY1_MaterialMake_PDI || '',
+                        // AccountAssignment:item?.AccountingAssignment || ''
+                    };
+
+
+                    aCompareQuotationItem.push(newQuotationComparisonItem);
+                });
+
+                return aCompareQuotationItem;
             },
             prepareCompareQuotationItemData: function () {
                 const aSelectedItems = this.getView().getModel("LocalModel").getProperty("/supplierQuotationItemSelected") || [];

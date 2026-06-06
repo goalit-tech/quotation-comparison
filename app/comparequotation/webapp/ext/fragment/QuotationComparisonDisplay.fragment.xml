@@ -10,7 +10,6 @@
                 id="_IDGenQCFormFragmentOverflowToolbar"
                 style="Clear"
             >
-            <ToolbarSpacer id="_IDGenQCFormFragmentToolbarSpacer" />
                 <Title
                     id="_IDGenQCFormFragmentTitle2"
                     text="EENADU TELEVISION PRIVATE LIMITED"
@@ -177,14 +176,8 @@
                     text="Supplier Quotation and Items"
                 />
                 <ToolbarSpacer id="_IDGenQCFormFragmentUITableToolbarSpacer" />
-                <ToolbarSeparator id="_IDGenQCFormFragmentUITableToolbarSeparator" />
-                <SearchField
-                    id="_IDGenQCFormFragmentUITableSearchField"
-                    placeholder="Filter"
-                    search=".filterGlobally"
-                    width="15rem"
-                    visible="false"
-                />
+                <Button id="_IDGenQCFormFragmentUITableButtonAddItem" text="Add Item" press=".onCQDynamicAddItemPress" type="Emphasized"></Button>
+                <Button id="_IDGenQCFormFragmentUITableButtonAddTC" text="Add Terms &amp; Conditions Row" press=".onCQDynamicAddTermsAndConditionPress" type="Emphasized"></Button>
             </OverflowToolbar>
         </uiTable:extension>
                </uiTable:Table>

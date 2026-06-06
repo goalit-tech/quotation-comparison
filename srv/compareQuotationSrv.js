@@ -154,7 +154,7 @@ class CapCompareQuotationService extends cds.ApplicationService {
             }
 
             const S4_QUOTATION_COMPARISON_SRV = await cds.connect.to("S4_API_QUOTATION_COMPARISON");
-            if (type === "UPDATE" && quotationComparison.QuotationComparison) {
+            if (type !== "CREATE" && quotationComparison.QuotationComparison) {
                 const resultHeader = await S4_QUOTATION_COMPARISON_SRV
                     .update('QuotationComparison')
                     .where({

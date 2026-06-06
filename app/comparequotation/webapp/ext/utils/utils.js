@@ -12,20 +12,22 @@ sap.ui.define(
 
             transformDataforComparisonTable: function (aSelectedData) {
                 const aProperties = [
-                    //"QuotationComparison",
+                    "QuotationComparison",
+                    "Supplierquotation",
+                    "Supplierquotationitem",
                     "SNo",
-                    //"SupplierCode",
-                    //"SupplierName",
+                    "SupplierCode",
+                    "SupplierName",
                     "Description",
                     "MaterialMake",
                     "ModelNumber",
                     "Specifications",
-                    "Warranty",
-                    // "Quantity",
+                    "Quantity",
                     "Units",
-                    "UnitRate",
                     "TotalAmount",
                     "Currency",
+                    "ContactPerson",
+                    "PhoneNumber",
                     "ConversionRs",
                     "AddDuties",
                     "BcdPercent",
@@ -42,8 +44,7 @@ sap.ui.define(
                     "HsnCode",
                     "Gst",
                     "TaxAmount",
-                    "ContactPerson",
-                    "PhoneNumber",
+                    "Warranty",
                 ];
 
                 const aRows = aProperties.map((sProperty) => {
@@ -69,6 +70,11 @@ sap.ui.define(
                     "TermsAndConditions"
                 ];
                 const nonEditableHeaderRows = [
+                    "QuotationComparison",
+                    "Supplierquotation",
+                    "Supplierquotationitem",
+                    "SupplierCode",
+                    "SupplierName",
                     "SNo",
                     "Description",
                     "MaterialMake",
@@ -81,6 +87,8 @@ sap.ui.define(
                     "TotalAmount",
                     "Currency",
                     "ConversionRs",
+                    "ContactPerson",
+                    "PhoneNumber",
                 ];
 
                 // Property column
@@ -171,15 +179,15 @@ sap.ui.define(
                     );
                 });
             },
-            reverseTransformDataOfCompareQuotationForSave: function (oCompareQuotation, aRows) {
+            reverseTransformCompareQuotationItemData: function (oCompareQuotation, aRows) {
                 // Get supplier names dynamically from the first row's keys (excluding "property")
                 const aSupplierNames = Object.keys(aRows[0]).filter(key => key !== "property");
-
+                // const sSupplierName = sKey.split("_")[0];
                 // Reconstruct one object per supplier
                 const aRestoredItems = aSupplierNames.map(sSupplierName => {
                     const oItem = {
                         QuotationComparison: oCompareQuotation?.QuotationComparison,
-                        SupplierName: sSupplierName
+                        SupplierName: sSupplierName.split("_")[0]
                     };
 
                     // Map each row back to its property on the supplier object
