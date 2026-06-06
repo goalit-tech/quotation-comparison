@@ -153,14 +153,14 @@
    
    
      <VBox id="_IDGenQCFormFragmentVBox">
-                <!-- rows="{oLocalModel>/compareQuotationItemData}" -->
+                <!-- rows="{oLocalModel>/CompareQuotationRowsData}" -->
             <uiTable:Table
                 id="_IDGenQCFormFragmentDynamicUITable"
                 enableCellFilter="true"
                 showNoData="true"
                 selectionMode="None"
                 rows="{
-                    path: 'oLocalModel>/compareQuotationItemData',
+                    path: 'LocalModel>/CompareQuotationRowsData',
                     sorter: {
                         path: 'Description',
                         descending: false

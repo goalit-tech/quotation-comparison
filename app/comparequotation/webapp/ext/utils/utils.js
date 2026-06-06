@@ -69,6 +69,7 @@ sap.ui.define(
                     "TermsAndConditions"
                 ];
                 const nonEditableHeaderRows = [
+                    "SNo",
                     "Description",
                     "MaterialMake",
                     "ModelNumber",
@@ -109,7 +110,7 @@ sap.ui.define(
                                 })
                             ]
                         }),
-                        width: "200px"
+                        width: "auto"
                     })
                 );
 
@@ -123,11 +124,11 @@ sap.ui.define(
                             // Show Input when property is NOT in headerRows and isEditable
                             new sap.m.Input({
                                 value: "{LocalModel>" + sSupplierName + "}",
-                                // editable: "{LocalModel>/compareQuotationIsEditable}",
+                                // editable: "{LocalModel>/IsDisplayCompareQuotation}",
                                 editable: {
                                     parts: [
                                         { path: "LocalModel>property" },
-                                        { path: "LocalModel>/compareQuotationIsEditable" }
+                                        { path: "LocalModel>/IsDisplayCompareQuotation" }
                                     ],
                                     formatter: function (sProperty, bEditable) {
                                         return nonEditableHeaderRows.includes(sProperty) ? false : true;
@@ -136,7 +137,7 @@ sap.ui.define(
                                 visible: {
                                     parts: [
                                         { path: "LocalModel>property" },
-                                        { path: "LocalModel>/compareQuotationIsEditable" }
+                                        { path: "LocalModel>/IsDisplayCompareQuotation" }
                                     ],
                                     formatter: function (sProperty, bEditable) {
                                         const headerRows = ["AddDuties", "TermsAndConditions"];
@@ -150,7 +151,7 @@ sap.ui.define(
                                 visible: {
                                     parts: [
                                         { path: "LocalModel>property" },
-                                        { path: "LocalModel>/compareQuotationIsEditable" }
+                                        { path: "LocalModel>/IsDisplayCompareQuotation" }
                                     ],
                                     formatter: function (sProperty, bEditable) {
                                         const headerRows = ["AddDuties", "TermsAndConditions"];
@@ -165,7 +166,7 @@ sap.ui.define(
                         new sap.ui.table.Column({
                             label: new sap.m.Title({ text: sSupplierName }),
                             template: oTemplate,
-                            width: "200px"
+                            width: "auto"
                         })
                     );
                 });

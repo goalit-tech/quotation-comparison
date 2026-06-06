@@ -66,6 +66,7 @@ sap.ui.define(
                     oCompareQuotationHeader.CompanyName = aSupplierQuotation[0]?.CompanyCodeName || "";
                     this.getView().getModel("LocalModel").setProperty("/Mode", "CREATE");
 
+                    this.getView().getModel("LocalModel").setProperty("/IsDisplayCompareQuotation", false);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotation", aSupplierQuotationData);
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotationItem", aSupplierQuotationItems);
@@ -86,6 +87,7 @@ sap.ui.define(
                         }))
                     );
                     this._bindRFQSessionTab(oCompareQuotationHeader?.RequestForQuotation);
+                    this.getView().getModel("LocalModel").setProperty("/IsDisplayCompareQuotation", true);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", _CompareQuotationItem);
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotation", aSupplierQuotationData);

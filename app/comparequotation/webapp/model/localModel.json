@@ -4,6 +4,7 @@
     "SupplierQuotationItem": [],
     "supplierQuotationItemSelected": [],
     "IsDisplayCompareQuotation":false,    
+    "compareQuotationIsEditable":false,    
     "Mode": "DISPLAY",
     "CompareQuotationHeader": {
         "QuotationComparison": "",
