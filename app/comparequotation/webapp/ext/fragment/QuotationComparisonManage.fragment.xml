@@ -64,6 +64,7 @@
             <Input
                 id="_IDGenQCManageFragmentInput2"
                 value="{LocalModel>/CompareQuotationHeader/CompativeStatementTitle}"
+                editable="{LocalModel>/IsEditCompareQuotation}"
             />
              <Label
                 id="_IDGenQCManageFragmentLabel7"
@@ -73,6 +74,7 @@
             <Input
                 id="_IDGenQCManageFragmentInput6"
                 value="{LocalModel>/CompareQuotationHeader/Purpose}"
+                editable="{LocalModel>/IsEditCompareQuotation}"
             />
             <core:Title
                 id="_IDGenQCManageFragmentTitle1"
@@ -137,6 +139,7 @@
 							'pattern': 'yyyy-MM-dd'
 						}
 					}"
+                    editable="{LocalModel>/IsEditCompareQuotation}"
             />
         </f:content>
     </f:SimpleForm>               
@@ -160,13 +163,6 @@
                 />
                 <ToolbarSpacer id="_IDGenQCManageFragmentToolbarSpacer" />
                 <ToolbarSeparator id="_IDGenQCManageFragmentToolbarSeparator" />
-                <SearchField
-                    id="_IDGenQCManageFragmentSearchField"
-                    placeholder="Filter"
-                    search=".filterGlobally"
-                    width="15rem"
-                    visible="false"
-                />
             </OverflowToolbar>
         </uiTable:extension>
         <uiTable:columns>

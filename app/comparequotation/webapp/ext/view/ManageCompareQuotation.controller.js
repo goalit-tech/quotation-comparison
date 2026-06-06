@@ -31,8 +31,16 @@ sap.ui.define(
             getView: function () {
                 return this.editFlow.getView();
             },
+            resetLocalModel: function () {
+                const oModel = this.getView().getModel("LocalModel");
+
+                jQuery.getJSON("model/localModel.json", function (oData) {
+                    oModel.setData(oData);
+                });
+            },
 
             onObjectMatched: async function (oEvent) {
+                this.resetLocalModel();
                 const oArgs = oEvent.getParameter("arguments");
                 let sCompareQuotationId = oArgs.key;
                 sCompareQuotationId = sCompareQuotationId ? sCompareQuotationId.replace(/^'|'$/g, '') : '';
@@ -66,7 +74,7 @@ sap.ui.define(
                     oCompareQuotationHeader.CompanyName = aSupplierQuotation[0]?.CompanyCodeName || "";
                     this.getView().getModel("LocalModel").setProperty("/Mode", "CREATE");
 
-                    this.getView().getModel("LocalModel").setProperty("/IsDisplayCompareQuotation", false);
+                    this.getView().getModel("LocalModel").setProperty("/IsEditCompareQuotation", true);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotation", aSupplierQuotationData);
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotationItem", aSupplierQuotationItems);
@@ -76,7 +84,7 @@ sap.ui.define(
                     const { _CompareQuotationItem, ...oCompareQuotationHeader } = oSelectedCompareQuotation;
 
                     this._bindRFQSessionTab(oCompareQuotationHeader?.RequestForQuotation);
-                    this.getView().getModel("LocalModel").setProperty("/IsDisplayCompareQuotation", true);
+                    this.getView().getModel("LocalModel").setProperty("/IsEditCompareQuotation", false);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", _CompareQuotationItem);
 
@@ -112,11 +120,16 @@ sap.ui.define(
                     name: "nlabs.ai.cq.comparequotation.ext.fragment.SupplierQuotationSelection"
                 });
                 // this.setSelectedSupplierQuotationItemRow(aCompareQuotationItemData);
-                this.getView().addDependent(this.oDialog);
+                this.getView().addDependent(this.oSQItemDialog);
                 this.oSQItemDialog?.open();
             },
-            onCQDynamicAddTermsAndConditionPress: function () {
-
+            onCQDynamicAddTermsAndConditionPress: async function () {
+                this.oTermsAndConditionDialog ??= await this.loadFragment({
+                    name: "nlabs.ai.cq.comparequotation.ext.fragment.AddTermsAndCondtion"
+                });
+                // this.setSelectedSupplierQuotationItemRow(aCompareQuotationItemData);
+                this.getView().addDependent(this.oTermsAndConditionDialog);
+                this.oTermsAndConditionDialog?.open();
             },
 
             onAddSQFragmentAddPress: function () {
@@ -358,11 +371,123 @@ sap.ui.define(
                 }
             },
             onCancelonMCQPress: function () {
-                this.getRouter().navBack();
+                const sMode = this.getView().getModel("LocalModel").getProperty("/Mode");
+                if (sMode === 'CREATE') {
+                    window.history.go(-1);
+                } else {
+                    this.getView().getModel("LocalModel").setProperty("/IsEditCompareQuotation", false);
+                }
             },
-            onCompareQuotationPress: function () {
-                this.getView().getModel("LocalModel").setProperty("/IsDisplayCompareQuotation", true);
-            }
+            onCompareQuotationEditPress: function () {
+                this.getView().getModel("LocalModel").setProperty("/IsEditCompareQuotation", true);
+            },
+            onTCDialogAddPress: function () {
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/IsAddNewTC", true);
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/KeyFieldState", "None");
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/KeyField", "");
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/KeyFieldValueState", "None");
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/KeyFieldValue", "");
+            },
+
+            onTCDialogSavePress: function () {
+                const oLocalModel = this.getView().getModel("LocalModel");
+
+                const keyField = oLocalModel.getProperty("/TermsAndConditionDialog/KeyField");
+                const keyFieldValue = oLocalModel.getProperty("/TermsAndConditionDialog/KeyFieldValue");
+
+                let bValid = true;
+
+                // Reset states
+                oLocalModel.setProperty("/TermsAndConditionDialog/KeyFieldState", "None");
+                oLocalModel.setProperty("/TermsAndConditionDialog/KeyFieldValueState", "None");
+
+                // Check empty values
+                if (!keyField?.trim()) {
+                    oLocalModel.setProperty("/TermsAndConditionDialog/KeyFieldState", "Error");
+                    bValid = false;
+                }
+
+                if (!keyFieldValue?.trim()) {
+                    oLocalModel.setProperty("/TermsAndConditionDialog/KeyFieldValueState", "Error");
+                    bValid = false;
+                }
+
+                // KeyField should NOT contain spaces or special characters
+                const keyFieldRegex = /^[A-Za-z0-9_]+$/;
+
+                if (keyField?.trim() && !keyFieldRegex.test(keyField)) {
+                    oLocalModel.setProperty("/TermsAndConditionDialog/KeyFieldState", "Error");
+                    bValid = false;
+                }
+
+                if (bValid) {
+                    const aPreDefinedTermsAndCondition = this.getView().getModel("LocalModel").getProperty("/TermsAndConditionDialog/PreDefinedTermsAndCondition");
+                    aPreDefinedTermsAndCondition.push({
+                        "KeyField": keyField,
+                        "KeyFieldDesc": keyFieldValue
+                    });
+                    this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/PreDefinedTermsAndCondition", aPreDefinedTermsAndCondition);
+                    this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/IsAddNewTC", false);
+                }
+            },
+            onTCDialogCancelPress: function () {
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/IsAddNewTC", false);
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/KeyFieldState", "None");
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/KeyField", "");
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/KeyFieldValueState", "None");
+                this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/KeyFieldValue", "");
+            },
+            onAddTCFragmentAddPress: function () {
+                // TermsAndConditionSelectedkey
+                const aSelectedKey = this.getView().getModel("LocalModel")
+                    .getProperty("/TermsAndConditionDialog/TermsAndConditionSelectedkey");
+
+                const aPreDefinedTermsAndCondition = this.getView().getModel("LocalModel")
+                    .getProperty("/TermsAndConditionDialog/PreDefinedTermsAndCondition");
+
+                const aSelectedTermsAndConditionToApply =
+                    aPreDefinedTermsAndCondition.filter(
+                        oItem => aSelectedKey.includes(oItem.KeyField)
+                    );
+
+                const aCompareQuotationRowsData = this.getView().getModel("LocalModel")
+                    .getProperty("/CompareQuotationRowsData");
+                const aSupplierNames = Object.keys(aCompareQuotationRowsData[0]);
+                aSelectedTermsAndConditionToApply.forEach(oTC => {
+
+                    const oNewRow = {
+                        property: oTC.KeyField
+                    };
+
+                    Object.keys(aCompareQuotationRowsData[0])
+                        .filter(sKey => sKey !== "property")
+                        .forEach(sSupplierColumn => {
+                            oNewRow[sSupplierColumn] = oTC.KeyFieldValue;
+                        });
+
+                    aCompareQuotationRowsData.push(oNewRow);
+                });
+                // aSelectedTermsAndConditionToApply.forEach(oTC => {
+
+                //     const oNewRow = {
+                //         property: oTC.KeyField
+                //     };
+
+                //     aSupplierNames.forEach(sSupplier => {
+                //         oNewRow[sSupplier] = oTC.KeyFieldValue;
+                //     });
+
+                //     aCompareQuotationRowsData.push(oNewRow);
+                // });
+
+                this.getView().getModel("LocalModel")
+                    .setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData);
+                this.oTermsAndConditionDialog?.close();
+            },
+            onAddTCFragmentCancelPress: function () {
+                this.oTermsAndConditionDialog?.close();
+
+            },
 
         });
     }

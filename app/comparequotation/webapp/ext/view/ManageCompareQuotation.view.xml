@@ -19,7 +19,7 @@
 
 		<!-- Actions aggregation -->
 		<macros:actions>
-			<Button id="_IDGenManageCQButton" text="Compare Quotation" press=".onCompareQuotationPress" type="Ghost" />
+			<Button id="_IDGenManageCQButton" text="Edit" press=".onCompareQuotationEditPress" type="Ghost" />
 			<!-- <Button id="_IDGenManageCQButton1" text="Check Policies" press=".onCheckPolicies" type="Ghost" /> -->
 		</macros:actions>
 
@@ -50,7 +50,7 @@
 					</IconTabFilter>
 				</items>
 			</IconTabBar>
-			<!-- <VBox id="_IDGenManageCQVBox2" visible="{= ${LocalModel>/IsDisplayCompareQuotation} ? true:false}">
+			<!-- <VBox id="_IDGenManageCQVBox2" visible="{= ${LocalModel>/IsEditCompareQuotation} ? true:false}">
 				<core:Fragment id="_IDGenManageCQCompareFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonDisplay" type="XML" />
 			</VBox> -->
 		</macros:items>
@@ -59,8 +59,8 @@
 		<macros:footer >
 			<OverflowToolbar id="_IDGenManageCQOverflowToolbar">
 				<ToolbarSpacer id="_IDGenManageCQToolbarSpacer"/>
-				<Button id="_IDGenManageCQButton2" text="Save" press=".onSaveMCQPress" type="Emphasized" icon="" />
-				<Button id="_IDGenManageCQButton3" text="Cancel" press=".onCancelonMCQPress" type="Default" icon="" />
+				<Button id="_IDGenManageCQButton2" visible="{LocalModel>/IsEditCompareQuotation}" text="Save" press=".onSaveMCQPress" type="Emphasized" icon="" />
+				<Button id="_IDGenManageCQButton3" visible="{LocalModel>/IsEditCompareQuotation}" text="Cancel" press=".onCancelonMCQPress" type="Default" icon="" />
 			</OverflowToolbar>
 		</macros:footer>
 	</macros:Page>

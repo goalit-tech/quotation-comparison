@@ -161,19 +161,33 @@ class CapCompareQuotationService extends cds.ApplicationService {
                         QuotationComparison: quotationComparison.QuotationComparison
                     })
                     .with(quotationComparison);
-                const aResults = await Promise.all(
-                    quotationComparisonItem.map(item => {
-                        const { QuotationComparison, SNo, ...itemPayload } = item;
+                const aResults = [];
+                for (const item of quotationComparisonItem) {
+                    const { QuotationComparison, SNo, ...itemPayload } = item;
 
-                        return S4_QUOTATION_COMPARISON_SRV
-                            .update('QuotationComparisonItem')
-                            .where({
-                                QuotationComparison: QuotationComparison,
-                                SNo: SNo
-                            })
-                            .with(itemPayload);
-                    })
-                );
+                    const result = await S4_QUOTATION_COMPARISON_SRV
+                        .update('QuotationComparisonItem')
+                        .where({
+                            QuotationComparison,
+                            SNo
+                        })
+                        .with(itemPayload);
+
+                    aResults.push(result);
+                }
+                // const aResults = await Promise.all(
+                //     quotationComparisonItem.map(item => {
+                //         const { QuotationComparison, SNo, ...itemPayload } = item;
+
+                //         return S4_QUOTATION_COMPARISON_SRV
+                //             .update('QuotationComparisonItem')
+                //             .where({
+                //                 QuotationComparison: QuotationComparison,
+                //                 SNo: SNo
+                //             })
+                //             .with(itemPayload);
+                //     })
+                // );
                 oMessage = {
                     message: `Quotation Updated successfully for Quotation Comparison: ${resultHeader?.QuotationComparison}`,
                     status: "Success"

@@ -73,6 +73,7 @@
             <Input
                 id="_IDGenQCHeaderFragmentInput2"
                 value="{LocalModel>/CompareQuotationHeader/CompativeStatementTitle}"
+                editable="{LocalModel>/IsEditCompareQuotation}"
             />
              <Label
                 id="_IDGenQCHeaderFragmentLabel7"
@@ -82,6 +83,7 @@
             <Input
                 id="_IDGenQCHeaderFragmentInput6"
                 value="{LocalModel>/CompareQuotationHeader/Purpose}"
+                editable="{LocalModel>/IsEditCompareQuotation}"
             />
             <core:Title
                 id="_IDGenQCHeaderFragmentTitle1"
@@ -146,6 +148,7 @@
 							'pattern': 'yyyy-MM-dd'
 						}
 					}"
+                editable="{LocalModel>/IsEditCompareQuotation}"
             />
         </f:content>
     </f:SimpleForm>
@@ -176,8 +179,8 @@
                     text="Supplier Quotation and Items"
                 />
                 <ToolbarSpacer id="_IDGenQCFormFragmentUITableToolbarSpacer" />
-                <Button id="_IDGenQCFormFragmentUITableButtonAddItem" text="Add Item" press=".onCQDynamicAddItemPress" type="Emphasized"></Button>
-                <Button id="_IDGenQCFormFragmentUITableButtonAddTC" text="Add Terms &amp; Conditions Row" press=".onCQDynamicAddTermsAndConditionPress" type="Emphasized"></Button>
+                <Button id="_IDGenQCFormFragmentUITableButtonAddItem" visible="{LocalModel>/IsEditCompareQuotation}" text="Add Item" press=".onCQDynamicAddItemPress" type="Emphasized"></Button>
+                <Button id="_IDGenQCFormFragmentUITableButtonAddTC" enabled="{=${LocalModel>/CompareQuotationRowsData}.length > 0 ? true:false}" visible="{LocalModel>/IsEditCompareQuotation}" text="Add Terms &amp; Conditions Row" press=".onCQDynamicAddTermsAndConditionPress" type="Emphasized"></Button>
             </OverflowToolbar>
         </uiTable:extension>
                </uiTable:Table>

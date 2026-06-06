@@ -3,8 +3,8 @@
     "SupplierQuotation": [],
     "SupplierQuotationItem": [],
     "supplierQuotationItemSelected": [],
-    "IsDisplayCompareQuotation":false,    
-    "compareQuotationIsEditable":false,    
+    "IsEditCompareQuotation": false,
+    "compareQuotationIsEditable": false,
     "Mode": "DISPLAY",
     "CompareQuotationHeader": {
         "QuotationComparison": "",
@@ -19,6 +19,88 @@
         "Purpose": "",
         "ComparisonDate": null
     },
-    "CompareQuotationItemData":[],
-    "CompareQuotationRowsData":[]
+    "CompareQuotationItemData": [],
+    "CompareQuotationRowsData": [],
+    "TermsAndConditionDialog": {
+        "IsAddNewTC": false,
+        "KeyFieldState": "None",
+        "KeyField": "",
+        "KeyFieldValueState": "None",
+        "KeyFieldValue": "",
+        "TermsAndConditionSelectedkey": [],
+        "PreDefinedTermsAndCondition": [
+            {
+                "KeyField": "Warranty",
+                "KeyFieldDesc": "Warranty"
+            },
+            {
+                "KeyField": "TaxAmount",
+                "KeyFieldDesc": "Tax Amount"
+            },
+            {
+                "KeyField": "FreightCharges",
+                "KeyFieldDesc": "Freight Charges"
+            },
+            {
+                "KeyField": "Discount",
+                "KeyFieldDesc": "Discount"
+            },
+            {
+                "KeyField": "TechnicalCompliance",
+                "KeyFieldDesc": "Technical Compliance"
+            },
+            {
+                "KeyField": "BCDPercent",
+                "KeyFieldDesc": "BCD %"
+            },
+            {
+                "KeyField": "SWCPercentOnBCD",
+                "KeyFieldDesc": "SWC % on BCD"
+            },
+            {
+                "KeyField": "HSNCode",
+                "KeyFieldDesc": "HSN Code"
+            },
+            {
+                "KeyField": "GST",
+                "KeyFieldDesc": "GST"
+            },
+            {
+                "KeyField": "FreightCharges",
+                "KeyFieldDesc": "Freight Charges"
+            },
+            {
+                "KeyField": "InsuranceCharges",
+                "KeyFieldDesc": "Insurance Charges"
+            },
+            {
+                "KeyField": "BankCharges",
+                "KeyFieldDesc": "Bank Charges"
+            },
+            {
+                "KeyField": "LocalTransportationCharges",
+                "KeyFieldDesc": "Local Transportation Charges"
+            },
+            {
+                "KeyField": "LandingCost",
+                "KeyFieldDesc": "Landing Cost"
+            },
+            {
+                "KeyField": "Density",
+                "KeyFieldDesc": "Density"
+            },
+            {
+                "KeyField": "ContactPerson",
+                "KeyFieldDesc": "Contact Person"
+            },
+            {
+                "KeyField": "PhoneNumber",
+                "KeyFieldDesc": "Phone Number"
+            },
+            {
+                "KeyField": "BankCharges",
+                "KeyFieldDesc": "Bank Charges"
+            }
+        ]
+    }
 }
