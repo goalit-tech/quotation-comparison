@@ -33,24 +33,26 @@
 
 		<!-- Main content -->
 		<macros:items>
-			<IconTabBar visible="{= ${LocalModel>/IsDisplayCompareQuotation} ? false:true}" id="_IDGenManageCQIconTabstickySubheaderBar" class="sapUiResponsiveContentPadding">
+			<IconTabBar id="_IDGenManageCQIconTabstickySubheaderBar" class="sapUiResponsiveContentPadding">
 				<items>
 					<IconTabFilter id="_IDGenManageCQIconTabFilter" text="Quotation Comparison">
 						 <!-- <VBox id="_IDGenManageCQVBox1" > -->
-						 <core:Fragment id="_IDGenManageCQCreateFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonManage" type="XML" />
+						 <core:Fragment id="_IDGenManageCQCreateFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonDisplay" type="XML" />
                         <!-- </VBox> -->
 					</IconTabFilter>
 					<IconTabFilter id="_IDGenManageCQIconTabFilter2" text="RFQ">
-						<Text id="_IDGenManageCQText" text="RFQ Content" />
+						<VBox id="_IDGenManageCQRFQSessionVBox">
+							<core:Fragment id="_IDGenManageCQRFQDetailFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.RFQDetail" type="XML" />
+						</VBox>
 					</IconTabFilter>
 					<IconTabFilter id="_IDGenManageCQIconTabFilter3" text="Workflow">
 						<Text id="_IDGenManageCQText1" text="Workflow" />
 					</IconTabFilter>
 				</items>
 			</IconTabBar>
-			<VBox id="_IDGenManageCQVBox2" visible="{= ${LocalModel>/IsDisplayCompareQuotation} ? true:false}">
+			<!-- <VBox id="_IDGenManageCQVBox2" visible="{= ${LocalModel>/IsDisplayCompareQuotation} ? true:false}">
 				<core:Fragment id="_IDGenManageCQCompareFragment" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonDisplay" type="XML" />
-			</VBox>
+			</VBox> -->
 		</macros:items>
 
 		<!-- Footer aggregation -->

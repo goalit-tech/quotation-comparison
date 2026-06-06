@@ -7,8 +7,139 @@
     xmlns:smartTable="sap.ui.comp.smarttable"
     xmlns:core="sap.ui.core"
 >
-<core:Fragment id="_IDGenQCManageFragmentQCHeader" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonHeader" type="XML" />
-                       
+ <f:SimpleForm
+        id="_IDGenQCManageFragmentSimpleForm1"
+        editable="true"
+        layout="ResponsiveGridLayout"
+        labelSpanXL="4"
+        labelSpanL="4"
+        labelSpanM="4"
+        labelSpanS="12"
+        adjustLabelSpan="false"
+        emptySpanXL="0"
+        emptySpanL="0"
+        emptySpanM="0"
+        emptySpanS="0"
+        columnsXL="3"
+        columnsL="2"
+        columnsM="2"
+        singleContainerFullSize="false"
+    >
+        <f:content>
+            <core:Title
+                id="_IDGenQCManageFragmentTitle"
+                text=""
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabel"
+                text="Request For Quotation"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput"
+                value="{LocalModel>/CompareQuotationHeader/RequestForQuotation}"
+                editable="false"
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabelCompanyCode"
+                text="Company Code"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInputCompanyCode"
+                value="{LocalModel>/CompareQuotationHeader/CompanyCode}"
+                editable="false"
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabelCompanyName"
+                text="Company Name"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInputCompanyName"
+                value="{LocalModel>/CompareQuotationHeader/CompanyName}"
+                editable="false"
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabel2"
+                text="Comparative Statement Title"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput2"
+                value="{LocalModel>/CompareQuotationHeader/CompativeStatementTitle}"
+            />
+             <Label
+                id="_IDGenQCManageFragmentLabel7"
+                text="Purpose"
+            />
+            
+            <Input
+                id="_IDGenQCManageFragmentInput6"
+                value="{LocalModel>/CompareQuotationHeader/Purpose}"
+            />
+            <core:Title
+                id="_IDGenQCManageFragmentTitle1"
+                text=""
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabel5"
+                text="Requisition Number"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput5"
+                value="{LocalModel>/CompareQuotationHeader/RequisitionNumber}"
+                editable="false"
+            />
+             <Label
+                id="_IDGenQCManageFragmentLabel3"
+                text="Requestor Name"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput3"
+                value="{LocalModel>/CompareQuotationHeader/NameOfRequester}"
+                editable="false"
+
+            />
+            <Label
+                id="_IDGenQCManageFragmentLabel4"
+                text="Account Assignment"
+            />
+            <Input
+                id="_IDGenQCManageFragmentInput4"
+                value="{LocalModel>/CompareQuotationHeader/AccountAssignment}"
+                editable="false"
+            />
+
+            <Label
+                id="_IDGenQCManageFragmentLabel6"
+                text="Requisition Date"
+            />
+            <!-- value="{LocalModel>/CompareQuotationHeader/RequisitionDate}" -->
+            <DatePicker
+                id="_IDGenQCManageFragmentDatePicker"
+                value="{
+						'path':'LocalModel>/CompareQuotationHeader/RequisitionDate',
+						'type':'sap.ui.model.type.Date',
+						'formatOptions': {
+							'pattern': 'yyyy-MM-dd'
+						}
+					}"
+                    editable="false"
+            />
+             <Label
+                id="_IDGenQCManageFragmentLabel8"
+                text="Comparison Date"
+            />
+            <!-- value="{LocalModel>/CompareQuotationHeader/ComparisonDate}" -->
+            <DatePicker
+                id="_IDGenQCManageFragmentDatePicker1"
+                value="{
+						'path':'LocalModel>/CompareQuotationHeader/ComparisonDate',
+						'type':'sap.ui.model.type.Date',
+						'formatOptions': {
+							'pattern': 'yyyy-MM-dd'
+						}
+					}"
+            />
+        </f:content>
+    </f:SimpleForm>               
     <uiTable:Table
         id="_IDGenQCManageFragmentTable"
         selectionMode="MultiToggle"

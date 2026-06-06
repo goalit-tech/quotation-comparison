@@ -3,6 +3,7 @@
     "SupplierQuotation": [],
     "SupplierQuotationItem": [],
     "supplierQuotationItemSelected": [],
+    "IsDisplayCompareQuotation":false,    
     "Mode": "DISPLAY",
     "CompareQuotationHeader": {
         "QuotationComparison": "",
@@ -16,5 +17,7 @@
         "RequisitionDate": null,
         "Purpose": "",
         "ComparisonDate": null
-    }
+    },
+    "CompareQuotationItemData":[],
+    "CompareQuotationRowsData":[]
 }

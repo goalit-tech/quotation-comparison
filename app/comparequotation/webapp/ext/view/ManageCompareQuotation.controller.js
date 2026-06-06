@@ -18,6 +18,13 @@ sap.ui.define(
                 // const oRouter = this.editFlow.getAppComponent().getRouter();
                 this.getRouter().getRoute("QuotationComparisonObjectPage").attachPatternMatched(this.onObjectMatched, this);
             },
+            _bindRFQSessionTab: function (key) {
+                const oContext = this.getView().getModel().bindContext(
+                    `/A_RequestForQuotation(${key}})`
+                ).getBoundContext();
+
+                this.getView().byId("_IDGenManageCQRFQSessionVBox").setBindingContext(oContext);
+            },
             getRouter: function () {
                 return this.editFlow.getAppComponent().getRouter();
             },
@@ -36,6 +43,7 @@ sap.ui.define(
                 // const oLocalModel = this.editFlow.getAppComponent().getModel("LocalModel");
                 if (oQuery && oQuery?.Mode === "CREATE") {
                     // if (oQuery?.Mode === "CREATE") {
+                    this._bindRFQSessionTab(oQuery?.RequestForQuotation);
                     const aSupplierQuotation = await Utils.getSupplierQuotationForRFQ(oQuery?.RequestForQuotation, this.getView());
                     const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
                         ? aSupplierQuotation
@@ -54,7 +62,8 @@ sap.ui.define(
                     oCompareQuotationHeader.RequestForQuotation = oQuery?.RequestForQuotation || "";
                     oCompareQuotationHeader.RequisitionNumber = oSelectedRFQForComparison?.to_RequestForQuotationItem[0]?.PurchaseRequisition || "";
                     oCompareQuotationHeader.CompativeStatementTitle = 'New Quotation Comparison';
-                    oCompareQuotationHeader.CompanyCode = oSelectedRFQForComparison?.CompanyCode || "";
+                    oCompareQuotationHeader.CompanyCode = aSupplierQuotation[0]?.CompanyCode || "";
+                    oCompareQuotationHeader.CompanyName = aSupplierQuotation[0]?.CompanyCodeName || "";
                     this.getView().getModel("LocalModel").setProperty("/Mode", "CREATE");
 
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
@@ -76,13 +85,18 @@ sap.ui.define(
                             SupplierName: quotation.SupplierName
                         }))
                     );
+                    this._bindRFQSessionTab(oCompareQuotationHeader?.RequestForQuotation);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
+                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", _CompareQuotationItem);
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotation", aSupplierQuotationData);
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotationItem", aSupplierQuotationItems);
                     this.getView().getModel("LocalModel").setProperty("/Mode", "DISPLAY");
-                    this.setSelectedSupplierQuotations(_CompareQuotationItem);
+                    //this.setSelectedSupplierQuotations(_CompareQuotationItem);
                     // this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oSelectedCompareQuotation);
-
+                    const transformRows = Utils.transformDataforComparisonTable(_CompareQuotationItem);
+                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", transformRows);
+                    //this.generateCOlumnsForComparison(aCompareQuotationItems);
+                    Utils.generateCOlumnsForComparisonTable(this.getView(), _CompareQuotationItem);
                 }
 
             },
@@ -184,22 +198,23 @@ sap.ui.define(
                     var newQuotationComparisonItem = {
                         QuotationComparison: item?.QuotationComparison || '',
                         SNo: ((index + 1) * 10).toString(),
-                        Material: item?.Material || '',
-                        SQItemNumber: item?.ItemNumber || '',
-                        SupplierQuotation: item?.SupplierQuotation || '',
                         Description: item?.PurchasingDocumentItemText || '',
+                        Material: item?.Material || '',
+                        Supplierquotation: item?.SupplierQuotation || '',
+                        Supplierquotationitem: item?.ItemNumber || '',
                         Quantity: item?.ScheduleLineOrderQuantity || 0,
                         Units: item?.BaseUnit || '',
                         SupplierCode: item?.SupplierCode || '',
                         SupplierName: item?.SupplierName || '',
-                        UnitRate: item?.NetPriceAmount || 0,
+                        UnitRate: item?.NetOrderPrice || 0,
                         TotalAmount: item?.NetAmount || 0,
                         Currency: item?.DocumentCurrency || '',
-                        MaterialMake: item?.MaterialMake || '',
+                        MaterialMake: item?.YY1_MaterialMake_PDI || '',
                         Specifications: item?.YY1_Specifications_PDI || '',
-                        ModelNumber: item?.YY1_MaterialMake_PDI || '',
+                        //ModelNumber: item?.YY1_MaterialMake_PDI || '',
                         ContactPerson: item?.ContactPerson || '',
-                        PhoneNumber: item?.PhoneNumber || ''
+                        PhoneNumber: item?.PhoneNumber || '',
+                        // AccountAssignment:item?.AccountingAssignment || ''
                     };
 
 
@@ -207,6 +222,23 @@ sap.ui.define(
                 });
 
                 return aCompareQuotationItem;
+            },
+            prepareCQTermsAndConditionData: function (aCompareQuotationItem) {
+                const aTermsAndCondition = [];
+                aCompareQuotationItem.forEach((item, index) => {
+                    var newTermsAndCondtion = {
+                        QuotationComparison: item?.QuotationComparison || '',
+                        QuotationComparisonItem: item?.SNo || '',
+                        ItemNo: (index + 1).toString(),
+                        KeyField: '',
+                        KeyFieldDesc: '',
+                        ValueField: '',
+                        Field_Property: ''
+                    }
+                    aTermsAndCondition.push(newTermsAndCondtion);
+                });
+
+                return aTermsAndCondition;
             },
             callActionUpsertCompareQuotation: async function (oCompareQuotation, aCompareQuotationItem, sType) {
                 try {
@@ -232,6 +264,9 @@ sap.ui.define(
             onCancelonMCQPress: function () {
                 this.getRouter().navBack();
             },
+            onCompareQuotationPress: function () {
+                this.getView().getModel("LocalModel").setProperty("/IsDisplayCompareQuotation", true);
+            }
 
         });
     }

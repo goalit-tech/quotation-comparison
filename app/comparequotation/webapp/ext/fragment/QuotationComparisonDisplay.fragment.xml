@@ -17,11 +17,145 @@
                 />
                 <ToolbarSeparator id="_IDGenQCFormFragmentToolbarSeparator" />
             </OverflowToolbar>
-    <core:Fragment id="_IDGenQCFormFragmentQCHeader" fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.QuotationComparisonHeader" type="XML" />
-        <VBox id="_IDGenQCFormFragmentVBox">
+   <f:SimpleForm
+        id="_IDGenQCHeaderFragmentSimpleForm1"
+        editable="true"
+        layout="ResponsiveGridLayout"
+        labelSpanXL="4"
+        labelSpanL="4"
+        labelSpanM="4"
+        labelSpanS="12"
+        adjustLabelSpan="false"
+        emptySpanXL="0"
+        emptySpanL="0"
+        emptySpanM="0"
+        emptySpanS="0"
+        columnsXL="3"
+        columnsL="2"
+        columnsM="2"
+        singleContainerFullSize="false"
+    >
+        <f:content>
+            <core:Title
+                id="_IDGenQCHeaderFragmentTitle"
+                text=""
+            />
+            <Label
+                id="_IDGenQCHeaderFragmentLabel"
+                text="Request For Quotation"
+            />
+            <Input
+                id="_IDGenQCHeaderFragmentInput"
+                value="{LocalModel>/CompareQuotationHeader/RequestForQuotation}"
+                editable="false"
+            />
+            <Label
+                id="_IDGenQCHeaderFragmentLabelCompanyCode"
+                text="Company Code"
+            />
+            <Input
+                id="_IDGenQCHeaderFragmentInputCompanyCode"
+                value="{LocalModel>/CompareQuotationHeader/CompanyCode}"
+                editable="false"
+            />
+            <Label
+                id="_IDGenQCHeaderFragmentLabelCompanyName"
+                text="Company Name"
+            />
+            <Input
+                id="_IDGenQCHeaderFragmentInputCompanyName"
+                value="{LocalModel>/CompareQuotationHeader/CompanyName}"
+                editable="false"
+            />
+            <Label
+                id="_IDGenQCHeaderFragmentLabel2"
+                text="Comparative Statement Title"
+            />
+            <Input
+                id="_IDGenQCHeaderFragmentInput2"
+                value="{LocalModel>/CompareQuotationHeader/CompativeStatementTitle}"
+            />
+             <Label
+                id="_IDGenQCHeaderFragmentLabel7"
+                text="Purpose"
+            />
+            
+            <Input
+                id="_IDGenQCHeaderFragmentInput6"
+                value="{LocalModel>/CompareQuotationHeader/Purpose}"
+            />
+            <core:Title
+                id="_IDGenQCHeaderFragmentTitle1"
+                text=""
+            />
+            <Label
+                id="_IDGenQCHeaderFragmentLabel5"
+                text="Requisition Number"
+            />
+            <Input
+                id="_IDGenQCHeaderFragmentInput5"
+                value="{LocalModel>/CompareQuotationHeader/RequisitionNumber}"
+                editable="false"
+            />
+             <Label
+                id="_IDGenQCHeaderFragmentLabel3"
+                text="Requestor Name"
+            />
+            <Input
+                id="_IDGenQCHeaderFragmentInput3"
+                value="{LocalModel>/CompareQuotationHeader/NameOfRequester}"
+                editable="false"
+
+            />
+            <Label
+                id="_IDGenQCHeaderFragmentLabel4"
+                text="Account Assignment"
+            />
+            <Input
+                id="_IDGenQCHeaderFragmentInput4"
+                value="{LocalModel>/CompareQuotationHeader/AccountAssignment}"
+                editable="false"
+            />
+
+            <Label
+                id="_IDGenQCHeaderFragmentLabel6"
+                text="Requisition Date"
+            />
+            <!-- value="{LocalModel>/CompareQuotationHeader/RequisitionDate}" -->
+            <DatePicker
+                id="_IDGenQCHeaderFragmentDatePicker"
+                value="{
+						'path':'LocalModel>/CompareQuotationHeader/RequisitionDate',
+						'type':'sap.ui.model.type.Date',
+						'formatOptions': {
+							'pattern': 'yyyy-MM-dd'
+						}
+					}"
+                    editable="false"
+            />
+             <Label
+                id="_IDGenQCHeaderFragmentLabel8"
+                text="Comparison Date"
+            />
+            <!-- value="{LocalModel>/CompareQuotationHeader/ComparisonDate}" -->
+            <DatePicker
+                id="_IDGenQCHeaderFragmentDatePicker1"
+                value="{
+						'path':'LocalModel>/CompareQuotationHeader/ComparisonDate',
+						'type':'sap.ui.model.type.Date',
+						'formatOptions': {
+							'pattern': 'yyyy-MM-dd'
+						}
+					}"
+            />
+        </f:content>
+    </f:SimpleForm>
+   
+   
+     <VBox id="_IDGenQCFormFragmentVBox">
                 <!-- rows="{oLocalModel>/compareQuotationItemData}" -->
             <uiTable:Table
-                id="_IDGenQCFormFragmentUITable"
+                id="_IDGenQCFormFragmentDynamicUITable"
                 enableCellFilter="true"
                 showNoData="true"
                 selectionMode="None"
@@ -33,6 +167,26 @@
                     }
                 }"
             >
+            <uiTable:extension>
+            <OverflowToolbar
+                id="_IDGenQCFormFragmentUITableOverflowToolbar"
+                style="Clear"
+            >
+                <Title
+                    id="_IDGenQCFormFragmentUITableTitle2"
+                    text="Supplier Quotation and Items"
+                />
+                <ToolbarSpacer id="_IDGenQCFormFragmentUITableToolbarSpacer" />
+                <ToolbarSeparator id="_IDGenQCFormFragmentUITableToolbarSeparator" />
+                <SearchField
+                    id="_IDGenQCFormFragmentUITableSearchField"
+                    placeholder="Filter"
+                    search=".filterGlobally"
+                    width="15rem"
+                    visible="false"
+                />
+            </OverflowToolbar>
+        </uiTable:extension>
                </uiTable:Table>
         </VBox>
 </core:FragmentDefinition>

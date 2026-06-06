@@ -21,7 +21,7 @@ sap.ui.define(
                     "ModelNumber",
                     "Specifications",
                     "Warranty",
-                    "Quantity",
+                    // "Quantity",
                     "Units",
                     "UnitRate",
                     "TotalAmount",
@@ -30,18 +30,18 @@ sap.ui.define(
                     "AddDuties",
                     "BcdPercent",
                     "SwcPercentOnBcd",
+                    // "FreightCharges",
+                    // "Discount",
+                    // "TechnicalCompliance",
+                    // "InsuranceCharges",
+                    // "BankCharges",
+                    // "LocalTransportCharges",
+                    // "LandingCost",
+                    "TermsAndConditions",
+                    // "Density",
                     "HsnCode",
                     "Gst",
                     "TaxAmount",
-                    "FreightCharges",
-                    "Discount",
-                    "TechnicalCompliance",
-                    "InsuranceCharges",
-                    "BankCharges",
-                    "LocalTransportCharges",
-                    "LandingCost",
-                    "TermsAndConditions",
-                    "Density",
                     "ContactPerson",
                     "PhoneNumber",
                 ];
@@ -61,7 +61,7 @@ sap.ui.define(
                 return aRows;
             },
             generateCOlumnsForComparisonTable: function (oView, aSelectedData) {
-                const oTable = oView?.byId("_IDGenCompareQuotationDetailUITable");
+                const oTable = oView?.byId("_IDGenQCFormFragmentDynamicUITable");
                 oTable.removeAllColumns();
 
                 const headerRows = [
@@ -89,9 +89,9 @@ sap.ui.define(
                         template: new sap.m.HBox({
                             items: [
                                 new sap.m.Title({
-                                    text: "{oLocalModel>property}",
+                                    text: "{LocalModel>property}",
                                     visible: {
-                                        path: "oLocalModel>property",
+                                        path: "LocalModel>property",
                                         formatter: function (sProperty) {
                                             return headerRows.includes(sProperty) ? true : false;
                                         }
@@ -99,9 +99,9 @@ sap.ui.define(
                                 }),
 
                                 new sap.m.Text({
-                                    text: "{oLocalModel>property}",
+                                    text: "{LocalModel>property}",
                                     visible: {
-                                        path: "oLocalModel>property",
+                                        path: "LocalModel>property",
                                         formatter: function (sProperty) {
                                             return headerRows.includes(sProperty) ? false : true;
                                         }
@@ -122,12 +122,12 @@ sap.ui.define(
                         items: [
                             // Show Input when property is NOT in headerRows and isEditable
                             new sap.m.Input({
-                                value: "{oLocalModel>" + sSupplierName + "}",
-                                // editable: "{oLocalModel>/compareQuotationIsEditable}",
+                                value: "{LocalModel>" + sSupplierName + "}",
+                                // editable: "{LocalModel>/compareQuotationIsEditable}",
                                 editable: {
                                     parts: [
-                                        { path: "oLocalModel>property" },
-                                        { path: "oLocalModel>/compareQuotationIsEditable" }
+                                        { path: "LocalModel>property" },
+                                        { path: "LocalModel>/compareQuotationIsEditable" }
                                     ],
                                     formatter: function (sProperty, bEditable) {
                                         return nonEditableHeaderRows.includes(sProperty) ? false : true;
@@ -135,8 +135,8 @@ sap.ui.define(
                                 },
                                 visible: {
                                     parts: [
-                                        { path: "oLocalModel>property" },
-                                        { path: "oLocalModel>/compareQuotationIsEditable" }
+                                        { path: "LocalModel>property" },
+                                        { path: "LocalModel>/compareQuotationIsEditable" }
                                     ],
                                     formatter: function (sProperty, bEditable) {
                                         const headerRows = ["AddDuties", "TermsAndConditions"];
@@ -146,11 +146,11 @@ sap.ui.define(
                             }),
                             // Always show Text when property IS in headerRows OR not editable
                             new sap.m.Text({
-                                text: "{oLocalModel>" + sSupplierName + "}",
+                                text: "{LocalModel>" + sSupplierName + "}",
                                 visible: {
                                     parts: [
-                                        { path: "oLocalModel>property" },
-                                        { path: "oLocalModel>/compareQuotationIsEditable" }
+                                        { path: "LocalModel>property" },
+                                        { path: "LocalModel>/compareQuotationIsEditable" }
                                     ],
                                     formatter: function (sProperty, bEditable) {
                                         const headerRows = ["AddDuties", "TermsAndConditions"];
