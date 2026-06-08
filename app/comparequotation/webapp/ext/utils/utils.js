@@ -30,21 +30,6 @@ sap.ui.define(
                     "PhoneNumber",
                     "ConversionRs",
                     "TermsAndConditions",
-                    // "AddDuties",
-                    // "BcdPercent",
-                    // "SwcPercentOnBcd",
-                    // "FreightCharges",
-                    // "Discount",
-                    // "TechnicalCompliance",
-                    // "InsuranceCharges",
-                    // "BankCharges",
-                    // "LocalTransportCharges",
-                    // "LandingCost",
-                    // "Density",
-                    // "HsnCode",
-                    // "Gst",
-                    // "TaxAmount",
-                    // "Warranty",
                 ];
                 aProperties.push(
                     ...(aNewProperties?.filter(prop => !aProperties.includes(prop)) || [])
