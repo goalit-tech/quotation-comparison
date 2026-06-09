@@ -193,6 +193,12 @@ class CapCompareQuotationService extends cds.ApplicationService {
                     status: "Success"
                 };
             } else {
+                if (quotationComparison) {
+                    delete quotationComparison.QuotationComparison;
+                }
+                quotationComparisonItem.forEach((item) => {
+                    delete item.QuotationComparison;
+                });
                 quotationComparison["_CompareQuotationItem"] = quotationComparisonItem;
                 const resultHeader = await S4_QUOTATION_COMPARISON_SRV.create('QuotationComparison', quotationComparison);
                 oMessage = {

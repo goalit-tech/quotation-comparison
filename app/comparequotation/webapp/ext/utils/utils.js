@@ -210,7 +210,7 @@ sap.ui.define(
                         width: "11rem"
                     })
                 );
-                
+
                 const aDyamicSupplierColumns = Object.keys(aRows[0])
                     .filter((sKey) => sKey !== "property");
 
@@ -490,6 +490,6 @@ sap.ui.define(
                     console.error("Error loading Request for CompareQuotation & items", oError);
                     return [];
                 }
-            },
+            }
         };
     });

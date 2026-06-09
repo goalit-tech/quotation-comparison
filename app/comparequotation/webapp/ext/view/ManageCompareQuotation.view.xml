@@ -64,13 +64,26 @@
                     </IconTabFilter>
                     <IconTabFilter
                         id="_IDGenManageCQIconTabFilter2"
-                        text="RFQ"
+                        text="Request For Quotation"
 						visible="true"
                     >
                         <!-- <VBox id="_IDGenManageCQRFQSessionVBox"> -->
                             <core:Fragment
                                 id="_IDGenManageCQRFQDetailFragment"
                                 fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.RFQDetail"
+                                type="XML"
+                            />
+                        <!-- </VBox> -->
+                    </IconTabFilter>
+                    <IconTabFilter
+                        id="_IDGenManageCQIconTabFilterSQ"
+                        text="Supplier Quotation"
+						visible="true"
+                    >
+                        <!-- <VBox id="_IDGenManageCQRFQSessionVBox"> -->
+                            <core:Fragment
+                                id="_IDGenManageCQRFQDetailFragmentSQ"
+                                fragmentName="nlabs.ai.cq.comparequotation.ext.fragment.SupplierQuotationDetail"
                                 type="XML"
                             />
                         <!-- </VBox> -->

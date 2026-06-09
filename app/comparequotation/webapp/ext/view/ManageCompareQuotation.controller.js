@@ -18,31 +18,7 @@ sap.ui.define(
                 // const oRouter = this.editFlow.getAppComponent().getRouter();
                 this.getRouter().getRoute("QuotationComparisonObjectPage").attachPatternMatched(this.onObjectMatched, this);
             },
-            _bindRFQSessionTab: async function (key) {
-                // const oContext = this.getView().getModel().bindContext(
-                //     `/A_RequestForQuotation('${key}')`
-                // );
-                // await oContext.requestObject();
-                debugger
-                this.getView().byId("_IDGenManageCQRFQSessionVBox").bindElement({
-                    path: `/A_RequestForQuotation('${key}')`,
-                    // parameters: {
-                    //     expand: 'to_RequestForQuotationItem'
-                    // }, 
-                    events: {
-                        dataReceived: function (oEvent) {
-                            debugger
-                            const oData = oEvent.getParameter("data");
-                            if (!oData) {
-                                console.error("No data received for key:", key);
-                            }
-                        }
-                    }
-                });
-                // this.getView().byId("_IDGenManageCQIconTabstickySubheaderBar").bindElement(
-                //     `/A_RequestForQuotation(${key})`
-                // );
-            },
+           
             getRouter: function () {
                 return this.editFlow.getAppComponent().getRouter();
             },
@@ -69,7 +45,6 @@ sap.ui.define(
                 // const oLocalModel = this.editFlow.getAppComponent().getModel("LocalModel");
                 if (oQuery && oQuery?.Mode === "CREATE") {
                     // if (oQuery?.Mode === "CREATE") {
-                    this._bindRFQSessionTab(oQuery?.RequestForQuotation);
                     const aSupplierQuotation = await Utils.getSupplierQuotationForRFQ(oQuery?.RequestForQuotation, this.getView());
                     const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
                         ? aSupplierQuotation
@@ -93,6 +68,8 @@ sap.ui.define(
                     this.getView().getModel("LocalModel").setProperty("/Mode", "CREATE");
 
                     this.getView().getModel("LocalModel").setProperty("/IsEditCompareQuotation", true);
+                    this.getView().getModel("LocalModel").setProperty("/RequestForQuotation", oSelectedRFQForComparison);
+                    this.getView().getModel("LocalModel").setProperty("/RequestForQuotationItem", oSelectedRFQForComparison?.to_RequestForQuotationItem);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotation", aSupplierQuotationData);
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotationItem", aSupplierQuotationItems);
@@ -101,8 +78,10 @@ sap.ui.define(
                     const oSelectedCompareQuotation = await Utils.getCompareQuotation(sCompareQuotationId, this.getView());
                     const { _CompareQuotationItem, ...oCompareQuotationHeader } = oSelectedCompareQuotation;
 
-                    this._bindRFQSessionTab(oCompareQuotationHeader?.RequestForQuotation);
+                    const oSelectedRFQForComparison = await Utils.getRequestForQuotation(oCompareQuotationHeader?.RequestForQuotation, this.getView());
                     this.getView().getModel("LocalModel").setProperty("/IsEditCompareQuotation", false);
+                    this.getView().getModel("LocalModel").setProperty("/RequestForQuotation", oSelectedRFQForComparison);
+                    this.getView().getModel("LocalModel").setProperty("/RequestForQuotationItem", oSelectedRFQForComparison?.to_RequestForQuotationItem);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", _CompareQuotationItem);
 
