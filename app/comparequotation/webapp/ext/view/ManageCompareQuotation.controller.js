@@ -94,7 +94,8 @@ sap.ui.define(
                     const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(_CompareQuotationItem);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData);
                     //this.generateCOlumnsForComparison(aCompareQuotationItems);
-                    Utils.generateCOlumnsForComparisonTable(this.getView(), _CompareQuotationItem);
+                    // Utils.generateCOlumnsForComparisonTable(this.getView(), _CompareQuotationItem);
+                    Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationRowsData);
                 }
 
             },
@@ -154,7 +155,8 @@ sap.ui.define(
                 const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(aCompareQuotationItemData);
                 this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData);
                 //this.generateCOlumnsForComparison(aCompareQuotationItems);
-                Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationItemData);
+                // Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationItemData);
+                Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationRowsData);
 
                 this.oSQItemDialog?.close();
             },

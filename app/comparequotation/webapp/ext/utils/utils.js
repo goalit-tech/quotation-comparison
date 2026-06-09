@@ -11,49 +11,128 @@ sap.ui.define(
             },
 
             transformDataforComparisonTable: function (aSelectedData, aNewProperties) {
-                const aProperties = [
+                const aSingleRowsAtTop = [
                     "QuotationComparison",
                     "Supplierquotation",
-                    "Supplierquotationitem",
-                    "SNo",
                     "SupplierCode",
                     "SupplierName",
+                ];
+                const aSingleRowsAtBottom = [
+                    "TermsAndConditions",
+                    "ContactPerson",
+                    "PhoneNumber",
+                ];
+                const aItemRows = [
+                    "Supplierquotationitem",
+                    "SNo",
                     "Description",
+                    "Material",
                     "MaterialMake",
                     "ModelNumber",
                     "Specifications",
                     "Quantity",
                     "Units",
-                    "TotalAmount",
                     "Currency",
-                    "ContactPerson",
-                    "PhoneNumber",
+                    "TotalAmount",
                     "ConversionRs",
-                    "TermsAndConditions",
                 ];
-                aProperties.push(
-                    ...(aNewProperties?.filter(prop => !aProperties.includes(prop)) || [])
+                aSingleRowsAtBottom.push(
+                    ...(aNewProperties?.filter(prop => !aSingleRowsAtBottom.includes(prop)) || [])
                 );
-                const aRows = aProperties.map((sProperty) => {
-                    //create empty row object name
+                const aRows = [];
+                //First create the Header rows for single time
+                aSingleRowsAtTop.forEach((sProperty) => {
                     const oRow = {
                         property: sProperty
                     };
+
                     aSelectedData.forEach((oItem) => {
-                        const sSupplierName = oItem.SupplierName + "_" + oItem.SNo;
-                        oRow[sSupplierName] = oItem[sProperty];
+                        // const sSupplierName = oItem.SupplierName + "_" + oItem.SNo;
+                        const sSupplierName = oItem.SupplierName;
+
+                        if (oRow[sSupplierName] === undefined) {
+                            oRow[sSupplierName] = oItem[sProperty];
+                        }
                     });
 
-                    return oRow;
+                    aRows.push(oRow);
                 });
+                /**
+                 * Then create all the properties of each material in group
+                 * this creates the multiple row of each material type
+                 * Intialy selected the no of material type here based on description
+                 */
+                const mItems = {};
+                aSelectedData.forEach((oItem) => {
+                    const sItemKey = oItem.Description; // choose your actual item key
+                    if (!mItems[sItemKey]) {
+                        mItems[sItemKey] = [];
+                    }
+                    mItems[sItemKey].push(oItem);
+                });
+                // Now for each Material type generate the columns
+                // let iItemNo = 1;
+
+                Object.values(mItems).forEach((aItems) => {
+                    const sItemId = aItems[0].Supplierquotationitem;
+
+                    aItemRows.forEach((sProperty) => {
+                        const oRow = {
+                            property: `${sProperty}_${sItemId}`
+                        };
+
+                        aItems.forEach((oItem) => {
+                            // const sSupplierName = oItem.SupplierName + "_" + oItem.SNo;
+                            const sSupplierName = oItem.SupplierName;
+                            oRow[sSupplierName] = oItem[sProperty];
+                        });
+                        aRows.push(oRow);
+                    });
+
+                    // iItemNo++;
+                });
+
+                // Now again the botton rows which should be common for each materialtype
+                aSingleRowsAtBottom.forEach((sProperty) => {
+
+                    const oRow = {
+                        property: sProperty
+                    };
+
+                    aSelectedData.forEach((oItem) => {
+
+                        // const sSupplierName = oItem.SupplierName + "_" + oItem.SNo;
+                        const sSupplierName = oItem.SupplierName;
+
+                        if (oRow[sSupplierName] === undefined) {
+                            oRow[sSupplierName] = oItem[sProperty];
+                        }
+                    });
+
+                    aRows.push(oRow);
+                });
+
+                // const aRows = aProperties.map((sProperty) => {
+                //     //create empty row object name
+                //     const oRow = {
+                //         property: sProperty
+                //     };
+                //     aSelectedData.forEach((oItem) => {
+                //         const sSupplierName = oItem.SupplierName + "_" + oItem.SNo;
+                //         oRow[sSupplierName] = oItem[sProperty];
+                //     });
+
+                //     return oRow;
+                // });
                 return aRows;
             },
-            generateCOlumnsForComparisonTable: function (oView, aSelectedData) {
+            generateCOlumnsForComparisonTable: function (oView, aRows) {
                 const oTable = oView?.byId("_IDGenQCFormFragmentDynamicUITable");
                 oTable.removeAllColumns();
 
                 const headerRows = [
                     // "AddDuties",
+                    "Description",
                     "TermsAndConditions"
                 ];
                 const nonEditableHeaderRows = [
@@ -63,6 +142,7 @@ sap.ui.define(
                     "SNo",
                     "SupplierCode",
                     "SupplierName",
+                    "Material",
                     "Description",
                     "MaterialMake",
                     "ModelNumber",
@@ -71,8 +151,8 @@ sap.ui.define(
                     "Units",
                     "TotalAmount",
                     "Currency",
-                    "ContactPerson",
-                    "PhoneNumber",
+                    // "ContactPerson",
+                    // "PhoneNumber",
                     "ConversionRs",
                     "TermsAndConditions",
                 ];
@@ -80,111 +160,159 @@ sap.ui.define(
                 // Property column
                 oTable.addColumn(
                     new sap.ui.table.Column({
-                        label: new sap.m.Title({ text: "Property" }),
+                        label: new sap.m.Title({ text: "{i18n>DymanicColumnProperty}" }),
                         template: new sap.m.HBox({
                             items: [
                                 new sap.m.Title({
-                                    text: "{LocalModel>property}",
+                                    text: {
+                                        path: "LocalModel>property",
+                                        formatter: function (sProperty) {
+                                            const oBundle = oView.getModel("i18n").getResourceBundle();
+                                            const sPropertyName = sProperty.split("_")[0];
+
+                                            return oBundle.hasText(sPropertyName)
+                                                ? oBundle.getText(sPropertyName)
+                                                : sPropertyName;
+                                        }.bind(this)
+                                    },
                                     visible: {
                                         path: "LocalModel>property",
                                         formatter: function (sProperty) {
-                                            return headerRows.includes(sProperty) ? true : false;
+                                            const sBaseProperty = sProperty.split("_")[0];
+                                            return headerRows.includes(sBaseProperty) ? true : false;
                                         }
                                     }
                                 }),
 
                                 new sap.m.Text({
-                                    text: "{LocalModel>property}",
+                                    text: {
+                                        path: "LocalModel>property",
+                                        formatter: function (sProperty) {
+                                            const oBundle = oView.getModel("i18n").getResourceBundle();
+
+                                            const sPropertyName = sProperty.split("_")[0];
+
+                                            return oBundle.hasText(sPropertyName)
+                                                ? oBundle.getText(sPropertyName)
+                                                : sPropertyName;
+                                        }.bind(this)
+                                    },
                                     visible: {
                                         path: "LocalModel>property",
                                         formatter: function (sProperty) {
-                                            return headerRows.includes(sProperty) ? false : true;
+                                            const sBaseProperty = sProperty.split("_")[0];
+                                            return headerRows.includes(sBaseProperty) ? false : true;
                                         }
                                     }
                                 })
                             ]
                         }),
-                        width: "auto"
+                        width: "11rem"
                     })
                 );
+                
+                const aDyamicSupplierColumns = Object.keys(aRows[0])
+                    .filter((sKey) => sKey !== "property");
 
-                // Dynamic supplier columns
-                aSelectedData.forEach((oItem) => {
-                    const sSupplierName = oItem.SupplierName + "_" + oItem.SNo;
+                aDyamicSupplierColumns.forEach((sSupplierName) => {
 
-                    // HBox holds both controls; visibility toggled per row
-                    const oTemplate = new sap.m.HBox({
-                        items: [
-                            // Show Input when property is NOT in headerRows and isEditable
-                            new sap.m.Input({
-                                value: "{LocalModel>" + sSupplierName + "}",
-                                // editable: "{LocalModel>/IsEditCompareQuotation}",
-                                editable: {
-                                    parts: [
-                                        { path: "LocalModel>property" },
-                                        { path: "LocalModel>/IsEditCompareQuotation" }
-                                    ],
-                                    formatter: function (sProperty, bEditable) {
-                                        return nonEditableHeaderRows.includes(sProperty) ? false : true;
+                    const oTemplate = new sap.m.HBox(
+                        {
+                            items: [
+                                new sap.m.Input({
+                                    value: "{LocalModel>" + sSupplierName + "}",
+                                    editable: {
+                                        parts: [
+                                            { path: "LocalModel>property" },
+                                            { path: "LocalModel>/IsEditCompareQuotation" }
+                                        ],
+                                        formatter: function (sProperty, bEditable) {
+                                            const sBaseProperty = sProperty.split("_")[0];
+                                            return !nonEditableHeaderRows.includes(sBaseProperty);
+                                        }
+                                    },
+                                    visible: {
+                                        parts: [
+                                            { path: "LocalModel>property" },
+                                            { path: "LocalModel>/IsEditCompareQuotation" }
+                                        ],
+                                        formatter: function (sProperty, bEditable) {
+                                            const headerRows = ["TermsAndConditions"];
+                                            return bEditable && !headerRows.includes(sProperty);
+                                        }
                                     }
-                                },
-                                visible: {
-                                    parts: [
-                                        { path: "LocalModel>property" },
-                                        { path: "LocalModel>/IsEditCompareQuotation" }
-                                    ],
-                                    formatter: function (sProperty, bEditable) {
-                                        const headerRows = ["AddDuties", "TermsAndConditions"];
-                                        return bEditable && !headerRows.includes(sProperty);
+                                }),
+                                new sap.m.Text({
+                                    text: "{LocalModel>" + sSupplierName + "}",
+                                    visible: {
+                                        parts: [
+                                            { path: "LocalModel>property" },
+                                            { path: "LocalModel>/IsEditCompareQuotation" }
+                                        ],
+                                        formatter: function (sProperty, bEditable) {
+                                            const headerRows = ["TermsAndConditions"];
+                                            return !bEditable || headerRows.includes(sProperty);
+                                        }
                                     }
-                                }
-                            }),
-                            // Always show Text when property IS in headerRows OR not editable
-                            new sap.m.Text({
-                                text: "{LocalModel>" + sSupplierName + "}",
-                                visible: {
-                                    parts: [
-                                        { path: "LocalModel>property" },
-                                        { path: "LocalModel>/IsEditCompareQuotation" }
-                                    ],
-                                    formatter: function (sProperty, bEditable) {
-                                        const headerRows = ["AddDuties", "TermsAndConditions"];
-                                        return !bEditable || headerRows.includes(sProperty);
-                                    }
-                                }
-                            })
-                        ]
-                    });
+                                })
+                            ]
+                        });
 
                     oTable.addColumn(
                         new sap.ui.table.Column({
-                            label: new sap.m.Title({ text: sSupplierName }),
+                            label: new sap.m.Title({
+                                text: sSupplierName,
+                                wrapping: true
+                            }),
                             template: oTemplate,
-                            width: "auto"
+                            width: "18rem"
                         })
                     );
                 });
             },
             reverseTransformCompareQuotationItemData: function (oCompareQuotation, aRows) {
-                // Get supplier names dynamically from the first row's keys (excluding "property")
-                const aSupplierNames = Object.keys(aRows[0]).filter(key => key !== "property");
-                // const sSupplierName = sKey.split("_")[0];
-                // Reconstruct one object per supplier
-                const aRestoredItems = aSupplierNames.map(sSupplierName => {
-                    const oItem = {
-                        QuotationComparison: oCompareQuotation?.QuotationComparison,
-                        SupplierName: sSupplierName.split("_")[0]
-                    };
 
-                    // Map each row back to its property on the supplier object
-                    aRows.forEach(oRow => {
-                        oItem[oRow.property] = oRow[sSupplierName];
+                const aSupplierNames = Object.keys(aRows[0])
+                    .filter(sKey => sKey !== "property");
+
+                const aResult = [];
+
+                aSupplierNames.forEach((sSupplierName) => {
+
+                    const oCommonFields = {};
+                    const mItems = {};
+
+                    aRows.forEach((oRow) => {
+
+                        const vValue = oRow[sSupplierName];
+
+                        if (oRow.property.includes("_")) {
+
+                            const [sField, sItemId] = oRow.property.split("_");
+
+                            if (!mItems[sItemId]) {
+                                mItems[sItemId] = {
+                                    QuotationComparison: oCompareQuotation?.QuotationComparison,
+                                    Supplierquotationitem: sItemId,
+                                    SupplierName: sSupplierName
+                                };
+                            }
+
+                            mItems[sItemId][sField] = vValue;
+
+                        } else {
+
+                            oCommonFields[oRow.property] = vValue;
+                        }
                     });
 
-                    return oItem;
+                    Object.values(mItems).forEach((oItem) => {
+                        Object.assign(oItem, oCommonFields);
+                        aResult.push(oItem);
+                    });
                 });
 
-                return aRestoredItems;
+                return aResult;
             },
             transformTermsAndConditionsForTable: function (aTermsAndConditions, aComparisonItems) {
                 const aFields = [

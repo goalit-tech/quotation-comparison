@@ -23,7 +23,7 @@
                 text="Edit"
                 press=".onCompareQuotationEditPress"
                 type="Ghost"
-                visible="{LocalModel>/IsEditCompareQuotation}"
+                visible="{=${LocalModel>/IsEditCompareQuotation}? false:true}"
             />
             <!-- <Button id="_IDGenManageCQButton1" text="Check Policies" press=".onCheckPolicies" type="Ghost" /> -->
         </macros:actions>
