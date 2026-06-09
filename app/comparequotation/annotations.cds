@@ -94,149 +94,76 @@ annotate service.QuotationComparison with @(Capabilities: {
 // DeleteHidden: true,
 );
 
-// Request For Quotation
 annotate service.A_RequestForQuotation with @(UI: {
-    SelectionFields: [
-        RequestForQuotation,
-        PurchasingOrganization
-    ],
-    LineItem       : [
+    HeaderInfo                : {
+        $Type         : 'UI.HeaderInfoType',
+        TypeName      : 'Request For Quotation',
+        TypeNamePlural: 'Request For Quotation',
+    },
+    LineItem                  : [
         {
             $Type: 'UI.DataField',
             Value: RequestForQuotation,
-            Label: 'Request For Quotation',
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: RFQPublishingDate,
-            Label: 'RFQ Publishing Date',
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: PurchasingOrganization,
-            Label: 'Purchasing Organization',
-        },
-        {
-            $Type: 'UI.DataField',
-            Value: PurchasingGroup,
-            Label: 'Purchasing Group',
         },
         {
             $Type: 'UI.DataField',
             Value: CompanyCode,
-            Label: 'Company Code',
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: PurchasingOrganization,
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: PurchasingGroup,
         },
     ],
-});
+    Facets                    : [{
+        $Type : 'UI.ReferenceFacet',
+        Target: '@UI.FieldGroup#GeneralInfoRFQ',
+    }, ],
+    FieldGroup #GeneralInfoRFQ: {
+        $Type: 'UI.FieldGroupType',
+        Data : [
+            {
+                $Type: 'UI.DataField',
+                Value: RequestForQuotation,
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: RequestForQuotationName,
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: PurchasingOrganization,
+            },
+            {
+                $Type: 'UI.DataField',
+                Value: PurchasingGroup,
+            },
+        ]
+    },
+}, );
 
-annotate service.A_RequestForQuotation with @(UI.FieldGroup #GeneralInformation: {Data: [
+annotate service.A_RequestForQuotationItem with @(UI: {LineItem: [
     {
         $Type: 'UI.DataField',
         Value: RequestForQuotation,
-        Label: 'Request For Quotation'
     },
     {
         $Type: 'UI.DataField',
-        Value: RequestForQuotationName,
-        Label: 'Name'
+        Value: RequestForQuotationItem,
     },
     {
         $Type: 'UI.DataField',
-        Label: 'Company Code',
-        Value: CompanyCode,
+        Value: PurchaseRequisition,
     },
     {
         $Type: 'UI.DataField',
-        Label: 'RFQ Date',
-        Value: CreationDate,
+        Value: PurchaseRequisitionItem,
     },
-    {
-        $Type: 'UI.DataField',
-        Label: 'Purchasing Organization',
-        Value: PurchasingOrganization
-    },
-    {
-        $Type: 'UI.DataField',
-        Label: 'Purchasing Group',
-        Value: PurchasingGroup
-    },
-    {
-        $Type: 'UI.DataField',
-        Label: 'Currency',
-        Value: 'DocumentCurrency',
-    },
-    {
-        $Type: 'UI.DataField',
-        Label: 'Target Amount',
-        Value: 'TargetAmount'
-    }
-], }, );
+], });
 
-annotate service.A_RequestForQuotationItem with @(UI: {
-    HeaderInfo: {
-        $Type         : 'UI.HeaderInfoType',
-        TypeName      : 'RFQ Item',
-        TypeNamePlural: 'RFQ Items',
-    },
-    LineItem  : [
-        {
-            $Type: 'UI.DataField',
-            Label: 'Item Number',
-            Value: RequestForQuotationItem,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Purchase Requisition',
-            Value: 'PurchaseRequisition',
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'PR Item',
-            Value: 'PurchaseRequisitionItem',
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Material Code',
-            Value: Material,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Material Group',
-            Value: MaterialGroup,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Quantity',
-            Value: ScheduleLineOrderQuantity,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Units',
-            Value: BaseUnit,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Make',
-            Value: 'YY1_MaterialMake_PDI',
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Specifications',
-            Value: 'YY1_Specifications_PDI',
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Delivery Date',
-            Value: ScheduleLineDeliveryDate,
-        },
-        {
-            $Type: 'UI.DataField',
-            Label: 'Plant',
-            Value: Plant,
-        }
-
-    ],
-});
 
 // Supplier Quotation
 annotate service.SupplierQuotation with @(UI: {LineItem: [

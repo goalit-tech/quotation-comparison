@@ -18,12 +18,30 @@ sap.ui.define(
                 // const oRouter = this.editFlow.getAppComponent().getRouter();
                 this.getRouter().getRoute("QuotationComparisonObjectPage").attachPatternMatched(this.onObjectMatched, this);
             },
-            _bindRFQSessionTab: function (key) {
-                const oContext = this.getView().getModel().bindContext(
-                    `/A_RequestForQuotation(${key}})`
-                ).getBoundContext();
-
-                this.getView().byId("_IDGenManageCQRFQSessionVBox").setBindingContext(oContext);
+            _bindRFQSessionTab: async function (key) {
+                // const oContext = this.getView().getModel().bindContext(
+                //     `/A_RequestForQuotation('${key}')`
+                // );
+                // await oContext.requestObject();
+                debugger
+                this.getView().byId("_IDGenManageCQRFQSessionVBox").bindElement({
+                    path: `/A_RequestForQuotation('${key}')`,
+                    // parameters: {
+                    //     expand: 'to_RequestForQuotationItem'
+                    // }, 
+                    events: {
+                        dataReceived: function (oEvent) {
+                            debugger
+                            const oData = oEvent.getParameter("data");
+                            if (!oData) {
+                                console.error("No data received for key:", key);
+                            }
+                        }
+                    }
+                });
+                // this.getView().byId("_IDGenManageCQIconTabstickySubheaderBar").bindElement(
+                //     `/A_RequestForQuotation(${key})`
+                // );
             },
             getRouter: function () {
                 return this.editFlow.getAppComponent().getRouter();

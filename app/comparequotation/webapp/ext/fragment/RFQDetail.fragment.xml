@@ -5,7 +5,8 @@
     xmlns:smartTable="sap.ui.comp.smarttable"
     xmlns:core="sap.ui.core"
 >
- <macros:Form id="_IDGenRFQDetailForm1" metaPath="/A_RequestForQuotation/@com.sap.vocabularies.UI.v1.FieldGroup#GeneralInformation" title="Request For Quotation" />
+ <VBox id="_IDGenManageCQRFQSessionVBox">
+ <macros:Form id="_IDGenRFQDetailForm1" metaPath="/A_RequestForQuotation/@com.sap.vocabularies.UI.v1.FieldGroup#GeneralInfoRFQ" title="Request For Quotation" />
        <macros:Table id="_IDGenRFQDetailTable"
             metaPath="/A_RequestForQuotation/A_RequestForQuotationItem/@com.sap.vocabularies.UI.v1.LineItem"
             selectionMode="ForceSingle"
@@ -13,5 +14,5 @@
             selectionChange=".onRFQDialogTableRowSelectionChange"
 
         />
-      
+       </VBox>
 </core:FragmentDefinition>
