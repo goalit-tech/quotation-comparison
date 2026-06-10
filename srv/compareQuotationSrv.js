@@ -150,7 +150,7 @@ class CapCompareQuotationService extends cds.ApplicationService {
         }
         return Array.isArray(from?.ref) && from.ref.some(r => r === sEntitySetName);
     }
-    async upsertCompareQuotation(quotationComparison, quotationComparisonItem, type) {
+    async upsertCompareQuotation(quotationComparison, quotationComparisonItem, aTermsAndConditoin, type) {
         try {
             const S4_QUOTATION_COMPARISON_SRV =
                 await cds.connect.to("S4_API_QUOTATION_COMPARISON");
@@ -170,17 +170,45 @@ class CapCompareQuotationService extends cds.ApplicationService {
                     path: `/QuotationComparison('${quotationComparison.QuotationComparison}')`,
                     data: quotationComparison
                 });
-
-                for (const item of quotationComparisonItem) {
+                //QuoationComparison Item update or ccreate
+                for (const item of aTermsAndConditoin) {
 
                     // Existing item
-                    if (item.QuotationComparison && item.SNo) {
+                    if (item.QuotationComparison) {
 
                         const { QuotationComparison, SNo, ...itemPayload } = item;
 
                         await S4_QUOTATION_COMPARISON_SRV.send({
                             method: "PATCH",
                             path: `/QuotationComparisonItem(QuotationComparison='${QuotationComparison}',SNo='${SNo}')`,
+                            data: itemPayload
+                        });
+
+                    }
+                    // New item
+                    else {
+
+                        // delete item.SNo;
+                        delete item.QuotationComparison;
+
+                        await S4_QUOTATION_COMPARISON_SRV.send({
+                            method: "POST",
+                            path: `/QuotationComparison('${quotationComparison.QuotationComparison}')/_CompareQuotationItem`,
+                            data: item
+                        });
+                    }
+                }
+                //Update or create of Terms and conditions
+                for (const item of aTermsAndConditoin) {
+
+                    // Existing item
+                    if (item.QuotationComparison) {
+
+                        const { QuotationComparison, QuotationComparisonItem, ItemNo, ...itemPayload } = item;
+
+                        await S4_QUOTATION_COMPARISON_SRV.send({
+                            method: "PATCH",
+                            path: `/QuotationComparisonItem(QuotationComparison='${QuotationComparison}',QuotationComparisonItem='${QuotationComparisonItem}',ItemNo='${ItemNo}')`,
                             data: itemPayload
                         });
 
@@ -368,6 +396,34 @@ class CapCompareQuotationService extends cds.ApplicationService {
     //         };
     //     }
     // }
+    async saveTermsAndCondition(aTermsAndConditons) {
+        for (const item of aTermsAndConditons) {
+            // Existing item
+            if (item.QuotationComparison && item.ItemNo) {
+
+                const { QuotationComparison, QuotationComparisonItem, ItemNo, ...itemPayload } = item;
+
+                await S4_QUOTATION_COMPARISON_SRV.send({
+                    method: "PATCH",
+                    path: `/TermsAndConditions(QuotationComparison='${QuotationComparison}',QuotationComparisonItem='${QuotationComparisonItem}',SNo='${ItemNo}')`,
+                    data: itemPayload
+                });
+
+            }
+            // New item
+            else {
+
+                delete item.SNo;
+                delete item.QuotationComparison;
+
+                await S4_QUOTATION_COMPARISON_SRV.send({
+                    method: "POST",
+                    path: `/TermsAndConditions`,
+                    data: item
+                });
+            }
+        }
+    }
     workflowForCompareQuotation(req) {
         return { message: "Workflow executed successfully" };
     }

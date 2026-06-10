@@ -19,8 +19,8 @@ sap.ui.define(
                 ];
                 const aSingleRowsAtBottom = [
                     "TermsAndConditions",
-                    "ContactPerson",
-                    "PhoneNumber",
+                    // "ContactPerson",
+                    // "PhoneNumber",
                 ];
                 const aItemRows = [
                     "Supplierquotationitem",
@@ -270,7 +270,7 @@ sap.ui.define(
                     );
                 });
             },
-            reverseTransformCompareQuotationItemData: function (oCompareQuotation, aRows,acurrentSelectedRow) {
+            reverseTransformCompareQuotationItemData: function (oCompareQuotation, aRows) {
 
                 const aSupplierNames = Object.keys(aRows[0])
                     .filter(sKey => sKey !== "property");
@@ -321,6 +321,60 @@ sap.ui.define(
 
                 return aResult;
             },
+
+
+            generateTermsAndConditions: function (
+                oCompareQuotation,
+                aRows,
+                aPreDefinedTerms
+            ) {
+
+                const aTermsAndConditions = [];
+                let iCompareQuotationItem = 10;
+
+                const mTermsLookup = {};
+                aPreDefinedTerms.forEach((oTerm) => {
+                    mTermsLookup[oTerm.KeyField] = oTerm.KeyFieldDesc;
+                });
+
+                const aSupplierNames = Object.keys(aRows[0])
+                    .filter((sKey) => sKey !== "property");
+
+                aRows.forEach((oRow) => {
+
+                    // Check if this row is a predefined term
+                    if (!mTermsLookup[oRow.property]) {
+                        return;
+                    }
+
+                    aSupplierNames.forEach((sSupplierName) => {
+
+                        const vValue = oRow[sSupplierName];
+
+                        if (
+                            vValue !== undefined &&
+                            vValue !== null &&
+                            vValue !== ""
+                        ) {
+
+                            aTermsAndConditions.push({
+                                QuotationComparison: oCompareQuotation?.QuotationComparison,
+                                CompareQuotationItem: String(iCompareQuotationItem).padStart(2, "0"),
+                                SupplierName: sSupplierName,
+                                KeyField: oRow.property,
+                                KeyFieldDesc: mTermsLookup[oRow.property],
+                                KeyFieldValue: vValue
+                            });
+
+                            iCompareQuotationItem += 10;
+                        }
+                    });
+                });
+
+                return aTermsAndConditions;
+            },
+
+
             transformTermsAndConditionsForTable: function (aTermsAndConditions, aComparisonItems) {
                 const aFields = [
                     {
@@ -483,14 +537,24 @@ sap.ui.define(
                     `/QuotationComparison('${keyId}')`,
                     undefined,
                     {
-                        $expand: "_CompareQuotationItem"
+                        $expand: "_CompareQuotationItem,_TermsAndConditions"
                     }
                 );
 
                 try {
                     const oCompareQuotation = await oContextBinding.requestObject();
-
+                    // const oCompareQuotation =
                     console.log("Compare Quotation", oCompareQuotation);
+                    // oQuotationComparison?._CompareQuotationItem.forEach(oItem => {
+                    //     const aItemTerms = aTerms.filter(
+                    //         oTerm => oTerm.QuotationComparisonItem === oItem.SNo
+                    //     );
+
+                    //     aItemTerms.forEach(oTerm => {
+                    //         oItem[oTerm.KeyField] = oTerm.ValueField;
+                    //     });
+
+                    // });
                     return oCompareQuotation;
 
                 } catch (oError) {

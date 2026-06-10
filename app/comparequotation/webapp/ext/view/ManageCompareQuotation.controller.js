@@ -46,10 +46,6 @@ sap.ui.define(
                 let sCompareQuotationId = oArgs.key;
                 sCompareQuotationId = sCompareQuotationId ? sCompareQuotationId.replace(/^'|'$/g, '') : '';
                 const oQuery = oArgs["?query"];
-                // console.log(sCompareQuotationId);      // 3150000001
-                // console.log(oQuery.Mode); // CREATE
-                // console.log(oQuery.RequestForQuotation); // 1000
-                // const oLocalModel = this.editFlow.getAppComponent().getModel("LocalModel");
                 if (oQuery && oQuery?.Mode === "CREATE") {
                     // if (oQuery?.Mode === "CREATE") {
                     const aSupplierQuotation = await Utils.getSupplierQuotationForRFQ(oQuery?.RequestForQuotation, this.getView());
@@ -82,7 +78,6 @@ sap.ui.define(
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotationItem", aSupplierQuotationItems);
 
                 } else {
-                    debugger
                     const oSelectedCompareQuotation = await Utils.getCompareQuotation(sCompareQuotationId, this.getView());
                     const { _CompareQuotationItem, ...oCompareQuotationHeader } = oSelectedCompareQuotation;
                     oCompareQuotationHeader.ComparisonDate =
@@ -185,13 +180,14 @@ sap.ui.define(
                 this.getView().setBusy(true);
                 try {
                     const oCompareQuotation = this.prepareCompareQuotationDataForSave();
-                    const asupplierQuotationItemSelected = this.getView().getModel("LocalModel").getProperty("/supplierQuotationItemSelected");
+                    //const asupplierQuotationItemSelected = this.getView().getModel("LocalModel").getProperty("/supplierQuotationItemSelected");
                     const aCompareQuotationRowsData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationRowsData");
-                    const aTransFormedCompareQuotationItem = Utils.reverseTransformCompareQuotationItemData(oCompareQuotation, aCompareQuotationRowsData, asupplierQuotationItemSelected);
+                    const aTransFormedCompareQuotationItem = Utils.reverseTransformCompareQuotationItemData(oCompareQuotation, aCompareQuotationRowsData);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", aTransFormedCompareQuotationItem);
-
+                    const aTermsAndConditoin = Utils.generateTermsAndConditions(oCompareQuotation, aCompareQuotationRowsData);
                     // aTransFormedCompareQuotationItem
                     const aCompareQuotationItem = this.prepareCompareQuotationItemDataForSave();
+
                     oCompareQuotation.ComparisonDate = oCompareQuotation.ComparisonDate ? (oCompareQuotation.ComparisonDate instanceof Date
                         ? oCompareQuotation.ComparisonDate.toISOString().split("T")[0]
                         : oCompareQuotation.ComparisonDate)
@@ -201,7 +197,7 @@ sap.ui.define(
                         : oCompareQuotation.RequisitionDate)
                         : null;
                     var sMode = this.getView().getModel("LocalModel").getProperty("/Mode");
-                    const oResult = await this.callActionUpsertCompareQuotation(oCompareQuotation, aCompareQuotationItem, sMode);
+                    const oResult = await this.callActionUpsertCompareQuotation(oCompareQuotation, aCompareQuotationItem, aTermsAndConditoin, sMode);
                     if (oResult?.status === "Error") {
                         this.getView().setBusy(false);
                         sap.m.MessageToast.show(`Error on Create Quotation Comparison ${oResult?.message || oResult?.error}`);
