@@ -270,7 +270,7 @@ sap.ui.define(
                     );
                 });
             },
-            reverseTransformCompareQuotationItemData: function (oCompareQuotation, aRows) {
+            reverseTransformCompareQuotationItemData: function (oCompareQuotation, aRows,acurrentSelectedRow) {
 
                 const aSupplierNames = Object.keys(aRows[0])
                     .filter(sKey => sKey !== "property");
@@ -288,7 +288,14 @@ sap.ui.define(
 
                         if (oRow.property.includes("_")) {
 
-                            const [sField, sItemId] = oRow.property.split("_");
+                            const iLastUnderscore = oRow.property.lastIndexOf("_");
+                            const sField = oRow.property.substring(0, iLastUnderscore);
+                            const sItemId = oRow.property.substring(iLastUnderscore + 1);
+
+                            // Skip rows that don't exist for this supplier
+                            if (vValue === undefined) {
+                                return;
+                            }
 
                             if (!mItems[sItemId]) {
                                 mItems[sItemId] = {

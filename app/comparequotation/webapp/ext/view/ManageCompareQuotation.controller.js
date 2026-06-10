@@ -27,6 +27,8 @@ sap.ui.define(
             },
             resetLocalModel: function () {
                 const oModel = this.getView().getModel("LocalModel");
+                const oTable = this.getView().byId("_IDGenQCFormFragmentDynamicUITable");
+                oTable?.removeAllColumns();
 
                 return new Promise((resolve, reject) => {
                     jQuery.getJSON("model/localModel.json")
@@ -80,9 +82,21 @@ sap.ui.define(
                     this.getView().getModel("LocalModel").setProperty("/SupplierQuotationItem", aSupplierQuotationItems);
 
                 } else {
+                    debugger
                     const oSelectedCompareQuotation = await Utils.getCompareQuotation(sCompareQuotationId, this.getView());
                     const { _CompareQuotationItem, ...oCompareQuotationHeader } = oSelectedCompareQuotation;
-
+                    oCompareQuotationHeader.ComparisonDate =
+                        oCompareQuotationHeader.ComparisonDate
+                            ? (oCompareQuotationHeader.ComparisonDate instanceof Date
+                                ? oCompareQuotationHeader.ComparisonDate
+                                : new Date(oCompareQuotationHeader.ComparisonDate))
+                            : null;
+                    oCompareQuotationHeader.RequisitionDate =
+                        oCompareQuotationHeader.RequisitionDate
+                            ? (oCompareQuotationHeader.RequisitionDate instanceof Date
+                                ? oCompareQuotationHeader.RequisitionDate
+                                : new Date(oCompareQuotationHeader.RequisitionDate))
+                            : null;
                     const oSelectedRFQForComparison = await Utils.getRequestForQuotation(oCompareQuotationHeader?.RequestForQuotation, this.getView());
                     this.getView().getModel("LocalModel").setProperty("/IsEditCompareQuotation", false);
                     this.getView().getModel("LocalModel").setProperty("/RequestForQuotation", oSelectedRFQForComparison);
@@ -168,12 +182,12 @@ sap.ui.define(
             },
 
             onSaveMCQPress: async function () {
-                debugger
                 this.getView().setBusy(true);
                 try {
                     const oCompareQuotation = this.prepareCompareQuotationDataForSave();
+                    const asupplierQuotationItemSelected = this.getView().getModel("LocalModel").getProperty("/supplierQuotationItemSelected");
                     const aCompareQuotationRowsData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationRowsData");
-                    const aTransFormedCompareQuotationItem = Utils.reverseTransformCompareQuotationItemData(oCompareQuotation, aCompareQuotationRowsData);
+                    const aTransFormedCompareQuotationItem = Utils.reverseTransformCompareQuotationItemData(oCompareQuotation, aCompareQuotationRowsData, asupplierQuotationItemSelected);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", aTransFormedCompareQuotationItem);
 
                     // aTransFormedCompareQuotationItem
@@ -192,9 +206,19 @@ sap.ui.define(
                         this.getView().setBusy(false);
                         sap.m.MessageToast.show(`Error on Create Quotation Comparison ${oResult?.message || oResult?.error}`);
                     } else {
-                        sap.m.MessageToast.show("Quotation Created successfully");
+
                         this.getView().setBusy(false);
-                        window.history.go(-1);
+                        if (sMode === 'CREATE') {
+                            window.history.go(-1);
+                        } else {
+                            // sap.m.MessageToast.show("Quotation Created successfully");
+                            sap.m.MessageToast.show("Quotation Created successfully", {
+                                duration: 1000,
+                                onClose: () => {
+                                    window.location.reload(true);
+                                }
+                            });
+                        }
                     }
                 }
                 catch (error) {

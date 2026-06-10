@@ -35,7 +35,7 @@ class CapCompareQuotationService extends cds.ApplicationService {
             const rfqKey = from.ref[0]?.where;
             const rfqId = rfqKey?.find(e => e.val)?.val;
             if (rfqId) {
-                query.where({ RequestForQuotation: rfqId });
+                query.where({ QuotationComparison: rfqId });
             }
         } else if (sel.where) {
             query.SELECT.where = sel.where;
@@ -137,6 +137,17 @@ class CapCompareQuotationService extends cds.ApplicationService {
     }
 
     entitySetAvailableInUrl(from, sEntitySetName) {
+        //return (!Array.isArray(from?.ref));// && from.ref.some(r => r === sEntitySetName);
+        const refEntry = from?.ref?.[0];
+        const entityFullId = typeof refEntry === 'string'
+            ? refEntry                  // plain string case
+            : refEntry?.id ?? '';       // object case
+        const entityName = entityFullId.includes('.')
+            ? entityFullId.split('.').pop()
+            : entityFullId;
+        if (entityName && entityName === sEntitySetName) {
+            return true;
+        }
         return Array.isArray(from?.ref) && from.ref.some(r => r === sEntitySetName);
     }
     async upsertCompareQuotation(quotationComparison, quotationComparisonItem, type) {
