@@ -18,7 +18,7 @@ sap.ui.define(
                 // const oRouter = this.editFlow.getAppComponent().getRouter();
                 this.getRouter().getRoute("QuotationComparisonObjectPage").attachPatternMatched(this.onObjectMatched, this);
             },
-           
+
             getRouter: function () {
                 return this.editFlow.getAppComponent().getRouter();
             },
@@ -28,13 +28,18 @@ sap.ui.define(
             resetLocalModel: function () {
                 const oModel = this.getView().getModel("LocalModel");
 
-                jQuery.getJSON("model/localModel.json", function (oData) {
-                    oModel.setData(oData);
+                return new Promise((resolve, reject) => {
+                    jQuery.getJSON("model/localModel.json")
+                        .done(function (oData) {
+                            oModel.setData(oData);
+                            resolve();
+                        })
+                        .fail(reject);
                 });
             },
 
             onObjectMatched: async function (oEvent) {
-                this.resetLocalModel();
+                await this.resetLocalModel();
                 const oArgs = oEvent.getParameter("arguments");
                 let sCompareQuotationId = oArgs.key;
                 sCompareQuotationId = sCompareQuotationId ? sCompareQuotationId.replace(/^'|'$/g, '') : '';
@@ -136,19 +141,20 @@ sap.ui.define(
                 this.getView().getModel("LocalModel").setProperty("/supplierQuotationItemSelected", aSelectedSupplierQuotationItems);
                 const oCompareQuotationHeader = this.getView().getModel("LocalModel").getProperty("/CompareQuotationHeader");
                 const sMode = this.getView().getModel("LocalModel").getProperty("/Mode");
-                const aCompareQuotationItemData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationItemData");
-                const aCompareQuotationItem = this.prepareCompareQuotationItemData();
-                var currentIndex = aCompareQuotationItemData.length;
-                aCompareQuotationItem.forEach(eachItem => {
-                    if (sMode === 'CREATE') {
-                        eachItem.SNo = ((currentIndex + 1) * 10).toString();
-                    } else {
+                // const aCompareQuotationItemData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationItemData");
+                const aCompareQuotationItemData = this.prepareCompareQuotationItemData();
+                this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", aCompareQuotationItemData);
+                // var currentIndex = aCompareQuotationItemData.length;
+                // aCompareQuotationItem.forEach(eachItem => {
+                //     if (sMode === 'CREATE') {
+                //         eachItem.SNo = ((currentIndex + 1) * 10).toString();
+                //     } else {
 
-                        eachItem.QuotationComparison = oCompareQuotationHeader?.QuotationComparison || '';
-                        eachItem.SNo = ((currentIndex + 1) * 10).toString();
-                    }
-                    aCompareQuotationItemData.push(eachItem);
-                })
+                //         eachItem.QuotationComparison = oCompareQuotationHeader?.QuotationComparison || '';
+                //         eachItem.SNo = ((currentIndex + 1) * 10).toString();
+                //     }
+                //     aCompareQuotationItemData.push(eachItem);
+                // })
                 const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(aCompareQuotationItemData);
                 this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData);
                 //this.generateCOlumnsForComparison(aCompareQuotationItems);
@@ -188,6 +194,7 @@ sap.ui.define(
                     } else {
                         sap.m.MessageToast.show("Quotation Created successfully");
                         this.getView().setBusy(false);
+                        window.history.go(-1);
                     }
                 }
                 catch (error) {
@@ -301,11 +308,15 @@ sap.ui.define(
             prepareCompareQuotationItemData: function () {
                 const aSelectedItems = this.getView().getModel("LocalModel").getProperty("/supplierQuotationItemSelected") || [];
                 const aCompareQuotationItem = [];
-
+                const aCompareQuotationItemData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationItemData");
+                let snoIndex = 0;
+                if (aCompareQuotationItemData && aCompareQuotationItemData.length) {
+                    snoIndex = aCompareQuotationItemData.length;
+                }
                 aSelectedItems.forEach((item, index) => {
                     var newQuotationComparisonItem = {
                         QuotationComparison: item?.QuotationComparison || '',
-                        SNo: ((index + 1) * 10).toString(),
+                        SNo: ((snoIndex + 1) * 10).toString(),
                         Description: item?.PurchasingDocumentItemText || '',
                         Material: item?.Material || '',
                         Supplierquotation: item?.SupplierQuotation || '',
@@ -326,10 +337,11 @@ sap.ui.define(
                     };
 
 
-                    aCompareQuotationItem.push(newQuotationComparisonItem);
+                    aCompareQuotationItemData.push(newQuotationComparisonItem);
+                    snoIndex++;
                 });
 
-                return aCompareQuotationItem;
+                return aCompareQuotationItemData;
             },
             prepareCQTermsAndConditionData: function (aCompareQuotationItem) {
                 const aTermsAndCondition = [];

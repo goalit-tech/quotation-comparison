@@ -23,6 +23,17 @@
           "annotations": [],
           "odataVersion": "4.01"
         }
+      },
+      "qcmainService": {
+        "uri": "/sap/opu/odata4/sap/zsb_quot_comp/srvd/sap/zsd_quot_comp_hdr/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
       }
     }
   },
@@ -65,6 +76,15 @@
       },
       "": {
         "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "QCServiceModel": {
+        "dataSource": "qcmainService",
         "preload": true,
         "settings": {
           "operationMode": "Server",

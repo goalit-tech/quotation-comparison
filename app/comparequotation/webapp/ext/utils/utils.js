@@ -168,7 +168,7 @@ sap.ui.define(
                                         path: "LocalModel>property",
                                         formatter: function (sProperty) {
                                             const oBundle = oView.getModel("i18n").getResourceBundle();
-                                            const sPropertyName = sProperty.split("_")[0];
+                                            const sPropertyName = sProperty?.split("_")[0];
 
                                             return oBundle.hasText(sPropertyName)
                                                 ? oBundle.getText(sPropertyName)
@@ -178,7 +178,7 @@ sap.ui.define(
                                     visible: {
                                         path: "LocalModel>property",
                                         formatter: function (sProperty) {
-                                            const sBaseProperty = sProperty.split("_")[0];
+                                            const sBaseProperty = sProperty?.split("_")[0];
                                             return headerRows.includes(sBaseProperty) ? true : false;
                                         }
                                     }
@@ -190,7 +190,7 @@ sap.ui.define(
                                         formatter: function (sProperty) {
                                             const oBundle = oView.getModel("i18n").getResourceBundle();
 
-                                            const sPropertyName = sProperty.split("_")[0];
+                                            const sPropertyName = sProperty?.split("_")[0];
 
                                             return oBundle.hasText(sPropertyName)
                                                 ? oBundle.getText(sPropertyName)
@@ -200,7 +200,7 @@ sap.ui.define(
                                     visible: {
                                         path: "LocalModel>property",
                                         formatter: function (sProperty) {
-                                            const sBaseProperty = sProperty.split("_")[0];
+                                            const sBaseProperty = sProperty?.split("_")[0];
                                             return headerRows.includes(sBaseProperty) ? false : true;
                                         }
                                     }
@@ -227,7 +227,7 @@ sap.ui.define(
                                             { path: "LocalModel>/IsEditCompareQuotation" }
                                         ],
                                         formatter: function (sProperty, bEditable) {
-                                            const sBaseProperty = sProperty.split("_")[0];
+                                            const sBaseProperty = sProperty?.split("_")[0];
                                             return !nonEditableHeaderRows.includes(sBaseProperty);
                                         }
                                     },

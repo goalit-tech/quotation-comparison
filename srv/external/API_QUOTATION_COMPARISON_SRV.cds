@@ -1,4 +1,4 @@
-/* checksum : 2abc32e468ab89f6cf864999b0828108 */
+/* checksum : 3842d7aa5524462949e61079563c9a70 */
 @cds.external : true
 @CodeList.CurrencyCodes.Url : '../../../../default/iwbep/common/0001/$metadata'
 @CodeList.CurrencyCodes.CollectionPath : 'Currencies'
@@ -96,7 +96,7 @@ service S4_API_QUOTATION_COMPARISON {
   @Capabilities.DeepUpdateSupport.ContentIDSupported : true
   @Capabilities.DeleteRestrictions.Deletable : ![__EntityControl/Deletable]
   entity QuotationComparison {
-    @Core.Computed : true
+    @Core.ComputedDefaultValue : true
     key QuotationComparison : String(10) not null;
     RequestForQuotation : String(10) not null;
     CompanyCode : String(4) not null;
@@ -165,7 +165,7 @@ service S4_API_QUOTATION_COMPARISON {
   @Capabilities.InsertRestrictions.Insertable : false
   @Capabilities.DeleteRestrictions.Deletable : ![__EntityControl/Deletable]
   entity QuotationComparisonItem {
-    @Core.Computed : true
+    @Core.ComputedDefaultValue : true
     key QuotationComparison : String(10) not null;
     @Core.ComputedDefaultValue : true
     @Common.IsDigitSequence : true

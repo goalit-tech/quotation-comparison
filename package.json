@@ -73,6 +73,10 @@
         },
         "csrf": true,
         "csrfInBatch": true
+      },
+      "API_QUOTATION_COMPARISON_SRV": {
+        "kind": "odata",
+        "model": "srv/external/API_QUOTATION_COMPARISON_SRV"
       }
     }
   },
