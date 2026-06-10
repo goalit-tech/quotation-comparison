@@ -120,7 +120,24 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
 
       //     return oRow;
       // });
-      return aRows;
+      const nonVisibleRows = [
+        "QuotationComparison",
+        "Supplierquotation",
+        "Supplierquotationitem",
+        "SNo",
+        "SupplierCode",
+        "SupplierName",
+      ];
+      const aVisibleRows = aRows.filter((row) => {
+        const base = row.property?.split("_")[0];
+        return !nonVisibleRows.includes(base);
+      });
+
+      // oModel.setProperty("/TableRows", aVisibleRows);
+      return {
+        actualRows: aRows,
+        filterRows: aVisibleRows,
+      };
     },
     generateCOlumnsForComparisonTable: function (oView, aRows) {
       const oTable = oView?.byId("_IDGenQCFormFragmentDynamicUITable");

@@ -103,10 +103,11 @@ sap.ui.define(
                     //this.setSelectedSupplierQuotationItemRow(_CompareQuotationItem);
                     // this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oSelectedCompareQuotation);
                     const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(_CompareQuotationItem);
-                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData);
+                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationActualRowsData", aCompareQuotationRowsData?.actualRows);
+                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData?.filterRows);
                     //this.generateCOlumnsForComparison(aCompareQuotationItems);
                     // Utils.generateCOlumnsForComparisonTable(this.getView(), _CompareQuotationItem);
-                    Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationRowsData);
+                    Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationRowsData?.filterRows);
                 }
 
             },
@@ -165,10 +166,11 @@ sap.ui.define(
                 //     aCompareQuotationItemData.push(eachItem);
                 // })
                 const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(aCompareQuotationItemData);
-                this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData);
+                this.getView().getModel("LocalModel").setProperty("/CompareQuotationActualRowsData", aCompareQuotationRowsData?.actualRows);
+                this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData?.filterRows);
                 //this.generateCOlumnsForComparison(aCompareQuotationItems);
                 // Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationItemData);
-                Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationRowsData);
+                Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationRowsData?.filterRows);
 
                 this.oSQItemDialog?.close();
             },
@@ -177,11 +179,14 @@ sap.ui.define(
             },
 
             onSaveMCQPress: async function () {
+                debugger
                 this.getView().setBusy(true);
                 try {
                     const oCompareQuotation = this.prepareCompareQuotationDataForSave();
                     //const asupplierQuotationItemSelected = this.getView().getModel("LocalModel").getProperty("/supplierQuotationItemSelected");
                     const aCompareQuotationRowsData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationRowsData");
+                    const aCompareQuotationActualRowsData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationActualRowsData");
+                    //merge all the columns
                     const aTransFormedCompareQuotationItem = Utils.reverseTransformCompareQuotationItemData(oCompareQuotation, aCompareQuotationRowsData);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", aTransFormedCompareQuotationItem);
                     const aTermsAndConditoin = Utils.generateTermsAndConditions(oCompareQuotation, aCompareQuotationRowsData);
