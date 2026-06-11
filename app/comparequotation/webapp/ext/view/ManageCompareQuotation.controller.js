@@ -107,7 +107,8 @@ sap.ui.define(
 
                     const updatedPredefineTerms = Utils.updatePredefinedTermsSelectable(aPreDefinedTerms, _TermsAndConditions);
                     this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/PreDefinedTermsAndCondition", updatedPredefineTerms);
-                    const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(aMergersItemsAndTerms);
+                    const aExistingKeys = Array.from(new Set(_TermsAndConditions.map(oTerm => oTerm.KeyField)));
+                    const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(aMergersItemsAndTerms, aExistingKeys);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationActualRowsData", aCompareQuotationRowsData?.actualRows);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData?.filterRows);
                     //this.generateCOlumnsForComparison(aCompareQuotationItems);
