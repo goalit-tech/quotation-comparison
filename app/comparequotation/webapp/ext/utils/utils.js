@@ -105,14 +105,7 @@ sap.ui.define(['sap/ui/model/json/JSONModel'], function (JSONModel) {
         aRows.push(oRow);
       });
 
-      const nonVisibleRows = [
-        'QuotationComparison',
-        'Supplierquotation',
-        'Supplierquotationitem',
-        'SNo',
-        'SupplierCode',
-        'SupplierName',
-      ];
+      const nonVisibleRows = ['QuotationComparison', 'Supplierquotation', 'Supplierquotationitem', 'SNo', 'SupplierCode', 'SupplierName'];
       const aVisibleRows = aRows.filter((row) => {
         const base = row.property?.split('_')[0];
         return !nonVisibleRows.includes(base);
@@ -171,7 +164,7 @@ sap.ui.define(['sap/ui/model/json/JSONModel'], function (JSONModel) {
     generateCOlumnsForComparisonTable: function (oView, aRows) {
       const oTable = oView?.byId('_IDGenQCFormFragmentDynamicUITable');
       oTable.removeAllColumns();
-
+      const aPredefinedTermsList = oView.getModel('LocalModel').getProperty('/TermsAndConditionDialog/PreDefinedTermsAndCondition');
       const headerRows = [
         // "AddDuties",
         'Description',
@@ -229,7 +222,14 @@ sap.ui.define(['sap/ui/model/json/JSONModel'], function (JSONModel) {
                   formatter: function (sProperty) {
                     const oBundle = oView.getModel('i18n').getResourceBundle();
                     const sPropertyName = sProperty?.split('_')[0];
-                    return oBundle.hasText(sPropertyName) ? oBundle.getText(sPropertyName) : sPropertyName;
+                    const sKeyFieldDesc = aPredefinedTermsList.find((oItem) => oItem.KeyField === sPropertyName)?.KeyFieldDesc || '';
+                    let textToDisplay = '';
+                    if (sKeyFieldDesc) {
+                      textToDisplay = sKeyFieldDesc;
+                    } else {
+                      textToDisplay = oBundle.hasText(sPropertyName) ? oBundle.getText(sPropertyName) : sPropertyName;
+                    }
+                    return textToDisplay;
                   }.bind(this),
                 },
                 visible: {
@@ -253,13 +253,14 @@ sap.ui.define(['sap/ui/model/json/JSONModel'], function (JSONModel) {
           items: [
             new sap.m.Input({
               value: '{LocalModel>' + sSupplierName + '}',
-              editable: {
-                parts: [{ path: 'LocalModel>property' }, { path: 'LocalModel>/IsEditCompareQuotation' }],
-                formatter: function (sProperty, bEditable) {
-                  const sBaseProperty = sProperty?.split('_')[0];
-                  return !nonEditableHeaderRows.includes(sBaseProperty);
-                },
-              },
+              editable: '{LocalModel>/IsEditCompareQuotation}',
+              //  {
+              //   parts: [{ path: 'LocalModel>property' }, { path: 'LocalModel>/IsEditCompareQuotation' }],
+              //   formatter: function (sProperty, bEditable) {
+              //     const sBaseProperty = sProperty?.split('_')[0];
+              //     // return !nonEditableHeaderRows.includes(sBaseProperty);
+              //   },
+              // },
               visible: {
                 parts: [{ path: 'LocalModel>property' }, { path: 'LocalModel>/IsEditCompareQuotation' }],
                 formatter: function (sProperty, bEditable) {
@@ -270,7 +271,7 @@ sap.ui.define(['sap/ui/model/json/JSONModel'], function (JSONModel) {
                   const sField = isUnderscore ? sProperty.substring(0, iLastUnderscore) : sProperty;
                   // }
                   // return bEditable && !headerRows.includes(sProperty);
-                  return bEditable && !nonEditableHeaderRows.includes(sField);
+                  return !nonEditableHeaderRows.includes(sField);
                 },
               },
             }),
@@ -380,13 +381,9 @@ sap.ui.define(['sap/ui/model/json/JSONModel'], function (JSONModel) {
     },
     getRequestForQuotation: async function (keyId, oView) {
       const oModel = oView?.getModel();
-      const oContextBinding = oModel.bindContext(
-        `/A_RequestForQuotation('${keyId.replace(/^'|'$/g, '')}')`,
-        undefined,
-        {
-          $expand: 'to_RequestForQuotationItem',
-        },
-      );
+      const oContextBinding = oModel.bindContext(`/A_RequestForQuotation('${keyId.replace(/^'|'$/g, '')}')`, undefined, {
+        $expand: 'to_RequestForQuotationItem',
+      });
 
       try {
         const oRequestForQuotation = await oContextBinding.requestObject();
