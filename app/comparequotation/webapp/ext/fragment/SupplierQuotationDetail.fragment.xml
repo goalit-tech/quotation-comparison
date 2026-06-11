@@ -7,7 +7,7 @@
     xmlns:smartTable="sap.ui.comp.smarttable"
     xmlns:core="sap.ui.core"
 >
-<f:SimpleForm
+<!-- <f:SimpleForm
             id="_IDGenSQDetailFragmentSimpleForm"
             editable="false"
             layout="ColumnLayout"
@@ -19,13 +19,13 @@
                 <Label id="_IDGenSQDetailFragmentFormLabel1" text="RequestForQuotation" />
                 <Text id="_IDGenSQDetailFragmentFormText" text="{LocalModel>/RequestForQuotation/RequestForQuotation}"/>
                    </f:content>
-        </f:SimpleForm>
+        </f:SimpleForm> -->
 
 <uiTable:Table
         id="_IDGenSQDetailFragmentTable"
-        selectionMode="MultiToggle"
+        selectionMode="None"
         enableSelectAll="false"
-        rows="{LocalModel>/SupplierQuotationItem}"
+        rows="{LocalModel>/ActualSupplierQuotationItem}"
         enableCellFilter="true"
         filter=".filterPrice"
         ariaLabelledBy="title"

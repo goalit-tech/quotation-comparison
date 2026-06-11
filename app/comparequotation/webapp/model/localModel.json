@@ -2,6 +2,7 @@
     "SelectedRFQForComparison": null,
     "SupplierQuotation": [],
     "SupplierQuotationItem": [],
+    "ActualSupplierQuotationItem": [],
     "supplierQuotationItemSelected": [],
     "IsEditCompareQuotation": false,
     "compareQuotationIsEditable": false,

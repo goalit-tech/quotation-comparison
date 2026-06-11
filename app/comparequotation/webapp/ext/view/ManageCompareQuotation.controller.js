@@ -49,6 +49,7 @@ sap.ui.define(
                 if (oQuery && oQuery?.Mode === "CREATE") {
                     // if (oQuery?.Mode === "CREATE") {
                     const aSupplierQuotation = await Utils.getSupplierQuotationForRFQ(oQuery?.RequestForQuotation, this.getView());
+
                     const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
                         ? aSupplierQuotation
                         : (aSupplierQuotation?.value || []);
@@ -60,6 +61,7 @@ sap.ui.define(
                             SupplierName: quotation.SupplierName
                         }))
                     );
+                    this.getView().getModel("LocalModel").setProperty("/ActualSupplierQuotationItem", aSupplierQuotationItems || []);
                     const oSelectedRFQForComparison = await Utils.getRequestForQuotation(oQuery?.RequestForQuotation, this.getView());
                     const oCompareQuotationHeader = this.getView().getModel("LocalModel").getProperty("/CompareQuotationHeader");
                     oCompareQuotationHeader.QuotationComparison = '';
@@ -111,6 +113,19 @@ sap.ui.define(
                     //this.generateCOlumnsForComparison(aCompareQuotationItems);
                     // Utils.generateCOlumnsForComparisonTable(this.getView(), _CompareQuotationItem);
                     Utils.generateCOlumnsForComparisonTable(this.getView(), aCompareQuotationRowsData?.filterRows);
+                    const aSupplierQuotation = await Utils.getSupplierQuotationForRFQ(oCompareQuotationHeader?.RequestForQuotation, this.getView());
+                    const aSupplierQuotationData = Array.isArray(aSupplierQuotation)
+                        ? aSupplierQuotation
+                        : (aSupplierQuotation?.value || []);
+
+                    const aSupplierQuotationItems = aSupplierQuotationData.flatMap(quotation =>
+                        (quotation._SupplierQuotationItem || []).map(item => ({
+                            ...item,
+                            SupplierCode: quotation.SupplierCode,
+                            SupplierName: quotation.SupplierName
+                        }))
+                    );
+                    this.getView().getModel("LocalModel").setProperty("/ActualSupplierQuotationItem", aSupplierQuotationItems || []);
                 }
 
             },
