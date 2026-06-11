@@ -79,7 +79,7 @@ sap.ui.define(
 
                 } else {
                     const oSelectedCompareQuotation = await Utils.getCompareQuotation(sCompareQuotationId, this.getView());
-                    const { _CompareQuotationItem, ...oCompareQuotationHeader } = oSelectedCompareQuotation;
+                    const { _CompareQuotationItem, _TermsAndConditions, ...oCompareQuotationHeader } = oSelectedCompareQuotation;
                     oCompareQuotationHeader.ComparisonDate =
                         oCompareQuotationHeader.ComparisonDate
                             ? (oCompareQuotationHeader.ComparisonDate instanceof Date
@@ -97,12 +97,15 @@ sap.ui.define(
                     this.getView().getModel("LocalModel").setProperty("/RequestForQuotation", oSelectedRFQForComparison);
                     this.getView().getModel("LocalModel").setProperty("/RequestForQuotationItem", oSelectedRFQForComparison?.to_RequestForQuotationItem);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oCompareQuotationHeader);
-                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", _CompareQuotationItem);
-
+                    const aMergersItemsAndTerms = Utils.mergeTermsAndConditonTOCompareQuotationITem(_CompareQuotationItem, _TermsAndConditions);
+                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", aMergersItemsAndTerms);
+                    this.getView().getModel("LocalModel").setProperty("/CompareQuotationTermsConditionData", _TermsAndConditions);
                     this.getView().getModel("LocalModel").setProperty("/Mode", "DISPLAY");
-                    //this.setSelectedSupplierQuotationItemRow(_CompareQuotationItem);
-                    // this.getView().getModel("LocalModel").setProperty("/CompareQuotationHeader", oSelectedCompareQuotation);
-                    const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(_CompareQuotationItem);
+                    const aPreDefinedTerms = this.getView().getModel("LocalModel").getProperty("/TermsAndConditionDialog/PreDefinedTermsAndCondition");
+
+                    const updatedPredefineTerms = Utils.updatePredefinedTermsSelectable(aPreDefinedTerms, _TermsAndConditions);
+                    this.getView().getModel("LocalModel").setProperty("/TermsAndConditionDialog/PreDefinedTermsAndCondition", updatedPredefineTerms);
+                    const aCompareQuotationRowsData = Utils.transformDataforComparisonTable(aMergersItemsAndTerms);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationActualRowsData", aCompareQuotationRowsData?.actualRows);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationRowsData", aCompareQuotationRowsData?.filterRows);
                     //this.generateCOlumnsForComparison(aCompareQuotationItems);
@@ -319,8 +322,7 @@ sap.ui.define(
                             )
                         ) {
                             aTermsAndConditions.push({
-                                QuotationComparison:
-                                    oCompareQuotationItem?.QuotationComparison || "",
+                                QuotationComparison: oTerm?.Selectable ? "" : oCompareQuotationItem?.QuotationComparison,
 
                                 QuotationComparisonItem:
                                     oCompareQuotationItem?.SNo || "",
@@ -429,7 +431,7 @@ sap.ui.define(
 
                 return aTermsAndCondition;
             },
-            callActionUpsertCompareQuotation: async function (oCompareQuotation, aCompareQuotationItem, sType) {
+            callActionUpsertCompareQuotation: async function (oCompareQuotation, aCompareQuotationItem, aTermsAndCondition, sType) {
                 try {
                     console.log("quotationComparisontoSave", oCompareQuotation);
                     console.log("quotationComparisonItemtoSave", aCompareQuotationItem);
@@ -437,6 +439,7 @@ sap.ui.define(
                     const oAction = oModel.bindContext("/upsertCompareQuotation(...)");
                     oAction.setParameter("quotationComparison", oCompareQuotation);
                     oAction.setParameter("quotationComparisonItem", aCompareQuotationItem);
+                    oAction.setParameter("termsAndCondition", aTermsAndCondition);
                     oAction.setParameter("type", sType);
 
                     await oAction.execute();

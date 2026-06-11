@@ -21,6 +21,7 @@
     },
     "CompareQuotationItemData": [],
     "CompareQuotationRowsData": [],
+    "CompareQuotationTermsConditionData": [],
     "CompareQuotationActualRowsData": [],
     "TermsAndConditionDialog": {
         "IsAddNewTC": false,
@@ -36,67 +37,83 @@
         "PreDefinedTermsAndCondition": [
             {
                 "KeyField": "Warranty",
-                "KeyFieldDesc": "Warranty"
+                "KeyFieldDesc": "Warranty",
+                "Selectable": true
             },
             {
                 "KeyField": "TaxAmount",
-                "KeyFieldDesc": "Tax Amount"
+                "KeyFieldDesc": "Tax Amount",
+                "Selectable": true
             },
             {
                 "KeyField": "FreightCharges",
-                "KeyFieldDesc": "Freight Charges"
+                "KeyFieldDesc": "Freight Charges",
+                "Selectable": true
             },
             {
                 "KeyField": "Discount",
-                "KeyFieldDesc": "Discount"
+                "KeyFieldDesc": "Discount",
+                "Selectable": true
             },
             {
                 "KeyField": "TechnicalCompliance",
-                "KeyFieldDesc": "Technical Compliance"
+                "KeyFieldDesc": "Technical Compliance",
+                "Selectable": true
             },
             {
                 "KeyField": "BCDPercent",
-                "KeyFieldDesc": "BCD %"
+                "KeyFieldDesc": "BCD %",
+                "Selectable": true
             },
             {
                 "KeyField": "SWCPercentOnBCD",
-                "KeyFieldDesc": "SWC % on BCD"
+                "KeyFieldDesc": "SWC % on BCD",
+                "Selectable": true
             },
             {
                 "KeyField": "HSNCode",
-                "KeyFieldDesc": "HSN Code"
+                "KeyFieldDesc": "HSN Code",
+                "Selectable": true
             },
             {
                 "KeyField": "GST",
-                "KeyFieldDesc": "GST"
+                "KeyFieldDesc": "GST",
+                "Selectable": true
             },
             {
                 "KeyField": "InsuranceCharges",
-                "KeyFieldDesc": "Insurance Charges"
+                "KeyFieldDesc": "Insurance Charges",
+                "Selectable": true
             },
             {
                 "KeyField": "BankCharges",
-                "KeyFieldDesc": "Bank Charges"
+                "KeyFieldDesc": "Bank Charges",
+                "Selectable": true
             },
             {
                 "KeyField": "LocalTransportationCharges",
-                "KeyFieldDesc": "Local Transportation Charges"
+                "KeyFieldDesc": "Local Transportation Charges",
+                "Selectable": true
             },
             {
                 "KeyField": "LandingCost",
-                "KeyFieldDesc": "Landing Cost"
+                "KeyFieldDesc": "Landing Cost",
+                "Selectable": true
             },
             {
                 "KeyField": "Density",
-                "KeyFieldDesc": "Density"
+                "KeyFieldDesc": "Density",
+                "Selectable": true
             },
             {
                 "KeyField": "ContactPerson",
-                "KeyFieldDesc": "Contact Person"
+                "KeyFieldDesc": "Contact Person",
+                "Selectable": true
             },
             {
                 "KeyField": "PhoneNumber",
-                "KeyFieldDesc": "Phone Number"
+                "KeyFieldDesc": "Phone Number",
+                "Selectable": true
             }
         ]
     },

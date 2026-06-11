@@ -6,6 +6,20 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
       return new JSONModel();
     },
 
+    updatePredefinedTermsSelectable: function (
+      aPreDefinedTerms,
+      aTermsAndCondition
+    ) {
+      const aExistingKeys = new Set(
+        aTermsAndCondition.map(oTerm => oTerm.KeyField)
+      );
+
+      return aPreDefinedTerms.map(oTerm => ({
+        ...oTerm,
+        Selectable: !aExistingKeys.has(oTerm.KeyField)
+      }));
+    },
+
     transformDataforComparisonTable: function (aSelectedData, aNewProperties) {
       const aSingleRowsAtTop = [
         "QuotationComparison",
@@ -168,6 +182,26 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
       return Array.from(mActualMap.values());
     },
 
+    mergeTermsAndConditonTOCompareQuotationITem: function (itemData, aTermsAndcondtion) {
+      const mTerms = aTermsAndcondtion.reduce((m, oTerm) => {
+        const sKey =
+          `${oTerm.QuotationComparison}_${oTerm.QuotationComparisonItem}`;
+
+        m[sKey] ??= {};
+        m[sKey][oTerm.KeyField] = oTerm.ValueField || "";
+
+        return m;
+      }, {});
+
+      const finalItemData = itemData.map((oItem) => ({
+        ...oItem,
+        ...(mTerms[
+          `${oItem.QuotationComparison}_${oItem.Supplierquotationitem}`
+        ] || {})
+      }));
+      return finalItemData;
+    },
+
     generateCOlumnsForComparisonTable: function (oView, aRows) {
       const oTable = oView?.byId("_IDGenQCFormFragmentDynamicUITable");
       oTable.removeAllColumns();
@@ -211,7 +245,6 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
                   formatter: function (sProperty) {
                     const oBundle = oView.getModel("i18n").getResourceBundle();
                     const sPropertyName = sProperty?.split("_")[0];
-
                     return oBundle.hasText(sPropertyName)
                       ? oBundle.getText(sPropertyName)
                       : sPropertyName;
@@ -231,9 +264,7 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
                   path: "LocalModel>property",
                   formatter: function (sProperty) {
                     const oBundle = oView.getModel("i18n").getResourceBundle();
-
                     const sPropertyName = sProperty?.split("_")[0];
-
                     return oBundle.hasText(sPropertyName)
                       ? oBundle.getText(sPropertyName)
                       : sPropertyName;
@@ -279,7 +310,13 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
                 ],
                 formatter: function (sProperty, bEditable) {
                   const headerRows = ["TermsAndConditions"];
-                  return bEditable && !headerRows.includes(sProperty);
+                  const isUnderscore = sProperty.includes("_");
+                  // if (isUnderscore) {
+                  const iLastUnderscore = sProperty.lastIndexOf("_");
+                  const sField = isUnderscore ? sProperty.substring(0, iLastUnderscore) : sProperty;
+                  // }
+                  // return bEditable && !headerRows.includes(sProperty);
+                  return bEditable && !nonEditableHeaderRows.includes(sField);
                 },
               },
             }),
@@ -292,7 +329,26 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
                 ],
                 formatter: function (sProperty, bEditable) {
                   const headerRows = ["TermsAndConditions"];
-                  return !bEditable || headerRows.includes(sProperty);
+                  // return !bEditable || headerRows.includes(sProperty);
+                  const isUnderscore = sProperty.includes("_");
+                  const iLastUnderscore = sProperty.lastIndexOf("_");
+                  const sField = isUnderscore ? sProperty.substring(0, iLastUnderscore) : sProperty;
+                  return sField !== 'Description' && nonEditableHeaderRows.includes(sField);
+                },
+              },
+            }),
+            new sap.m.Title({
+              text: "{LocalModel>" + sSupplierName + "}",
+              visible: {
+                parts: [
+                  { path: "LocalModel>property" },
+                  { path: "LocalModel>/IsEditCompareQuotation" },
+                ],
+                formatter: function (sProperty, bEditable) {
+                  const isUnderscore = sProperty.includes("_");
+                  const iLastUnderscore = sProperty.lastIndexOf("_");
+                  const sField = isUnderscore ? sProperty.substring(0, iLastUnderscore) : sProperty;
+                  return sField === 'Description';
                 },
               },
             }),
@@ -360,206 +416,7 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
 
       return aResult;
     },
-    // generateTermsAndConditions: function (
-    //   oCompareQuotation,
-    //   aRows,
-    //   aPreDefinedTerms
-    // ) {
-    //   const aTermsAndConditions = [];
 
-    //   const mTermsLookup = {};
-    //   aPreDefinedTerms.forEach((oTerm) => {
-    //     mTermsLookup[oTerm.KeyField] = oTerm.KeyFieldDesc;
-    //   });
-
-    //   const aSupplierNames = Object.keys(aRows[0]).filter(
-    //     (sKey) => sKey !== "property"
-    //   );
-
-    //   const oSNoRow = aRows.find(
-    //     (oRow) => oRow.property === "SNo"
-    //   );
-
-    //   aRows.forEach((oRow) => {
-    //     if (!mTermsLookup[oRow.property]) {
-    //       return;
-    //     }
-
-    //     aSupplierNames.forEach((sSupplierName, index) => {
-    //       aTermsAndConditions.push({
-    //         QuotationComparison:
-    //           oCompareQuotation?.QuotationComparison || "",
-    //         QuotationComparisonItem:
-    //           oSNoRow?.[sSupplierName] || "",
-    //         ItemNo: String(index + 1).padStart(2, "0"),
-    //         KeyField: oRow.property,
-    //         KeyFieldDesc: mTermsLookup[oRow.property],
-    //         ValueField: oRow[sSupplierName] ?? "",
-    //       });
-
-    //     });
-    //   });
-
-    //   return aTermsAndConditions;
-    // },
-    // generateTermsAndConditions: function (
-    //   oCompareQuotation,
-    //   aRows,
-    //   aPreDefinedTerms,
-    // ) {
-    //   const aTermsAndConditions = [];
-    //   let itemNo = 10;
-
-    //   const mTermsLookup = {};
-    //   aPreDefinedTerms.forEach((oTerm) => {
-    //     mTermsLookup[oTerm.KeyField] = oTerm.KeyFieldDesc;
-    //   });
-
-    //   const aSupplierNames = Object.keys(aRows[0]).filter(
-    //     (sKey) => sKey !== "property",
-    //   );
-
-    //   aRows.forEach((oRow) => {
-    //     // Check if this row is a predefined term
-    //     if (!mTermsLookup[oRow.property]) {
-    //       return;
-    //     }
-
-    //     aSupplierNames.forEach((sSupplierName) => {
-    //       const vValue = oRow[sSupplierName];
-    //       debugger
-    //       if (vValue !== undefined && vValue !== null && vValue !== "") {
-    //         aTermsAndConditions.push({
-    //           QuotationComparison: oCompareQuotation?.QuotationComparison || '',
-    //           QuotationComparisonItem: mTermsLookup['SNo'] ?? '',
-    //           ItemNo: String(itemNo).padStart(2, "0"),
-    //           // SupplierName: sSupplierName,
-    //           KeyField: oRow.property,
-    //           KeyFieldDesc: mTermsLookup[oRow.property],
-    //           ValueField: vValue,
-    //         });
-
-    //         iCompareQuotationItem += 10;
-    //       }
-    //     });
-    //   });
-
-    //   return aTermsAndConditions;
-    // },
-
-    transformTermsAndConditionsForTable: function (
-      aTermsAndConditions,
-      aComparisonItems,
-    ) {
-      const aFields = [
-        {
-          KeyField: "Warranty",
-          KeyFieldDesc: "Warranty",
-          ValueField: "",
-        },
-        {
-          KeyField: "TaxAmount",
-          KeyFieldDesc: "Tax Amount",
-          ValueField: "",
-        },
-        {
-          KeyField: "FreightCharges",
-          KeyFieldDesc: "Freight Charges",
-          ValueField: "",
-        },
-        {
-          KeyField: "Discount",
-          KeyFieldDesc: "Discount",
-          ValueField: "",
-        },
-        {
-          KeyField: "TechnicalCompliance",
-          KeyFieldDesc: "Technical Compliance",
-          ValueField: "",
-        },
-        {
-          KeyField: "ConversionRs",
-          KeyFieldDesc: "Conversion @ Rs",
-          ValueField: "",
-        },
-        {
-          KeyField: "BCDPercent",
-          KeyFieldDesc: "BCD %",
-          ValueField: "",
-        },
-        {
-          KeyField: "SWCPercentOnBCD",
-          KeyFieldDesc: "SWC % on BCD",
-          ValueField: "",
-        },
-        {
-          KeyField: "HSNCode",
-          KeyFieldDesc: "HSN Code",
-          ValueField: "",
-        },
-        {
-          KeyField: "GST",
-          KeyFieldDesc: "GST",
-          ValueField: "",
-        },
-        {
-          KeyField: "FreightCharges",
-          KeyFieldDesc: "Freight Charges",
-          ValueField: "",
-        },
-        {
-          KeyField: "InsuranceCharges",
-          KeyFieldDesc: "Insurance Charges",
-          ValueField: "",
-        },
-        {
-          KeyField: "BankCharges",
-          KeyFieldDesc: "Bank Charges",
-          ValueField: "",
-        },
-        {
-          KeyField: "LocalTransportationCharges",
-          KeyFieldDesc: "Local Transportation Charges",
-          ValueField: "",
-        },
-        {
-          KeyField: "LandingCost",
-          KeyFieldDesc: "Landing Cost",
-          ValueField: "",
-        },
-        {
-          KeyField: "Density",
-          KeyFieldDesc: "Density",
-          ValueField: "",
-        },
-        {
-          KeyField: "ContactPerson",
-          KeyFieldDesc: "Contact Person",
-          ValueField: "",
-        },
-        {
-          KeyField: "PhoneNumber",
-          KeyFieldDesc: "Phone Number",
-          ValueField: "",
-        },
-        {
-          KeyField: "BankCharges",
-          KeyFieldDesc: "Bank Charges",
-          ValueField: "",
-        },
-      ];
-
-      aComparisonItems.forEach((sQuotationComparisonItem) => {
-        aFields.forEach((sField) => {
-          aTermsAndConditions.push({
-            QuotationComparisonItem: sQuotationComparisonItem,
-            ItemNo: "00001",
-            KeyField: sField.KeyField,
-            ValueField: "", // populate actual value here
-          });
-        });
-      });
-    },
     getSupplierQuotationForRFQ: async function (keyId, oView) {
       const oModel = oView?.getModel();
       const sPath = `/A_RequestForQuotation('${keyId}')/SupplierQuotation`;
