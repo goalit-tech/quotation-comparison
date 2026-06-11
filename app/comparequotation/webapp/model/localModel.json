@@ -21,6 +21,7 @@
     },
     "CompareQuotationItemData": [],
     "CompareQuotationRowsData": [],
+    "CompareQuotationActualRowsData": [],
     "TermsAndConditionDialog": {
         "IsAddNewTC": false,
         "KeyFieldState": "None",
@@ -28,6 +29,10 @@
         "KeyFieldValueState": "None",
         "KeyFieldValue": "",
         "TermsAndConditionSelectedkey": [],
+        "TermsCondPreviousSelectedkey": [
+            "Warranty",
+            "BCDPercent"
+        ],
         "PreDefinedTermsAndCondition": [
             {
                 "KeyField": "Warranty",
@@ -66,10 +71,6 @@
                 "KeyFieldDesc": "GST"
             },
             {
-                "KeyField": "FreightCharges",
-                "KeyFieldDesc": "Freight Charges"
-            },
-            {
                 "KeyField": "InsuranceCharges",
                 "KeyFieldDesc": "Insurance Charges"
             },
@@ -96,15 +97,11 @@
             {
                 "KeyField": "PhoneNumber",
                 "KeyFieldDesc": "Phone Number"
-            },
-            {
-                "KeyField": "BankCharges",
-                "KeyFieldDesc": "Bank Charges"
             }
         ]
     },
-    "RequestForQuotation":{},
-    "RequestForQuotationItem":[],
+    "RequestForQuotation": {},
+    "RequestForQuotationItem": [],
     "nodes": [
         {
             "id": "1",

@@ -33,7 +33,7 @@ service CompareQuotationService {
     @readonly
     entity A_RequestForQuotationItem as projection on API_RFQ_PROCESS_SRV.A_RequestForQuotationItem;
 
-    action upsertCompareQuotation(quotationComparison: QuotationComparison, quotationComparisonItem: QuotationComparisonItem, aTermsAndConditoin: TermsAndConditions, type: String) returns String;
+    action upsertCompareQuotation(quotationComparison: QuotationComparison, quotationComparisonItem: QuotationComparisonItem, termsAndCondition: TermsAndConditions, type: String) returns String;
     action workflowForCompareQuotation(quotationComparison: QuotationComparison, workflowType: String)
 
 

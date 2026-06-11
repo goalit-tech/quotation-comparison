@@ -194,7 +194,7 @@ class CapCompareQuotationService extends cds.ApplicationService {
   async upsertCompareQuotation(
     quotationComparison,
     quotationComparisonItem,
-    aTermsAndConditoin,
+    termsAndCondition,
     type,
   ) {
     try {
@@ -217,7 +217,7 @@ class CapCompareQuotationService extends cds.ApplicationService {
           data: quotationComparison,
         });
         //QuoationComparison Item update or ccreate
-        for (const item of aTermsAndConditoin) {
+        for (const item of termsAndCondition) {
           // Existing item
           if (item.QuotationComparison) {
             const { QuotationComparison, SNo, ...itemPayload } = item;
@@ -241,7 +241,7 @@ class CapCompareQuotationService extends cds.ApplicationService {
           }
         }
         //Update or create of Terms and conditions
-        for (const item of aTermsAndConditoin) {
+        for (const item of termsAndCondition) {
           // Existing item
           if (item.QuotationComparison) {
             const {
@@ -278,31 +278,43 @@ class CapCompareQuotationService extends cds.ApplicationService {
 
       // CREATE
       delete quotationComparison.QuotationComparison;
-
-      const resultHeader = await S4_QUOTATION_COMPARISON_SRV.send({
-        method: "POST",
-        path: "/QuotationComparison",
-        data: quotationComparison,
-      });
-
-      const sQuotationComparison = resultHeader?.QuotationComparison;
-
-      if (!sQuotationComparison) {
-        throw new Error(
-          "QuotationComparison key not returned after header creation",
-        );
-      }
-
-      for (const item of quotationComparisonItem) {
-        //delete item.SNo;
+      /** 
+            const resultHeader = await S4_QUOTATION_COMPARISON_SRV.send({
+              method: "POST",
+              path: "/QuotationComparison",
+              data: quotationComparison,
+            });
+      
+            const sQuotationComparison = resultHeader?.QuotationComparison;
+      
+            if (!sQuotationComparison) {
+              throw new Error(
+                "QuotationComparison key not returned after header creation",
+              );
+            }
+      
+            for (const item of quotationComparisonItem) {
+              //delete item.SNo;
+              delete item.QuotationComparison;
+      
+              // await S4_QUOTATION_COMPARISON_SRV.send({
+              //   method: "POST",
+              //   path: `/QuotationComparison('${sQuotationComparison}')/_CompareQuotationItem`,
+              //   data: item,
+              // });
+            }
+      */
+      for (const item of termsAndCondition) {
         delete item.QuotationComparison;
-
-        await S4_QUOTATION_COMPARISON_SRV.send({
-          method: "POST",
-          path: `/QuotationComparison('${sQuotationComparison}')/_CompareQuotationItem`,
-          data: item,
-        });
       }
+      for (const item of quotationComparisonItem) {
+        delete item.QuotationComparison;
+      }
+
+      // const S4_QUOTATION_COMPARISON_SRV = await cds.connect.to("S4_API_QUOTATION_COMPARISON");
+      quotationComparison["_CompareQuotationItem"] = quotationComparisonItem;
+      quotationComparison["_TermsAndConditions"] = termsAndCondition;
+      const resultHeader = await S4_QUOTATION_COMPARISON_SRV.create('QuotationComparison', quotationComparison);
 
       return {
         message: `Quotation created successfully for Quotation Comparison: ${sQuotationComparison}`,

@@ -139,6 +139,35 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
         filterRows: aVisibleRows,
       };
     },
+    mergeActualAndFilterRowData: function (aActual, aWorking) {
+
+      const mActualMap = new Map();
+
+      // 1. Index actual by property
+      aActual.forEach(o => {
+        mActualMap.set(o.property, { ...o });
+      });
+
+      // 2. Merge working into actual
+      aWorking.forEach(o => {
+        const sKey = o.property;
+
+        if (mActualMap.has(sKey)) {
+          // update existing row (merge values dynamically)
+          mActualMap.set(sKey, {
+            ...mActualMap.get(sKey),
+            ...o
+          });
+        } else {
+          // new row → add directly
+          mActualMap.set(sKey, { ...o });
+        }
+      });
+
+      // 3. Return merged array
+      return Array.from(mActualMap.values());
+    },
+
     generateCOlumnsForComparisonTable: function (oView, aRows) {
       const oTable = oView?.byId("_IDGenQCFormFragmentDynamicUITable");
       oTable.removeAllColumns();
@@ -331,53 +360,92 @@ sap.ui.define(["sap/ui/model/json/JSONModel"], function (JSONModel) {
 
       return aResult;
     },
+    // generateTermsAndConditions: function (
+    //   oCompareQuotation,
+    //   aRows,
+    //   aPreDefinedTerms
+    // ) {
+    //   const aTermsAndConditions = [];
 
-    generateTermsAndConditions: function (
-      oCompareQuotation,
-      aRows,
-      aPreDefinedTerms,
-    ) {
-      const aTermsAndConditions = [];
-      let iCompareQuotationItem = 10;
+    //   const mTermsLookup = {};
+    //   aPreDefinedTerms.forEach((oTerm) => {
+    //     mTermsLookup[oTerm.KeyField] = oTerm.KeyFieldDesc;
+    //   });
 
-      const mTermsLookup = {};
-      aPreDefinedTerms.forEach((oTerm) => {
-        mTermsLookup[oTerm.KeyField] = oTerm.KeyFieldDesc;
-      });
+    //   const aSupplierNames = Object.keys(aRows[0]).filter(
+    //     (sKey) => sKey !== "property"
+    //   );
 
-      const aSupplierNames = Object.keys(aRows[0]).filter(
-        (sKey) => sKey !== "property",
-      );
+    //   const oSNoRow = aRows.find(
+    //     (oRow) => oRow.property === "SNo"
+    //   );
 
-      aRows.forEach((oRow) => {
-        // Check if this row is a predefined term
-        if (!mTermsLookup[oRow.property]) {
-          return;
-        }
+    //   aRows.forEach((oRow) => {
+    //     if (!mTermsLookup[oRow.property]) {
+    //       return;
+    //     }
 
-        aSupplierNames.forEach((sSupplierName) => {
-          const vValue = oRow[sSupplierName];
+    //     aSupplierNames.forEach((sSupplierName, index) => {
+    //       aTermsAndConditions.push({
+    //         QuotationComparison:
+    //           oCompareQuotation?.QuotationComparison || "",
+    //         QuotationComparisonItem:
+    //           oSNoRow?.[sSupplierName] || "",
+    //         ItemNo: String(index + 1).padStart(2, "0"),
+    //         KeyField: oRow.property,
+    //         KeyFieldDesc: mTermsLookup[oRow.property],
+    //         ValueField: oRow[sSupplierName] ?? "",
+    //       });
 
-          if (vValue !== undefined && vValue !== null && vValue !== "") {
-            aTermsAndConditions.push({
-              QuotationComparison: oCompareQuotation?.QuotationComparison,
-              CompareQuotationItem: String(iCompareQuotationItem).padStart(
-                2,
-                "0",
-              ),
-              SupplierName: sSupplierName,
-              KeyField: oRow.property,
-              KeyFieldDesc: mTermsLookup[oRow.property],
-              KeyFieldValue: vValue,
-            });
+    //     });
+    //   });
 
-            iCompareQuotationItem += 10;
-          }
-        });
-      });
+    //   return aTermsAndConditions;
+    // },
+    // generateTermsAndConditions: function (
+    //   oCompareQuotation,
+    //   aRows,
+    //   aPreDefinedTerms,
+    // ) {
+    //   const aTermsAndConditions = [];
+    //   let itemNo = 10;
 
-      return aTermsAndConditions;
-    },
+    //   const mTermsLookup = {};
+    //   aPreDefinedTerms.forEach((oTerm) => {
+    //     mTermsLookup[oTerm.KeyField] = oTerm.KeyFieldDesc;
+    //   });
+
+    //   const aSupplierNames = Object.keys(aRows[0]).filter(
+    //     (sKey) => sKey !== "property",
+    //   );
+
+    //   aRows.forEach((oRow) => {
+    //     // Check if this row is a predefined term
+    //     if (!mTermsLookup[oRow.property]) {
+    //       return;
+    //     }
+
+    //     aSupplierNames.forEach((sSupplierName) => {
+    //       const vValue = oRow[sSupplierName];
+    //       debugger
+    //       if (vValue !== undefined && vValue !== null && vValue !== "") {
+    //         aTermsAndConditions.push({
+    //           QuotationComparison: oCompareQuotation?.QuotationComparison || '',
+    //           QuotationComparisonItem: mTermsLookup['SNo'] ?? '',
+    //           ItemNo: String(itemNo).padStart(2, "0"),
+    //           // SupplierName: sSupplierName,
+    //           KeyField: oRow.property,
+    //           KeyFieldDesc: mTermsLookup[oRow.property],
+    //           ValueField: vValue,
+    //         });
+
+    //         iCompareQuotationItem += 10;
+    //       }
+    //     });
+    //   });
+
+    //   return aTermsAndConditions;
+    // },
 
     transformTermsAndConditionsForTable: function (
       aTermsAndConditions,

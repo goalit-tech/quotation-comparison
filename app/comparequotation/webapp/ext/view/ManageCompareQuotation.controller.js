@@ -179,17 +179,17 @@ sap.ui.define(
             },
 
             onSaveMCQPress: async function () {
-                debugger
                 this.getView().setBusy(true);
                 try {
                     const oCompareQuotation = this.prepareCompareQuotationDataForSave();
-                    //const asupplierQuotationItemSelected = this.getView().getModel("LocalModel").getProperty("/supplierQuotationItemSelected");
                     const aCompareQuotationRowsData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationRowsData");
                     const aCompareQuotationActualRowsData = this.getView().getModel("LocalModel").getProperty("/CompareQuotationActualRowsData");
                     //merge all the columns
-                    const aTransFormedCompareQuotationItem = Utils.reverseTransformCompareQuotationItemData(oCompareQuotation, aCompareQuotationRowsData);
+                    const finalCompareQuotaionItemRows = Utils.mergeActualAndFilterRowData(aCompareQuotationActualRowsData, aCompareQuotationRowsData);
+                    const aTransFormedCompareQuotationItem = Utils.reverseTransformCompareQuotationItemData(oCompareQuotation, finalCompareQuotaionItemRows);
                     this.getView().getModel("LocalModel").setProperty("/CompareQuotationItemData", aTransFormedCompareQuotationItem);
-                    const aTermsAndConditoin = Utils.generateTermsAndConditions(oCompareQuotation, aCompareQuotationRowsData);
+                    // const aTermsAndConditoin = Utils.generateTermsAndConditions(oCompareQuotation, finalCompareQuotaionItemRows, aPreDefinedTermsAndCondition);
+                    const aTermsAndConditoin = this.prepareTermsAndConditionDataForSave();
                     // aTransFormedCompareQuotationItem
                     const aCompareQuotationItem = this.prepareCompareQuotationItemDataForSave();
 
@@ -296,6 +296,50 @@ sap.ui.define(
                     "ComparisonDate": oCompareQuotation?.ComparisonDate || null,
                 };
                 return oCompareQuotationToSave;
+            },
+            prepareTermsAndConditionDataForSave: function () {
+                const aCompareQuotationItems = this.getView().getModel("LocalModel").getProperty("/CompareQuotationItemData") || [];
+                const aPreDefinedTerms = this.getView().getModel("LocalModel").getProperty("/TermsAndConditionDialog/PreDefinedTermsAndCondition");
+
+                const aTermsAndConditions = [];
+                // const aTermsAndConditions = [];
+
+                // const aTermsAndConditions = [];
+
+                aCompareQuotationItems.forEach((oCompareQuotationItem) => {
+                    let iItemNo = 1;
+
+                    aPreDefinedTerms.forEach((oTerm) => {
+                        const sKeyField = oTerm.KeyField;
+
+                        if (
+                            Object.prototype.hasOwnProperty.call(
+                                oCompareQuotationItem,
+                                sKeyField
+                            )
+                        ) {
+                            aTermsAndConditions.push({
+                                QuotationComparison:
+                                    oCompareQuotationItem?.QuotationComparison || "",
+
+                                QuotationComparisonItem:
+                                    oCompareQuotationItem?.SNo || "",
+
+                                ItemNo: String(iItemNo++).padStart(2, "0"),
+
+                                KeyField: sKeyField,
+
+                                ValueField:
+                                    oCompareQuotationItem[sKeyField] !== undefined &&
+                                        oCompareQuotationItem[sKeyField] !== null
+                                        ? String(oCompareQuotationItem[sKeyField])
+                                        : "",
+                            });
+                        }
+                    });
+                });
+
+                return aTermsAndConditions;
             },
             prepareCompareQuotationItemDataForSave: function () {
                 const aSelectedItems = this.getView().getModel("LocalModel").getProperty("/CompareQuotationItemData") || [];

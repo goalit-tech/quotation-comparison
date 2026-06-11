@@ -44,7 +44,7 @@
                 <Label id="_IDGenTCFragmentDialogLabel3" text="Select Terms And Conditions" visible="{= ${LocalModel>/TermsAndConditionDialog/IsAddNewTC} ? false:true}"/>
                     <MultiComboBox selectedKeys="{LocalModel>/TermsAndConditionDialog/TermsAndConditionSelectedkey}" id="_IDGenTCFragmentDialogComboBox" items="{LocalModel>/TermsAndConditionDialog/PreDefinedTermsAndCondition}" visible="{= ${LocalModel>/TermsAndConditionDialog/IsAddNewTC} ? false:true}">
                         <items>
-                            <core:Item id="_IDGenTCFragmentDialogItem" text="{LocalModel>KeyFieldDesc}" key="{LocalModel>KeyField}"/>
+                            <core:Item id="_IDGenTCFragmentDialogItem" enabled="true" text="{LocalModel>KeyFieldDesc}" key="{LocalModel>KeyField}"/>
                         </items>
                     </MultiComboBox>
 				<Label id="_IDGenTCFragmentDialogLabel" text="Field Key" visible="{= ${LocalModel>/TermsAndConditionDialog/IsAddNewTC} ? true:false}"/>
